@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aarogya Vault - Splash Screen</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#5a5f64",
+                    "secondary-fixed": "#d4e3ff",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed": "#171c20",
+                    "inverse-on-surface": "#f0f0f3",
+                    "on-surface": "#1a1c1e",
+                    "surface-container-highest": "#e2e2e5",
+                    "secondary-container": "#68abff",
+                    "on-secondary": "#ffffff",
+                    "on-surface-variant": "#3d4a44",
+                    "on-tertiary-fixed-variant": "#42474c",
+                    "outline": "#6c7a74",
+                    "secondary": "#0060ac",
+                    "surface-tint": "#006b53",
+                    "on-tertiary": "#ffffff",
+                    "surface-variant": "#e2e2e5",
+                    "on-tertiary-container": "#292e32",
+                    "error-container": "#ffdad6",
+                    "on-secondary-fixed": "#001c39",
+                    "surface": "#f9f9fc",
+                    "surface-container-low": "#f3f3f6",
+                    "primary-container": "#00a884",
+                    "surface-container-lowest": "#ffffff",
+                    "primary": "#006b53",
+                    "on-secondary-container": "#003e73",
+                    "primary-fixed": "#79f9d0",
+                    "tertiary-fixed": "#dfe3e9",
+                    "on-primary": "#ffffff",
+                    "outline-variant": "#bccac2",
+                    "primary-fixed-dim": "#59dcb5",
+                    "on-secondary-fixed-variant": "#004883",
+                    "on-primary-container": "#003427",
+                    "surface-dim": "#dadadc",
+                    "surface-container": "#eeeef0",
+                    "tertiary-fixed-dim": "#c2c7cd",
+                    "surface-bright": "#f9f9fc",
+                    "inverse-surface": "#2f3133",
+                    "on-primary-fixed": "#002117",
+                    "background": "#f9f9fc",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#90959a",
+                    "on-error-container": "#93000a",
+                    "on-background": "#1a1c1e",
+                    "inverse-primary": "#59dcb5",
+                    "surface-container-high": "#e8e8ea",
+                    "on-primary-fixed-variant": "#00513e",
+                    "secondary-fixed-dim": "#a4c9ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-md": "12px",
+                    "stack-sm": "4px",
+                    "container-margin-mob": "16px",
+                    "base": "8px",
+                    "gutter": "16px",
+                    "container-margin-desk": "24px",
+                    "stack-lg": "24px"
+            },
+            "fontFamily": {
+                    "label-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "title-lg": ["Inter"],
+                    "title-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                    "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "label-sm": ["11px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Custom Entrance Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.85);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-fade-up {
+            animation: fadeInUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .animate-scale-in {
+            animation: scaleIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .delay-1 { animation-delay: 0.3s; }
+        .delay-2 { animation-delay: 0.6s; }
+        .delay-3 { animation-delay: 0.9s; }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface overflow-hidden">
+<!-- Full Screen Shader Background -->
+<div class="fixed inset-0 z-0">
+<!-- STITCH_SHADER_START:ANIMATION_5 class="absolute inset-0 w-full h-full opacity-40" -->
+<div class="absolute inset-0 w-full h-full opacity-40" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_5" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_5');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+varying vec2 v_texCoord;
+uniform float u_time;
+uniform vec2 u_resolution;
+
+void main() {
+    vec2 uv = v_texCoord;
+    vec3 color1 = vec3(0.0, 0.659, 0.518); // Medical Green #00a884
+    vec3 color2 = vec3(0.97, 0.98, 1.0);   // Soft Light Blue/White
+    
+    float noise = sin(uv.x * 10.0 + u_time) * sin(uv.y * 10.0 + u_time) * 0.5 + 0.5;
+    vec3 finalColor = mix(color1, color2, uv.y + noise * 0.1);
+    
+    gl_FragColor = vec4(finalColor * 0.05 + 0.95, 1.0); // Very subtle background wash
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_5 -->
+<!-- Tonal overlay for better text legibility -->
+<div class="absolute inset-0 bg-gradient-to-b from-transparent via-surface/40 to-surface"></div>
+</div>
+<!-- Main Content Wrapper -->
+<main class="relative z-10 flex flex-col items-center justify-between min-h-screen w-full px-container-margin-mob md:px-container-margin-desk py-stack-lg">
+<!-- Center Content: Logo & Branding -->
+<div class="flex-1 flex flex-col items-center justify-center text-center space-y-stack-lg max-w-md w-full">
+<!-- Premium Logo -->
+<div class="animate-scale-in opacity-0">
+<div class="relative group">
+<!-- Subtle glow effect behind logo -->
+<div class="absolute -inset-4 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-all duration-700"></div>
+<img alt="Aarogya Vault Premium Logo" class="w-32 h-32 md:w-40 md:h-40 object-contain relative z-10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAG8mKeR55YUX_siDf7-SN5ch99E3DiC8VaS28XoEeRM3JRnepH7m38dkECS9GPTqgD-gjwXdoHE6iVQiRflVVmx-xUCKpcdka3v3yu62epwM5SFCuHqwR_hGNr7d3sRDuu4mD3NiNBKzN-q9Jk0TGk5xU36mw7_9O5I4NLVT95DQ52AaYY-ooLcYc4bR_vQgJpDnNM-nxT6jPXBJnyz47nAyPvVYu311x7o6IncO1KCAOSNQ6nN1OxoA"/>
+</div>
+</div>
+<!-- Branding Text -->
+<div class="space-y-stack-sm">
+<h1 class="animate-fade-up delay-1 opacity-0 font-headline-lg md:font-display-lg text-headline-lg md:text-display-lg text-primary tracking-tight font-extrabold">
+                    Aarogya Vault
+                </h1>
+<p class="animate-fade-up delay-2 opacity-0 font-title-md text-title-md text-tertiary max-w-[280px] md:max-w-xs mx-auto leading-relaxed">
+                    Your Health. Your Data. Always With You.
+                </p>
+</div>
+</div>
+<!-- Bottom Action Area -->
+<div class="w-full max-w-sm animate-fade-up delay-3 opacity-0 pb-12">
+<button class="w-full bg-primary-container text-on-primary-container font-title-md text-title-md py-4 px-8 rounded-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-base group">
+<span>Get Started</span>
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+<!-- Secondary Info -->
+<div class="mt-stack-lg flex flex-col items-center gap-stack-sm text-on-surface-variant/60">
+<div class="flex items-center gap-base">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest">Secure Healthcare Infrastructure</span>
+</div>
+<p class="font-label-sm text-label-sm">v2.4.0 • Enterprise Edition</p>
+</div>
+</div>
+</main>
+<!-- Micro-interaction Script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const button = document.querySelector('button');
+            
+            // Subtle ripple/pulse effect on button intermittently
+            setInterval(() => {
+                button.classList.add('ring-4', 'ring-primary/10');
+                setTimeout(() => {
+                    button.classList.remove('ring-4', 'ring-primary/10');
+                }, 1000);
+            }, 5000);
+
+            // Handle button click (Simulate navigation)
+            button.addEventListener('click', (e) => {
+                const rect = button.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const ripple = document.createElement('span');
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+                ripple.className = 'absolute bg-white/20 rounded-full w-4 h-4 transform -translate-x-1/2 -translate-y-1/2 animate-ping';
+                button.appendChild(ripple);
+
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+    </script>
+</body></html>

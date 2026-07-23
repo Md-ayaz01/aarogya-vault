@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Emergency QR &amp; Access - Aarogya Vault</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#5a5f64",
+                    "secondary-fixed": "#d4e3ff",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed": "#171c20",
+                    "inverse-on-surface": "#f0f0f3",
+                    "on-surface": "#1a1c1e",
+                    "surface-container-highest": "#e2e2e5",
+                    "secondary-container": "#68abff",
+                    "on-secondary": "#ffffff",
+                    "on-surface-variant": "#3d4a44",
+                    "on-tertiary-fixed-variant": "#42474c",
+                    "outline": "#6c7a74",
+                    "secondary": "#0060ac",
+                    "surface-tint": "#006b53",
+                    "on-tertiary": "#ffffff",
+                    "surface-variant": "#e2e2e5",
+                    "on-tertiary-container": "#292e32",
+                    "error-container": "#ffdad6",
+                    "on-secondary-fixed": "#001c39",
+                    "surface": "#f9f9fc",
+                    "surface-container-low": "#f3f3f6",
+                    "primary-container": "#00a884",
+                    "surface-container-lowest": "#ffffff",
+                    "primary": "#006b53",
+                    "on-secondary-container": "#003e73",
+                    "primary-fixed": "#79f9d0",
+                    "tertiary-fixed": "#dfe3e9",
+                    "on-primary": "#ffffff",
+                    "outline-variant": "#bccac2",
+                    "primary-fixed-dim": "#59dcb5",
+                    "on-secondary-fixed-variant": "#004883",
+                    "on-primary-container": "#003427",
+                    "surface-dim": "#dadadc",
+                    "surface-container": "#eeeef0",
+                    "tertiary-fixed-dim": "#c2c7cd",
+                    "surface-bright": "#f9f9fc",
+                    "inverse-surface": "#2f3133",
+                    "on-primary-fixed": "#002117",
+                    "background": "#f9f9fc",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#90959a",
+                    "on-error-container": "#93000a",
+                    "on-background": "#1a1c1e",
+                    "inverse-primary": "#59dcb5",
+                    "surface-container-high": "#e8e8ea",
+                    "on-primary-fixed-variant": "#00513e",
+                    "secondary-fixed-dim": "#a4c9ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-md": "12px",
+                    "stack-sm": "4px",
+                    "container-margin-mob": "16px",
+                    "base": "8px",
+                    "gutter": "16px",
+                    "container-margin-desk": "24px",
+                    "stack-lg": "24px"
+            },
+            "fontFamily": {
+                    "label-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "title-lg": ["Inter"],
+                    "title-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                    "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "label-sm": ["11px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ripple-effect:active {
+            background-color: rgba(0,0,0,0.1);
+            transition: background-color 0s;
+        }
+        .qr-gradient {
+            background: linear-gradient(135deg, #006b53 0%, #00a884 100%);
+        }
+        .emergency-header-gradient {
+            background: linear-gradient(to right, #ba1a1a, #93000a);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<header class="bg-surface shadow-sm fixed top-0 w-full z-50 flex justify-between items-center px-container-margin-mob md:px-container-margin-desk py-base">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary font-headline-sm" style="font-variation-settings: 'FILL' 1;">health_and_safety</span>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">Aarogya Vault</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-surface-variant/50 rounded-full transition-all">search</button>
+<div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional close-up headshot of a 26-year-old male with friendly features, wearing a modern clinical environment setting in the background. The lighting is soft and neutral, maintaining the professional healthcare app aesthetic with a clean, high-key atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEy8iIpILmMdeBMrRCJLgCVVeLLlh708Qv-l7ZTVPuwoBFOUw4LRNKLYb6dxRA2LmeYs0TM_ixzH6jUrRtQUx7w0TybDK4axsyYlk0S9T7Bbixq4vGLzOXC7Cjm8EFgm844eU5DTXldiYlJcEx1WI9eUKnBV-hYHw43XkLdfS461mCaAlbkZ315vpnnvMm8EtDjv2JGe_mrd-dK6cNcKrkbATjH42RYSx7WbDWLeV45zk01tASFfZsMA"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-20 pb-28 min-h-screen px-container-margin-mob md:px-container-margin-desk max-w-7xl mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-stack-lg">
+<!-- Left Column: Premium QR Section -->
+<section class="lg:col-span-5 flex flex-col gap-stack-lg">
+<div class="bg-surface-container-lowest p-stack-lg rounded-xl shadow-sm border border-outline-variant flex flex-col items-center text-center">
+<h2 class="font-title-lg text-title-lg text-on-surface mb-stack-sm">Emergency Medical ID</h2>
+<p class="font-body-md text-on-surface-variant mb-6">Scan this QR in an emergency to access vital medical information immediately.</p>
+<!-- QR Code Container -->
+<div class="relative p-6 bg-white rounded-2xl shadow-md border-4 border-primary/10 mb-8 w-full max-w-[280px] aspect-square flex items-center justify-center group">
+<div class="absolute inset-0 border-2 border-dashed border-primary/20 rounded-2xl m-2"></div>
+<img class="w-full h-full object-contain" data-alt="A high-resolution, complex QR code displayed centrally on a pristine white background. In the center of the QR code is a stylized medical cross icon in primary green. The QR is framed by subtle, modern tech-inspired graphic elements, reflecting a secure and sophisticated digital healthcare environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAm2KnCLIT57xmoHVLlyeEfJG1KeS_nUY4I6ye1f8RPAGLci7XzIgJmzyFHNgkS-Y-ZrDpVH7Yt8HvfA8QWCpZO7QVzpj5hKUisDyZ9X5IC0_Z1gDxksn9i5NwintuHvui1jy44-HMO4aIryjRlRWX9NfpDY05mLcM9aNuayHrGJZ73ZIsxtNWihaKJR4Oe4Cr1x86iwpYq4zUd1iKJxmJqDXGeagVk_N59ox6kRf0F3OQAffqkNXqY_g"/>
+<div class="absolute -bottom-4 bg-primary text-on-primary px-4 py-1 rounded-full text-label-sm font-label-sm shadow-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+                            SECURE ACCESS
+                        </div>
+</div>
+<div class="w-full grid grid-cols-1 gap-stack-md">
+<button class="flex items-center justify-center gap-2 bg-primary text-on-primary font-title-md py-3 rounded-xl shadow-md hover:scale-[0.99] active:scale-95 transition-all w-full">
+<span class="material-symbols-outlined">share</span>
+                            Share QR
+                        </button>
+<button class="flex items-center justify-center gap-2 bg-surface text-primary border border-primary font-title-md py-3 rounded-xl hover:bg-primary/5 transition-all w-full">
+<span class="material-symbols-outlined">download</span>
+                            Save to Device
+                        </button>
+</div>
+<div class="mt-stack-lg flex items-start gap-3 p-4 bg-surface-container-low rounded-lg text-left border border-outline-variant/30">
+<span class="material-symbols-outlined text-primary">info</span>
+<p class="font-body-md text-on-surface-variant text-sm">Keep this QR updated for better emergency support. It includes your blood group, allergies, and emergency contacts.</p>
+</div>
+</div>
+</section>
+<!-- Right Column: Emergency Access Info -->
+<section class="lg:col-span-7 flex flex-col gap-stack-lg">
+<!-- Authorized Access Banner -->
+<div class="emergency-header-gradient p-4 rounded-xl flex items-center justify-between text-on-primary shadow-lg">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">emergency</span>
+<div>
+<h3 class="font-title-md text-title-md leading-none">Emergency Access</h3>
+<p class="text-xs opacity-90">Authorized Personnel Only</p>
+</div>
+</div>
+<div class="bg-white/20 px-3 py-1 rounded-full flex items-center gap-1">
+<div class="w-2 h-2 rounded-full bg-white animate-pulse"></div>
+<span class="text-label-sm font-label-sm">LIVE STATUS</span>
+</div>
+</div>
+<!-- Patient Profile Summary -->
+<div class="bg-surface-container-lowest p-stack-lg rounded-xl shadow-sm border border-outline-variant">
+<div class="flex flex-col md:flex-row items-center gap-6 mb-8">
+<div class="relative w-24 h-24 rounded-full border-4 border-surface-container-high shadow-md overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="A portrait of Majid Shaikh, a 26-year-old male with a calm and trustworthy expression. He is photographed in natural daylight against a neutral, high-quality architectural background. The image is clear, professional, and optimized for a medical ID card profile picture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_BtsAquE2Ahy0DePLYenNZY0bA6vBi6d9TrzG6Cekkm38z6o0RjHnuAU9o0OaGLYVf0EFxu6T6kN97vda0iLopvlJ1KOB6Qzmpa13dcO42EHQyB5pYva5l603fN96qgz9P7SZWbdknMN_L78m_KjIHiMNca7hyfyaFeKmN6vslkBH84huYQy4Qtfc-fNl2hvqeGVfpCC3vxNUfubKoe0G-8kN6IjELMApGAFjGLl4XNMWcNR6zxzUNA"/>
+</div>
+<div class="text-center md:text-left flex-1">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Majid Shaikh</h2>
+<div class="flex flex-wrap justify-center md:justify-start gap-2 mt-2">
+<span class="bg-error-container text-on-error-container px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">bloodtype</span>
+                                    O+ Positive
+                                </span>
+<span class="bg-surface-container text-on-surface-variant px-3 py-1 rounded-full font-label-sm text-label-sm">
+                                    26 Years, Male
+                                </span>
+</div>
+</div>
+</div>
+<!-- Bento Grid for Vital Medical Data -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+<!-- Allergies -->
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/30 flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+                                    Allergies
+                                </span>
+</div>
+<div class="flex flex-wrap gap-2 mt-1">
+<span class="px-2 py-1 bg-white border border-outline-variant rounded-md text-sm font-medium">Penicillin</span>
+<span class="px-2 py-1 bg-white border border-outline-variant rounded-md text-sm font-medium">Pollen</span>
+</div>
+</div>
+<!-- Chronic Conditions -->
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/30 flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">medical_information</span>
+                                    Chronic Diseases
+                                </span>
+</div>
+<p class="text-sm text-on-surface-variant/70 italic mt-1">None reported</p>
+</div>
+<!-- Current Medications -->
+<div class="md:col-span-2 bg-surface-container-low p-4 rounded-xl border border-outline-variant/30 flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">pill</span>
+                                    Current Medications
+                                </span>
+</div>
+<p class="text-sm font-body-md text-on-surface">Paracetamol, Azithromycin (as of April 12, 2024)</p>
+</div>
+<!-- Emergency Contacts -->
+<div class="md:col-span-2 bg-surface-container-low p-4 rounded-xl border border-outline-variant/30">
+<span class="font-title-md text-on-surface-variant flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-on-surface">contact_phone</span>
+                                Emergency Contact
+                            </span>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 p-3 bg-white rounded-lg border border-outline-variant/20">
+<div>
+<p class="font-title-md text-on-surface">Sikandar Shaikh</p>
+<p class="text-sm text-on-surface-variant">Father • Primary Contact</p>
+</div>
+<div class="flex items-center gap-2">
+<p class="font-mono text-primary font-bold">+91 91234 56789</p>
+<button class="p-2 bg-primary-container/20 text-on-primary-container rounded-full hover:bg-primary-container/30">
+<span class="material-symbols-outlined text-xl">call</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Emergency Action Buttons -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-stack-md mt-auto">
+<button class="bg-tertiary text-on-tertiary flex items-center justify-center gap-3 py-stack-lg rounded-xl font-title-lg shadow-md hover:scale-[0.98] transition-transform active:bg-tertiary/90">
+<span class="material-symbols-outlined text-3xl">call</span>
+                        Call Contact
+                    </button>
+<button class="bg-error text-on-error flex items-center justify-center gap-3 py-stack-lg rounded-xl font-title-lg shadow-md hover:scale-[0.98] transition-transform active:bg-error/90 animate-pulse">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">ambulance</span>
+                        Call Ambulance
+                    </button>
+</div>
+</section>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile Only via JSON instructions) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-base pb-safe pt-2 bg-surface-container dark:bg-surface-container-high border-t border-outline-variant dark:border-outline shadow-md md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-sm text-label-sm">Records</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-label-sm text-label-sm">AI Assistant</span>
+</a>
+<!-- Active Tab: Alerts/Emergency (Contextually chosen) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1.5 scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">notifications</span>
+<span class="font-label-sm text-label-sm">Alerts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<!-- FAB Suppression Logic: Not rendered as this is a Details/Emergency screen -->
+<script>
+        // Micro-interactions for button press
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.classList.add('scale-95');
+            });
+            button.addEventListener('mouseup', () => {
+                button.classList.remove('scale-95');
+            });
+            button.addEventListener('mouseleave', () => {
+                button.classList.remove('scale-95');
+            });
+        });
+
+        // Simulating Emergency Pulse interaction
+        const ambulanceBtn = document.querySelector('.bg-error');
+        if (ambulanceBtn) {
+            setInterval(() => {
+                ambulanceBtn.classList.toggle('brightness-110');
+            }, 800);
+        }
+    </script>
+</body></html>

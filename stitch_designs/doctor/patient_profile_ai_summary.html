@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aarogya Vault - Patient Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f2f4f6",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed": "#002117",
+                    "surface": "#f7f9fb",
+                    "on-tertiary-fixed-variant": "#004395",
+                    "outline": "#6c7a74",
+                    "error": "#ba1a1a",
+                    "surface-container-high": "#e6e8ea",
+                    "error-container": "#ffdad6",
+                    "primary-fixed-dim": "#59dcb5",
+                    "on-secondary": "#ffffff",
+                    "on-primary-container": "#003427",
+                    "inverse-surface": "#2d3133",
+                    "inverse-primary": "#59dcb5",
+                    "background": "#f7f9fb",
+                    "on-secondary-container": "#586377",
+                    "on-error-container": "#93000a",
+                    "primary-container": "#00a884",
+                    "on-tertiary-container": "#002b63",
+                    "tertiary-fixed-dim": "#adc6ff",
+                    "on-background": "#191c1e",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-surface": "#191c1e",
+                    "on-tertiary-fixed": "#001a42",
+                    "on-secondary-fixed-variant": "#3c475a",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed": "#d8e3fb",
+                    "secondary": "#545f73",
+                    "tertiary": "#005ac2",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-on-surface": "#eff1f3",
+                    "primary-fixed": "#79f9d0",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed": "#111c2d",
+                    "secondary-container": "#d5e0f8",
+                    "on-surface-variant": "#3d4a44",
+                    "tertiary-container": "#5592ff",
+                    "surface-variant": "#e0e3e5",
+                    "surface-dim": "#d8dadc",
+                    "primary": "#006b53",
+                    "on-primary-fixed-variant": "#00513e",
+                    "surface-bright": "#f7f9fb",
+                    "secondary-fixed-dim": "#bcc7de",
+                    "surface-container": "#eceef0",
+                    "surface-tint": "#006b53",
+                    "tertiary-fixed": "#d8e2ff",
+                    "outline-variant": "#bccac2"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "grid-gutter": "16px",
+                    "container-padding": "24px",
+                    "unit": "4px",
+                    "density-compact": "8px",
+                    "density-comfortable": "16px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Hanken Grotesk"],
+                    "data-mono": ["JetBrains Mono"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "title-sm": ["Inter"],
+                    "display-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "data-mono": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .active-tab-indicator {
+            height: 2px;
+            background-color: #006b53;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 16px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #bccac2;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-24">
+<!-- Top App Bar -->
+<header class="bg-surface sticky top-0 z-50 flex justify-between items-center w-full px-container-padding h-16 border-b border-outline-variant">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold overflow-hidden">
+<span class="material-symbols-outlined">health_and_safety</span>
+</div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Aarogya Vault</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-sm">notifications</span>
+</div>
+</div>
+</header>
+<main class="max-w-[1600px] mx-auto p-container-padding">
+<div class="bento-grid">
+<!-- Patient Profile Sidebar (Left) -->
+<aside class="col-span-12 lg:col-span-3 space-y-4">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm">
+<div class="aspect-[0.67] w-full relative">
+<img alt="Patient profile photo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC13Ga3W2YsLQCg5bHxHJjddQBkrESXQnuXqGHuwlhcBpz5HnlQTwkYtEF7H8X0WFa93StH7C9o9JbTBsLuw9JDvLAHZPZYRrigMGgw1hePpEEThWOnwu8RW0Q9W0vEXTMRxlXHif3Un3ZPrsfbz5-u9LgpmrpS1K_JOTGv-KDDj4Ws7lfrhsad5RHV0iULzzkShZR1cYboeekeJXgQCee8Z9EgYx30m6xdT0_aR3pKfnA2nnP58E7ilnNa7qV1dn5Y0yM"/>
+<div class="absolute top-4 right-4">
+<span class="bg-error text-on-error font-label-caps px-3 py-1 rounded-sm shadow-lg flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+                                ALLERGY: PENICILLIN
+                            </span>
+</div>
+</div>
+<div class="p-5 space-y-4">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Arjun Vardhan</h2>
+<p class="font-body-sm text-on-surface-variant">Patient ID: #AV-98234-B</p>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-surface-container-low p-3 rounded-lg">
+<p class="font-label-caps text-on-surface-variant uppercase text-[10px]">Age / Gender</p>
+<p class="font-title-sm text-title-sm">42 / Male</p>
+</div>
+<div class="bg-surface-container-low p-3 rounded-lg">
+<p class="font-label-caps text-on-surface-variant uppercase text-[10px]">Blood Group</p>
+<p class="font-title-sm text-title-sm text-error">O Positive</p>
+</div>
+<div class="bg-surface-container-low p-3 rounded-lg">
+<p class="font-label-caps text-on-surface-variant uppercase text-[10px]">Height</p>
+<p class="font-title-sm text-title-sm">178 cm</p>
+</div>
+<div class="bg-surface-container-low p-3 rounded-lg">
+<p class="font-label-caps text-on-surface-variant uppercase text-[10px]">Weight</p>
+<p class="font-title-sm text-title-sm">84 kg</p>
+</div>
+</div>
+<div class="pt-2 border-t border-outline-variant">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-[20px]">medical_information</span>
+<span class="font-title-sm text-title-sm">Vitals History</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-on-surface-variant">BP (Last)</span>
+<span class="font-data-mono text-data-mono text-on-surface">138/92 mmHg</span>
+</div>
+<div class="w-full bg-surface-container-high h-1 rounded-full overflow-hidden">
+<div class="bg-tertiary-container h-full" style="width: 75%"></div>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-on-surface-variant">HbA1c</span>
+<span class="font-data-mono text-data-mono text-on-surface">6.8%</span>
+</div>
+<div class="w-full bg-surface-container-high h-1 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full" style="width: 62%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area (Center/Right) -->
+<div class="col-span-12 lg:col-span-9 space-y-6">
+<!-- AI Clinical Summary Card -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant p-6 relative overflow-hidden">
+<!-- Subtle AI Glow Effect -->
+<div class="absolute -top-12 -right-12 w-64 h-64 bg-primary/5 blur-[80px] rounded-full pointer-events-none"></div>
+<div class="flex flex-col md:flex-row gap-6">
+<div class="md:w-1/3 flex flex-col items-center justify-center border-r border-outline-variant md:pr-6">
+<div class="relative w-32 h-32 flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container-high" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-error transition-all duration-1000" cx="64" cy="64" fill="transparent" r="58" stroke="currentColor" stroke-dasharray="364.4" stroke-dashoffset="109.3" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-display-lg text-display-lg text-on-surface leading-none">74</span>
+<span class="font-label-caps text-error">HIGH RISK</span>
+</div>
+</div>
+<p class="mt-4 font-title-sm text-title-sm text-center">AI Clinical Risk Score</p>
+<p class="font-body-sm text-on-surface-variant text-center px-4">Based on historical vitals and latest pathology trends.</p>
+</div>
+<div class="md:w-2/3 space-y-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<h3 class="font-title-sm text-title-sm">AI Insight Summary</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-error-container/30 p-4 rounded-lg border border-error/10">
+<div class="flex items-center gap-2 mb-2 text-error">
+<span class="material-symbols-outlined text-[18px]">priority_high</span>
+<span class="font-label-caps">IMPORTANT ALERTS</span>
+</div>
+<ul class="space-y-2 list-disc list-inside font-body-sm text-on-surface">
+<li>Rising Creatinine levels (1.4 mg/dL) over last 3 labs.</li>
+<li>Sudden increase in nocturnal heart rate variability.</li>
+</ul>
+</div>
+<div class="bg-primary-container/10 p-4 rounded-lg border border-primary/10">
+<div class="flex items-center gap-2 mb-2 text-primary">
+<span class="material-symbols-outlined text-[18px]">bolt</span>
+<span class="font-label-caps">RECOMMENDATIONS</span>
+</div>
+<ul class="space-y-2 list-disc list-inside font-body-sm text-on-surface">
+<li>Schedule Nephrology consult within 48 hours.</li>
+<li>Initiate 24-hour BP monitoring protocol.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Tabs Section -->
+<div class="space-y-4">
+<div class="flex border-b border-outline-variant gap-8 overflow-x-auto no-scrollbar">
+<button class="pb-3 relative group active" onclick="switchTab('timeline')">
+<span class="font-title-sm text-title-sm text-primary transition-colors">Timeline</span>
+<div class="active-tab-indicator" id="timeline-indicator"></div>
+</button>
+<button class="pb-3 relative group" onclick="switchTab('reports')">
+<span class="font-title-sm text-title-sm text-on-surface-variant group-hover:text-primary transition-colors">Clinical Reports</span>
+<div class="h-[2px] bg-primary absolute bottom-0 left-0 w-full opacity-0 transition-opacity" id="reports-indicator"></div>
+</button>
+</div>
+<!-- Timeline Content -->
+<div class="space-y-4" id="tab-timeline">
+<div class="flex justify-between items-center mb-2">
+<h4 class="font-title-sm text-title-sm">Recent Activity</h4>
+<button class="text-primary font-label-caps flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-[16px]">filter_list</span> FILTER
+                            </button>
+</div>
+<div class="space-y-0 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[1px] before:bg-outline-variant">
+<!-- Timeline Item 1 -->
+<div class="relative pl-8 pb-6 group">
+<div class="absolute left-0 top-1 w-[24px] h-[24px] bg-surface rounded-full border-2 border-primary-container z-10 flex items-center justify-center">
+<div class="w-2 h-2 bg-primary rounded-full"></div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg group-hover:bg-surface-container-high transition-colors border-l-4 border-primary">
+<div class="flex justify-between items-start mb-1">
+<h5 class="font-title-sm text-title-sm text-on-surface">Consultation: Dr. Ananya Sharma</h5>
+<span class="font-data-mono text-data-mono text-on-surface-variant">Today, 10:30 AM</span>
+</div>
+<p class="font-body-sm text-on-surface-variant">Primary Diagnosis: Mild Hypertension, Stage 1. Patient reported persistent headaches.</p>
+<div class="mt-3 flex gap-2">
+<span class="px-2 py-1 bg-surface-container-highest rounded text-[10px] font-label-caps text-on-secondary-fixed-variant">CARDIOLOGY</span>
+<span class="px-2 py-1 bg-surface-container-highest rounded text-[10px] font-label-caps text-on-secondary-fixed-variant">PRESCRIPTION ISSUED</span>
+</div>
+</div>
+</div>
+<!-- Timeline Item 2 -->
+<div class="relative pl-8 pb-6 group">
+<div class="absolute left-0 top-1 w-[24px] h-[24px] bg-surface rounded-full border-2 border-outline-variant z-10 flex items-center justify-center">
+<div class="w-2 h-2 bg-outline-variant rounded-full"></div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant group-hover:bg-surface-container-low transition-colors">
+<div class="flex justify-between items-start mb-1">
+<h5 class="font-title-sm text-title-sm text-on-surface">Pathology Result: Lipid Profile</h5>
+<span class="font-data-mono text-data-mono text-on-surface-variant">12 Jul 2024</span>
+</div>
+<p class="font-body-sm text-on-surface-variant">Total Cholesterol: 210 mg/dL (High). Referral to nutritionist suggested.</p>
+</div>
+</div>
+<!-- Timeline Item 3 -->
+<div class="relative pl-8 group">
+<div class="absolute left-0 top-1 w-[24px] h-[24px] bg-surface rounded-full border-2 border-outline-variant z-10 flex items-center justify-center">
+<div class="w-2 h-2 bg-outline-variant rounded-full"></div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant group-hover:bg-surface-container-low transition-colors">
+<div class="flex justify-between items-start mb-1">
+<h5 class="font-title-sm text-title-sm text-on-surface">Pharmacy Pick-up</h5>
+<span class="font-data-mono text-data-mono text-on-surface-variant">08 Jul 2024</span>
+</div>
+<p class="font-body-sm text-on-surface-variant">Telmisartan 40mg - 30 days supply dispensed by Apollo Pharmacy.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Reports Content (Hidden by default) -->
+<div class="hidden grid grid-cols-1 md:grid-cols-2 gap-4" id="tab-reports">
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant hover:border-primary transition-all cursor-pointer group">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-lg bg-tertiary/10 text-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined">description</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h5 class="font-title-sm text-title-sm text-on-surface">Annual Health Screening</h5>
+<span class="font-data-mono text-data-mono text-on-surface-variant">PDF • 4.2 MB</span>
+</div>
+<p class="font-body-sm text-on-surface-variant mt-1">Comprehensive body checkup including renal and liver function.</p>
+<div class="mt-3 flex justify-between items-center">
+<span class="text-[10px] font-label-caps text-on-surface-variant uppercase">Updated 2 days ago</span>
+<button class="p-1 rounded-full group-hover:bg-surface-container-high"><span class="material-symbols-outlined text-[20px]">download</span></button>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant hover:border-primary transition-all cursor-pointer group">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined">image</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h5 class="font-title-sm text-title-sm text-on-surface">Chest X-Ray (PA View)</h5>
+<span class="font-data-mono text-data-mono text-on-surface-variant">DICOM • 12 MB</span>
+</div>
+<p class="font-body-sm text-on-surface-variant mt-1">Imaging for respiratory tracking. Clear lung fields noted.</p>
+<div class="mt-3 flex justify-between items-center">
+<span class="text-[10px] font-label-caps text-on-surface-variant uppercase">05 Jul 2024</span>
+<button class="p-1 rounded-full group-hover:bg-surface-container-high"><span class="material-symbols-outlined text-[20px]">visibility</span></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Nav Bar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center py-density-compact bg-surface-container-lowest border-t border-outline-variant shadow-sm md:px-32">
+<div class="flex flex-col items-center justify-center text-secondary">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-caps text-label-caps">Dashboard</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-caps text-label-caps">Patients</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-caps text-label-caps">Appointments</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-label-caps text-label-caps">AI Copilot</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-caps text-label-caps">Profile</span>
+</div>
+</nav>
+<script>
+        function switchTab(tab) {
+            const timeline = document.getElementById('tab-timeline');
+            const reports = document.getElementById('tab-reports');
+            const timelineInd = document.getElementById('timeline-indicator');
+            const reportsInd = document.getElementById('reports-indicator');
+            
+            const timelineText = timelineInd.previousElementSibling;
+            const reportsText = reportsInd.previousElementSibling;
+
+            if (tab === 'timeline') {
+                timeline.classList.remove('hidden');
+                reports.classList.add('hidden');
+                timelineInd.classList.replace('opacity-0', 'opacity-100');
+                reportsInd.classList.replace('opacity-100', 'opacity-0');
+                timelineText.classList.add('text-primary');
+                timelineText.classList.remove('text-on-surface-variant');
+                reportsText.classList.add('text-on-surface-variant');
+                reportsText.classList.remove('text-primary');
+            } else {
+                timeline.classList.add('hidden');
+                reports.classList.remove('hidden');
+                timelineInd.classList.replace('opacity-100', 'opacity-0');
+                reportsInd.classList.replace('opacity-0', 'opacity-100');
+                reportsText.classList.add('text-primary');
+                reportsText.classList.remove('text-on-surface-variant');
+                timelineText.classList.add('text-on-surface-variant');
+                timelineText.classList.remove('text-primary');
+            }
+        }
+        
+        // Initial setup for indicators
+        document.addEventListener('DOMContentLoaded', () => {
+            const timelineInd = document.getElementById('timeline-indicator');
+            const reportsInd = document.getElementById('reports-indicator');
+            timelineInd.classList.add('opacity-100');
+            reportsInd.classList.add('opacity-0');
+        });
+    </script>
+</body></html>

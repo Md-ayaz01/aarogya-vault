@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aarogya Vault - Doctor Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-surface": "#191c1e",
+                "primary-fixed": "#79f9d0",
+                "tertiary-container": "#5592ff",
+                "primary-container": "#00a884",
+                "inverse-on-surface": "#eff1f3",
+                "on-primary-fixed-variant": "#00513e",
+                "on-background": "#191c1e",
+                "inverse-primary": "#59dcb5",
+                "surface-container-highest": "#e0e3e5",
+                "on-secondary-fixed": "#111c2d",
+                "on-secondary-container": "#586377",
+                "on-primary": "#ffffff",
+                "on-secondary-fixed-variant": "#3c475a",
+                "surface-container-high": "#e6e8ea",
+                "on-tertiary-fixed-variant": "#004395",
+                "secondary-fixed-dim": "#bcc7de",
+                "on-surface-variant": "#3d4a44",
+                "tertiary": "#005ac2",
+                "surface-container-lowest": "#ffffff",
+                "primary-fixed-dim": "#59dcb5",
+                "outline-variant": "#bccac2",
+                "error": "#ba1a1a",
+                "surface-bright": "#f7f9fb",
+                "on-tertiary-container": "#002b63",
+                "tertiary-fixed-dim": "#adc6ff",
+                "secondary-container": "#d5e0f8",
+                "surface-container": "#eceef0",
+                "on-error-container": "#93000a",
+                "surface-variant": "#e0e3e5",
+                "on-primary-container": "#003427",
+                "background": "#f7f9fb",
+                "surface": "#f7f9fb",
+                "on-tertiary": "#ffffff",
+                "primary": "#006b53",
+                "outline": "#6c7a74",
+                "surface-dim": "#d8dadc",
+                "surface-container-low": "#f2f4f6",
+                "secondary-fixed": "#d8e3fb",
+                "surface-tint": "#006b53",
+                "error-container": "#ffdad6",
+                "secondary": "#545f73",
+                "tertiary-fixed": "#d8e2ff",
+                "on-tertiary-fixed": "#001a42",
+                "on-secondary": "#ffffff",
+                "on-primary-fixed": "#002117",
+                "on-error": "#ffffff",
+                "inverse-surface": "#2d3133"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+            },
+            "spacing": {
+                "density-comfortable": "16px",
+                "container-padding": "24px",
+                "density-compact": "8px",
+                "unit": "4px",
+                "grid-gutter": "16px"
+            },
+            "fontFamily": {
+                "headline-md": ["Hanken Grotesk"],
+                "data-mono": ["JetBrains Mono"],
+                "body-sm": ["Inter"],
+                "body-md": ["Inter"],
+                "display-lg": ["Hanken Grotesk"],
+                "title-sm": ["Inter"],
+                "label-caps": ["Inter"]
+            },
+            "fontSize": {
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "data-mono": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f7f9fb;
+            color: #191c1e;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 16px;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid #e2e8f0;
+        }
+        .medical-accent-left {
+            border-left: 4px solid #006b53;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-body-md mb-20">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-container-padding h-16 bg-surface dark:bg-on-surface border-b border-outline-variant dark:border-on-surface-variant shadow-none">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed" data-icon="clinical_notes">clinical_notes</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">Profile</h1>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional medical headshot of a mature South Asian male doctor with a kind expression, wearing a white clinical coat and a stethoscope. The background is a clean, softly lit modern hospital office with cool blue and white tones. The photography is high-resolution, sharp, and corporate in style, emphasizing trust and analytical expertise." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQIbZyctOB21DWcf_ymgvwYlgSFr9IfROAnQ3GvE1pICF-a4-G8TTbQOtjU9FBE0s7wFlzroQ-H3F1VjbJQYsKmU4cdAjvg0X2-0Yyn2piDz57t48BBzIQfT1C76PvlhT4qePcE03sI7L2MPg0eWz74CPvA0cREmqzHOTM4-8T3m0MqlZTmVR6EEKHZgymC7xF7drPT0D2H2JAF6szbFTqentSMU4h1Ym0IX00R6n0BMlXZkYBVe5UyQ"/>
+</div>
+</div>
+</header>
+<main class="mt-20 px-container-padding max-w-[1600px] mx-auto">
+<!-- Profile Header & Stats -->
+<div class="bento-grid">
+<!-- Main Doctor Identity -->
+<div class="col-span-12 lg:col-span-8 glass-card p-6 rounded-xl flex flex-col md:flex-row gap-6 items-center md:items-start">
+<div class="relative">
+<div class="w-32 h-32 rounded-xl overflow-hidden shadow-sm border-2 border-white">
+<img class="w-full h-full object-cover" data-alt="Close up portrait of Dr. Ravi Sharma, a senior cardiologist with a professional and reassuring demeanor. He is wearing a crisp white medical apron over a light blue formal shirt. The lighting is neutral and bright, suitable for a professional clinical environment. The overall aesthetic is minimalist, expert, and clean, aligning with high-end medical software design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBV8H9M3b2GH38jh_0Rk0h2-Nu0L8tFx1NaRJrkWf4XsOjFMn7BoGDlwQKiJ0xRweJKvvgSrJpLiL8UBv3MQFptp--oXDwP2Ju76AR-5JfEY5HmyBN7cqeE4Ji1SGuCkr0Jadza2Df7IaXI2wLZJJTW61ry-vlw7uXMGtp5L9fnKK5Bgcpl0Z3buKiDZA3h5fHUKRPNy7dum2C3EQgNHQ6s3EcufBq9elQ2TV7OVcd-pXymtoJbxNcQPw"/>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-primary-container text-white p-1 rounded-lg">
+<span class="material-symbols-outlined text-[18px]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="text-center md:text-left space-y-1 flex-1">
+<h2 class="font-display-lg text-display-lg text-on-surface">Dr. Ravi Sharma</h2>
+<p class="font-title-sm text-title-sm text-primary">MBBS, MD Cardiology</p>
+<div class="flex items-center justify-center md:justify-start gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]" data-icon="hospital">festival</span>
+<span class="font-body-sm text-body-sm">City Central General Hospital</span>
+</div>
+<div class="pt-4 flex flex-wrap gap-2 justify-center md:justify-start">
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-label-caps font-label-caps rounded-lg">Senior Consultant</span>
+<span class="px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed text-label-caps font-label-caps rounded-lg">Available Today</span>
+</div>
+</div>
+</div>
+<!-- Quick Stats -->
+<div class="col-span-12 lg:col-span-4 grid grid-cols-3 lg:grid-cols-1 gap-4">
+<div class="glass-card p-4 rounded-xl flex flex-col items-center justify-center text-center medical-accent-left">
+<span class="font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Experience</span>
+<span class="font-headline-md text-headline-md text-primary font-data-mono">12y</span>
+</div>
+<div class="glass-card p-4 rounded-xl flex flex-col items-center justify-center text-center medical-accent-left">
+<span class="font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Patients</span>
+<span class="font-headline-md text-headline-md text-primary font-data-mono">5k+</span>
+</div>
+<div class="glass-card p-4 rounded-xl flex flex-col items-center justify-center text-center medical-accent-left">
+<span class="font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase">Rating</span>
+<div class="flex items-center gap-1">
+<span class="font-headline-md text-headline-md text-primary font-data-mono">4.9</span>
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+</div>
+<!-- Professional Information -->
+<section class="col-span-12 md:col-span-6 glass-card p-6 rounded-xl border border-outline-variant">
+<div class="flex items-center gap-2 mb-6 border-b border-surface-container-highest pb-3">
+<span class="material-symbols-outlined text-primary" data-icon="badge">badge</span>
+<h3 class="font-title-sm text-title-sm uppercase tracking-wider text-on-surface">Professional Details</h3>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-on-surface-variant">Specialization</span>
+<span class="font-body-md font-semibold text-on-surface">Interventional Cardiology</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-on-surface-variant">License No.</span>
+<span class="font-data-mono text-body-md text-on-surface">MC-1284-9021-X</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-on-surface-variant">Digital Signature</span>
+<div class="flex items-center gap-2 text-primary-container">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span>
+<span class="font-body-sm font-semibold">Active &amp; Encrypted</span>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-on-surface-variant">Membership</span>
+<span class="font-body-md text-on-surface text-right">Cardiological Society of India</span>
+</div>
+</div>
+</section>
+<!-- Account & Schedule -->
+<section class="col-span-12 md:col-span-6 glass-card p-6 rounded-xl border border-outline-variant">
+<div class="flex items-center gap-2 mb-6 border-b border-surface-container-highest pb-3">
+<span class="material-symbols-outlined text-primary" data-icon="settings_account_box">settings_account_box</span>
+<h3 class="font-title-sm text-title-sm uppercase tracking-wider text-on-surface">Account Settings</h3>
+</div>
+<div class="space-y-2">
+<button class="w-full flex items-center justify-between p-3 hover:bg-surface-container-low rounded-lg transition-colors group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary" data-icon="person">person</span>
+<span class="font-body-md text-on-surface">Personal Information</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-3 hover:bg-surface-container-low rounded-lg transition-colors group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary" data-icon="domain">domain</span>
+<span class="font-body-md text-on-surface">Hospital Affiliations</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-3 hover:bg-surface-container-low rounded-lg transition-colors group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary" data-icon="calendar_month">calendar_month</span>
+<span class="font-body-md text-on-surface">Work Schedule &amp; Buffer Times</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- App Preferences -->
+<section class="col-span-12 glass-card p-6 rounded-xl border border-outline-variant">
+<div class="flex items-center gap-2 mb-6 border-b border-surface-container-highest pb-3">
+<span class="material-symbols-outlined text-primary" data-icon="tune">tune</span>
+<h3 class="font-title-sm text-title-sm uppercase tracking-wider text-on-surface">App Preferences</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="flex items-center justify-between bg-surface-container rounded-xl p-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="language">language</span>
+<div>
+<p class="font-body-md font-semibold">Language</p>
+<p class="font-body-sm text-on-surface-variant">System default: English</p>
+</div>
+</div>
+<select class="bg-transparent border-none focus:ring-0 font-body-sm text-primary cursor-pointer">
+<option>English</option>
+<option>Hindi</option>
+<option>Marathi</option>
+</select>
+</div>
+<div class="flex items-center justify-between bg-surface-container rounded-xl p-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="contrast">contrast</span>
+<div>
+<p class="font-body-md font-semibold">Display Theme</p>
+<p class="font-body-sm text-on-surface-variant">Currently: Light Mode</p>
+</div>
+</div>
+<div class="flex bg-surface-container-high rounded-lg p-1">
+<button class="p-2 bg-white rounded-md shadow-sm text-primary">
+<span class="material-symbols-outlined text-[20px]" data-icon="light_mode">light_mode</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined text-[20px]" data-icon="dark_mode">dark_mode</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer / Action Area -->
+<div class="col-span-12 mt-4 pb-12">
+<button class="w-full flex items-center justify-center gap-3 bg-error-container text-on-error-container hover:bg-error hover:text-white transition-all py-4 rounded-xl font-title-sm text-title-sm">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span>Log out from Clinical Console</span>
+</button>
+<div class="text-center mt-6">
+<p class="font-body-sm text-on-surface-variant opacity-60">Version 2.4.1 (Clinical Build) • 256-bit Encrypted Session</p>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center bg-surface dark:bg-on-surface pb-safe h-16 border-t border-outline-variant dark:border-on-surface-variant">
+<a class="flex flex-col items-center justify-center text-on-secondary-container dark:text-on-secondary-fixed-variant pt-2 hover:text-primary-container dark:hover:text-primary-fixed transition-all scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-caps text-label-caps">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-secondary-container dark:text-on-secondary-fixed-variant pt-2 hover:text-primary-container dark:hover:text-primary-fixed transition-all scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-caps text-label-caps">Patients</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-secondary-container dark:text-on-secondary-fixed-variant pt-2 hover:text-primary-container dark:hover:text-primary-fixed transition-all scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+<span class="font-label-caps text-label-caps">Schedule</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-secondary-container dark:text-on-secondary-fixed-variant pt-2 hover:text-primary-container dark:hover:text-primary-fixed transition-all scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="psychiatry">psychiatry</span>
+<span class="font-label-caps text-label-caps">Copilot</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim border-t-2 border-primary dark:border-primary-fixed-dim pt-2 scale-95 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle" style="font-variation-settings: 'FILL' 1;">account_circle</span>
+<span class="font-label-caps text-label-caps">Profile</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions
+        document.querySelectorAll('button, a').forEach(elem => {
+            elem.addEventListener('mousedown', () => {
+                elem.style.transform = 'scale(0.98)';
+            });
+            elem.addEventListener('mouseup', () => {
+                elem.style.transform = 'scale(1)';
+            });
+            elem.addEventListener('mouseleave', () => {
+                elem.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

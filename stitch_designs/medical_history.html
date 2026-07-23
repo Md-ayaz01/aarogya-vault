@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aarogya Vault - Medical History</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Config Verbatim -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary": "#5a5f64",
+                    "secondary-fixed": "#d4e3ff",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed": "#171c20",
+                    "inverse-on-surface": "#f0f0f3",
+                    "on-surface": "#1a1c1e",
+                    "surface-container-highest": "#e2e2e5",
+                    "secondary-container": "#68abff",
+                    "on-secondary": "#ffffff",
+                    "on-surface-variant": "#3d4a44",
+                    "on-tertiary-fixed-variant": "#42474c",
+                    "outline": "#6c7a74",
+                    "secondary": "#0060ac",
+                    "surface-tint": "#006b53",
+                    "on-tertiary": "#ffffff",
+                    "surface-variant": "#e2e2e5",
+                    "on-tertiary-container": "#292e32",
+                    "error-container": "#ffdad6",
+                    "on-secondary-fixed": "#001c39",
+                    "surface": "#f9f9fc",
+                    "surface-container-low": "#f3f3f6",
+                    "primary-container": "#00a884",
+                    "surface-container-lowest": "#ffffff",
+                    "primary": "#006b53",
+                    "on-secondary-container": "#003e73",
+                    "primary-fixed": "#79f9d0",
+                    "tertiary-fixed": "#dfe3e9",
+                    "on-primary": "#ffffff",
+                    "outline-variant": "#bccac2",
+                    "primary-fixed-dim": "#59dcb5",
+                    "on-secondary-fixed-variant": "#004883",
+                    "on-primary-container": "#003427",
+                    "surface-dim": "#dadadc",
+                    "surface-container": "#eeeef0",
+                    "tertiary-fixed-dim": "#c2c7cd",
+                    "surface-bright": "#f9f9fc",
+                    "inverse-surface": "#2f3133",
+                    "on-primary-fixed": "#002117",
+                    "background": "#f9f9fc",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#90959a",
+                    "on-error-container": "#93000a",
+                    "on-background": "#1a1c1e",
+                    "inverse-primary": "#59dcb5",
+                    "surface-container-high": "#e8e8ea",
+                    "on-primary-fixed-variant": "#00513e",
+                    "secondary-fixed-dim": "#a4c9ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-md": "12px",
+                    "stack-sm": "4px",
+                    "container-margin-mob": "16px",
+                    "base": "8px",
+                    "gutter": "16px",
+                    "container-margin-desk": "24px",
+                    "stack-lg": "24px"
+            },
+            "fontFamily": {
+                    "label-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "title-lg": ["Inter"],
+                    "title-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                    "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "label-sm": ["11px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9f9fc;
+        }
+        .custom-shadow {
+            box-shadow: 0px 4px 12px rgba(0,0,0,0.05);
+        }
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #bccac2;
+            z-index: 0;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-inverse-surface shadow-sm fixed top-0 left-0 w-full z-40 flex justify-between items-center px-container-margin-mob md:px-container-margin-desk py-base">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-fixed overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a 26-year-old South Asian man named Majid with a friendly smile, clean-shaven, wearing a clinical but casual modern shirt. The background is a soft-focus minimalist medical office with clean lines and high-key lighting, maintaining a trustworthy healthcare brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcua8aZS409warFLgu3D4zweHK5d9p1ryFaJ3yXjO-ZFgekifed5wAPJgyWB39OWkBqoebTGNa43FxR974ko_kCHvyyufNlx12T3zTUuBdn_VaKyouufX2yvg2M8AiY8GJF-jfD10PNal0EQRccIqcxwKi1PRhc2n-KkJsvvIOi1_bwGHRv7W4YKiX5FH_JLZlzzlVrg-hVw2KVrcVJtMbRw4-_Jy22AB8LTieK4QYUgifZVaNEdNGSA"/>
+</div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed">Aarogya Vault</h1>
+</div>
+<button class="material-symbols-outlined text-primary dark:text-primary-fixed p-2 hover:bg-surface-variant/50 rounded-full transition-all duration-200 active:scale-98">
+            search
+        </button>
+</header>
+<main class="mt-20 px-container-margin-mob md:px-container-margin-desk space-y-stack-lg max-w-4xl mx-auto">
+<!-- Header Section & Toggle -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-gutter">
+<div class="space-y-stack-sm">
+<h2 class="font-headline-md text-headline-md text-on-surface">Medical History</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">View and manage your lifetime health records securely.</p>
+</div>
+<div class="bg-surface-container-low p-1 rounded-xl flex">
+<button class="flex-1 md:flex-none px-6 py-2 rounded-lg font-label-lg text-label-lg transition-all duration-200 bg-primary-container text-on-primary-container" id="list-toggle" onclick="switchView('list')">
+                    Categories
+                </button>
+<button class="flex-1 md:flex-none px-6 py-2 rounded-lg font-label-lg text-label-lg transition-all duration-200 text-on-surface-variant" id="timeline-toggle" onclick="switchView('timeline')">
+                    Timeline
+                </button>
+</div>
+</div>
+<!-- CATEGORIES VIEW -->
+<div class="space-y-stack-md" id="list-view">
+<!-- Chronic Diseases -->
+<div class="bg-surface-container-lowest p-gutter rounded-xl border border-outline-variant custom-shadow hover:bg-surface-container-low transition-colors duration-200 flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">chronic</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface">Chronic Diseases</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">No chronic diseases reported</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+<!-- Allergies -->
+<div class="bg-surface-container-lowest p-gutter rounded-xl border border-outline-variant custom-shadow hover:bg-surface-container-low transition-colors duration-200 flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center text-error">
+<span class="material-symbols-outlined">emergency_home</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface">Allergies</h3>
+<div class="flex flex-wrap gap-2 mt-1">
+<span class="px-3 py-0.5 rounded-full bg-error/10 text-error text-[10px] font-bold uppercase tracking-wider">Penicillin</span>
+<span class="px-3 py-0.5 rounded-full bg-error/10 text-error text-[10px] font-bold uppercase tracking-wider">Pollen</span>
+</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+<!-- Surgeries -->
+<div class="bg-surface-container-lowest p-gutter rounded-xl border border-outline-variant custom-shadow hover:bg-surface-container-low transition-colors duration-200 flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">charger</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface">Surgeries</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Appendectomy (2019)</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+<!-- Family History -->
+<div class="bg-surface-container-lowest p-gutter rounded-xl border border-outline-variant custom-shadow hover:bg-surface-container-low transition-colors duration-200 flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-tertiary/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">family_history</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface">Family History</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Diabetes, Hypertension</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+<!-- Vaccinations -->
+<div class="bg-surface-container-lowest p-gutter rounded-xl border border-outline-variant custom-shadow hover:bg-surface-container-low transition-colors duration-200 flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">vaccines</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface">Vaccinations</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Up to date • Last: 10 Jan 2024</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+</div>
+<!-- TIMELINE VIEW (Hidden by default) -->
+<div class="hidden relative space-y-stack-lg pl-10 timeline-line" id="timeline-view">
+<!-- Timeline Item 1 -->
+<div class="relative">
+<div class="absolute -left-10 w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white z-10 border-4 border-background">
+<span class="material-symbols-outlined text-[18px]">vaccines</span>
+</div>
+<div class="bg-surface-container-lowest p-gutter rounded-xl border border-outline-variant custom-shadow">
+<span class="font-label-sm text-label-sm text-primary font-bold uppercase tracking-widest">10 Jan 2024</span>
+<h3 class="font-title-md text-title-md text-on-surface mt-1">Hepatitis B Booster</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Administered at Apollo Hospital, Indore.</p>
+</div>
+</div>
+<!-- Timeline Item 2 -->
+<div class="relative">
+<div class="absolute -left-10 w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-white z-10 border-4 border-background">
+<span class="material-symbols-outlined text-[18px]">biotech</span>
+</div>
+<div class="bg-surface-container-lowest p-gutter rounded-xl border border-outline-variant custom-shadow">
+<span class="font-label-sm text-label-sm text-secondary font-bold uppercase tracking-widest">05 Nov 2023</span>
+<h3 class="font-title-md text-title-md text-on-surface mt-1">Annual Blood Panel</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">All parameters within normal range. Vitamin D slightly low.</p>
+</div>
+</div>
+<!-- Timeline Item 3 -->
+<div class="relative">
+<div class="absolute -left-10 w-10 h-10 rounded-full bg-error flex items-center justify-center text-white z-10 border-4 border-background">
+<span class="material-symbols-outlined text-[18px]">emergency_home</span>
+</div>
+<div class="bg-surface-container-lowest p-gutter rounded-xl border border-outline-variant custom-shadow">
+<span class="font-label-sm text-label-sm text-error font-bold uppercase tracking-widest">12 Aug 2023</span>
+<h3 class="font-title-md text-title-md text-on-surface mt-1">Allergic Reaction</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Acute hives post Penicillin administration. Marked as critical allergy.</p>
+</div>
+</div>
+<!-- Timeline Item 4 -->
+<div class="relative">
+<div class="absolute -left-10 w-10 h-10 rounded-full bg-tertiary flex items-center justify-center text-white z-10 border-4 border-background">
+<span class="material-symbols-outlined text-[18px]">charger</span>
+</div>
+<div class="bg-surface-container-lowest p-gutter rounded-xl border border-outline-variant custom-shadow">
+<span class="font-label-sm text-label-sm text-tertiary font-bold uppercase tracking-widest">15 June 2019</span>
+<h3 class="font-title-md text-title-md text-on-surface mt-1">Appendectomy</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Laparoscopic surgery performed without complications.</p>
+</div>
+</div>
+</div>
+<!-- Floating Upload Button -->
+<div class="flex justify-center pt-stack-lg">
+<button class="bg-primary text-on-primary px-stack-lg py-4 rounded-full font-title-md text-title-md flex items-center gap-2 shadow-lg hover:bg-on-primary-fixed-variant transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">upload_file</span>
+                Upload Record
+            </button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-base pb-safe pt-2 bg-surface-container dark:bg-surface-container-high border-t border-outline-variant dark:border-outline shadow-md">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:bg-surface-container-highest transition-transform duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-on-primary-fixed-variant text-on-primary-container dark:text-primary-fixed rounded-full px-4 py-1.5 transition-transform duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-sm text-label-sm">Records</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:bg-surface-container-highest transition-transform duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-label-sm text-label-sm">AI Assistant</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:bg-surface-container-highest transition-transform duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span class="font-label-sm text-label-sm">Alerts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:bg-surface-container-highest transition-transform duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        function switchView(view) {
+            const listToggle = document.getElementById('list-toggle');
+            const timelineToggle = document.getElementById('timeline-toggle');
+            const listView = document.getElementById('list-view');
+            const timelineView = document.getElementById('timeline-view');
+
+            if (view === 'list') {
+                listView.classList.remove('hidden');
+                timelineView.classList.add('hidden');
+                listToggle.classList.add('bg-primary-container', 'text-on-primary-container');
+                listToggle.classList.remove('text-on-surface-variant');
+                timelineToggle.classList.remove('bg-primary-container', 'text-on-primary-container');
+                timelineToggle.classList.add('text-on-surface-variant');
+            } else {
+                listView.classList.add('hidden');
+                timelineView.classList.remove('hidden');
+                timelineToggle.classList.add('bg-primary-container', 'text-on-primary-container');
+                timelineToggle.classList.remove('text-on-surface-variant');
+                listToggle.classList.remove('bg-primary-container', 'text-on-primary-container');
+                listToggle.classList.add('text-on-surface-variant');
+            }
+        }
+    </script>
+</body></html>

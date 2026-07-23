@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aarogya Vault | Doctor Edition</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Hanken+Grotesk:wght@600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f2f4f6",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed": "#002117",
+                    "surface": "#f7f9fb",
+                    "on-tertiary-fixed-variant": "#004395",
+                    "outline": "#6c7a74",
+                    "error": "#ba1a1a",
+                    "surface-container-high": "#e6e8ea",
+                    "error-container": "#ffdad6",
+                    "primary-fixed-dim": "#59dcb5",
+                    "on-secondary": "#ffffff",
+                    "on-primary-container": "#003427",
+                    "inverse-surface": "#2d3133",
+                    "inverse-primary": "#59dcb5",
+                    "background": "#f7f9fb",
+                    "on-secondary-container": "#586377",
+                    "on-error-container": "#93000a",
+                    "primary-container": "#00a884",
+                    "on-tertiary-container": "#002b63",
+                    "tertiary-fixed-dim": "#adc6ff",
+                    "on-background": "#191c1e",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-surface": "#191c1e",
+                    "on-tertiary-fixed": "#001a42",
+                    "on-secondary-fixed-variant": "#3c475a",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed": "#d8e3fb",
+                    "secondary": "#545f73",
+                    "tertiary": "#005ac2",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-on-surface": "#eff1f3",
+                    "primary-fixed": "#79f9d0",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed": "#111c2d",
+                    "secondary-container": "#d5e0f8",
+                    "on-surface-variant": "#3d4a44",
+                    "tertiary-container": "#5592ff",
+                    "surface-variant": "#e0e3e5",
+                    "surface-dim": "#d8dadc",
+                    "primary": "#006b53",
+                    "on-primary-fixed-variant": "#00513e",
+                    "surface-bright": "#f7f9fb",
+                    "secondary-fixed-dim": "#bcc7de",
+                    "surface-container": "#eceef0",
+                    "surface-tint": "#006b53",
+                    "tertiary-fixed": "#d8e2ff",
+                    "outline-variant": "#bccac2"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "grid-gutter": "16px",
+                    "container-padding": "24px",
+                    "unit": "4px",
+                    "density-compact": "8px",
+                    "density-comfortable": "16px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Hanken Grotesk"],
+                    "data-mono": ["JetBrains Mono"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "title-sm": ["Inter"],
+                    "display-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "data-mono": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>@keyframes fade-up {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+        } 100% {
+        opacity: 1;
+        transform: translateY(0);
+        }
+    }
+@keyframes pulse-soft {
+    0%, 100% {
+        opacity: 1;
+        } 50% {
+        opacity: 0.7;
+        }
+    }
+@keyframes grain {
+    0%, 100% {
+        transform: translate(0, 0);
+        } 10% {
+        transform: translate(-5%, -10%);
+        } 20% {
+        transform: translate(-15%, 5%);
+        } 30% {
+        transform: translate(7%, -25%);
+        } 40% {
+        transform: translate(-5%, 25%);
+        } 50% {
+        transform: translate(-15%, 10%);
+        } 60% {
+        transform: translate(15%, 0%);
+        } 70% {
+        transform: translate(0%, 15%);
+        } 80% {
+        transform: translate(3%, 35%);
+        } 90% {
+        transform: translate(-10%, 10%);
+        }
+    }
+.animate-fade-up {
+    animation: fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards
+    }
+.animate-delay-1 {
+    animation-delay: 0.2s
+    }
+.animate-delay-2 {
+    animation-delay: 0.4s
+    }
+/* Medical watermark background pattern */
+.medical-grid {
+    background-image: radial-gradient(#00a884 0.5px, transparent 0.5px);
+    background-size: 24px 24px;
+    opacity: 0.03
+    }
+.grain-overlay {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDNaoadOfYqx0CxPO3SJDdle-hRE5xKIjEl5BepclH9ggj1dZ38eKOPKY5c8_36n3pikva7Z9WdvHmUW-HpMmDxW_3DXI4d_56IKIekge6doqnf0xH8zjF_wn6qymnxiF3XkEccTSDBOzGBxb2TdmrXQF3v0OAEtNq9igrAlC76nIhQtSBoiBUWpx7RddX4s-TsLgcup27ntNafAwIPxAxT-qSp0DrOHb5lk_fWdmKJgx_GG0_gXKCgUA);
+    filter: contrast(120%) brightness(120%);
+    animation: grain 8s steps(10) infinite
+    }</style>
+</head>
+<body class="bg-surface font-body-md text-on-surface overflow-hidden">
+<!-- Subtle Background Elements -->
+<div class="fixed inset-0 pointer-events-none z-0">
+<!-- Medical Grid Watermark -->
+<div class="absolute inset-0 medical-grid"></div>
+<!-- Soft Gradient Glows -->
+<div class="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary-fixed-dim blur-[120px] opacity-20 rounded-full"></div>
+<div class="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-secondary-container blur-[100px] opacity-15 rounded-full"></div>
+<!-- Grain for high-end finish -->
+<div class="absolute inset-0 grain-overlay opacity-[0.04]"></div>
+</div>
+<!-- Main Content Canvas -->
+<main class="relative z-10 flex flex-col items-center justify-center min-h-screen w-full px-container-padding">
+<!-- Logo Section -->
+<div class="flex flex-col items-center max-w-sm w-full space-y-density-comfortable">
+<!-- App Logo with Glassmorphism ring -->
+<div class="relative group">
+<div class="absolute inset-0 bg-primary/20 blur-2xl rounded-full scale-75 group-hover:scale-100 transition-transform duration-700"></div>
+<div class="relative w-32 h-32 md:w-40 md:h-40 bg-white p-6 rounded-xl shadow-sm border border-outline-variant flex items-center justify-center overflow-hidden">
+<img alt="Aarogya Vault Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida/AP1WRLuBjqLv9RQEHeKW4pqZa9UFjCY98mfU_LKPeRtAyQhR0rUEIMJfUelnI0LcUF6JgjEKzdGdGVkg3_aCby1xi0PYXzeT4MnpPT0KYhxu5lu9Y9a7iqc71blHlD246hAj2-0woJrUeRUNwO2vecpsKMfiRqGNQTKVAJpT3bdOYozKS0fFbuAcxH27aLJ-pxx79EjRk3dmVRQkFwTRuudxzb6MBrg5AXqfQrQLJulgn7UyXpUpnI4bdYWrtI2F"/>
+</div>
+</div>
+<!-- Branding & Edition -->
+<div class="text-center space-y-unit opacity-0 animate-fade-up">
+<h1 class="font-display-lg text-display-lg text-on-surface tracking-tight">
+                    Aarogya Vault
+                </h1>
+<div class="inline-flex items-center space-x-2 bg-primary-container/10 border border-primary/20 px-3 py-1 rounded-full">
+<span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="font-label-caps text-label-caps text-primary tracking-widest">DOCTOR EDITION</span>
+</div>
+</div>
+</div>
+<!-- System Loading / Status -->
+<div class="absolute bottom-16 w-full flex flex-col items-center space-y-6 opacity-0 animate-fade-up animate-delay-2">
+<!-- Progress Bar -->
+<div class="w-48 h-0.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary w-0 transition-all duration-[2000ms] ease-out" id="progress-bar"></div>
+</div>
+<!-- Security Ticker -->
+<div class="flex flex-col items-center space-y-2">
+<div class="flex items-center space-x-3 text-on-surface-variant">
+<div class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></div>
+<p class="font-data-mono text-data-mono uppercase tracking-tighter">Syncing secure vault records...</p>
+</div>
+<div class="flex items-center space-x-2 text-outline">
+<span class="material-symbols-outlined text-[12px]">lock</span>
+<span class="text-[10px] font-label-caps opacity-60">AES-256 BIT ENCRYPTION ACTIVE</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Identity -->
+<footer class="fixed bottom-6 left-0 w-full text-center px-container-padding z-10 opacity-40">
+<p class="font-label-caps text-[10px] text-on-surface-variant">
+            © 2024 Aarogya Healthcare Systems. All Rights Reserved. Enterprise Compliance Tier.
+        </p>
+</footer>
+<script>
+        // Simulate app initialization loading
+        window.addEventListener('DOMContentLoaded', () => {
+            const progressBar = document.getElementById('progress-bar');
+            
+            // Initial delay then fill
+            setTimeout(() => {
+                progressBar.style.width = '100%';
+            }, 300);
+
+            // Micro-interaction: Subtle mouse parallax on the glows
+            document.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth) - 0.5;
+                const y = (e.clientY / window.innerHeight) - 0.5;
+                
+                const glows = document.querySelectorAll('.bg-primary-fixed-dim, .bg-secondary-container');
+                glows.forEach((glow, idx) => {
+                    const speed = (idx + 1) * 20;
+                    glow.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+                });
+            });
+        });
+    </script>
+</body></html>

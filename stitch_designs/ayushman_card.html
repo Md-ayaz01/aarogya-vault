@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aarogya Vault - Ayushman Bharat Health Card</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Shared Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error": "#ffffff",
+                    "on-primary-fixed-variant": "#00513e",
+                    "error-container": "#ffdad6",
+                    "inverse-surface": "#2f3133",
+                    "secondary": "#0060ac",
+                    "on-secondary-fixed-variant": "#004883",
+                    "secondary-container": "#68abff",
+                    "surface-container-highest": "#e2e2e5",
+                    "on-secondary-fixed": "#001c39",
+                    "on-secondary-container": "#003e73",
+                    "tertiary-fixed-dim": "#c2c7cd",
+                    "surface-container": "#eeeef0",
+                    "on-tertiary-fixed": "#171c20",
+                    "secondary-fixed": "#d4e3ff",
+                    "on-background": "#1a1c1e",
+                    "surface-bright": "#f9f9fc",
+                    "tertiary-fixed": "#dfe3e9",
+                    "primary-container": "#00a884",
+                    "on-secondary": "#ffffff",
+                    "surface-container-high": "#e8e8ea",
+                    "on-tertiary-container": "#292e32",
+                    "secondary-fixed-dim": "#a4c9ff",
+                    "on-primary": "#ffffff",
+                    "primary-fixed-dim": "#59dcb5",
+                    "primary": "#006b53",
+                    "tertiary": "#5a5f64",
+                    "background": "#f9f9fc",
+                    "on-primary-container": "#003427",
+                    "error": "#ba1a1a",
+                    "on-surface-variant": "#3d4a44",
+                    "inverse-primary": "#59dcb5",
+                    "tertiary-container": "#90959a",
+                    "inverse-on-surface": "#f0f0f3",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-variant": "#e2e2e5",
+                    "surface-dim": "#dadadc",
+                    "surface": "#f9f9fc",
+                    "outline-variant": "#bccac2",
+                    "surface-tint": "#006b53",
+                    "outline": "#6c7a74",
+                    "on-tertiary-fixed-variant": "#42474c",
+                    "on-error-container": "#93000a",
+                    "surface-container-low": "#f3f3f6",
+                    "on-tertiary": "#ffffff",
+                    "on-surface": "#1a1c1e",
+                    "on-primary-fixed": "#002117",
+                    "primary-fixed": "#79f9d0"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-lg": "24px",
+                    "gutter": "16px",
+                    "base": "8px",
+                    "container-margin-desk": "24px",
+                    "stack-sm": "4px",
+                    "stack-md": "12px",
+                    "container-margin-mob": "16px"
+            },
+            "fontFamily": {
+                    "title-md": ["Inter"],
+                    "title-lg": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "label-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "600"}],
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "label-sm": ["11px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .ripple-effect:active {
+            background-color: rgba(0, 0, 0, 0.1);
+            transition: background-color 0.1s;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .card-shadow {
+            box-shadow: 0px 4px 12px rgba(0,0,0,0.05);
+        }
+        .floating-button-shadow {
+            box-shadow: 0px 8px 24px rgba(0,0,0,0.12);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<header class="bg-surface shadow-sm sticky top-0 z-50 flex justify-between items-center w-full px-container-margin-mob md:px-container-margin-desk py-base">
+<div class="flex items-center gap-3">
+<button class="material-symbols-outlined p-2 hover:bg-surface-variant/50 rounded-full transition-all duration-200">arrow_back</button>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">Aarogya Vault</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer p-2 hover:bg-surface-variant/50 rounded-full">search</span>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed">
+<img class="w-full h-full object-cover" data-alt="A professional studio headshot of Majid Shaikh, a 26-year-old South Asian man with a friendly expression. He is wearing a clean white shirt against a soft, neutral medical clinic background. The lighting is bright and airy, following a clinical precision design aesthetic with high-key illumination and sharp focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_FVxPVGjdHCTdw1r4tCvMNoXuOZ8O4tknk-7fJT2sJbu0t3vlY1lVEMncgGp4Jrx4DrtoEUoUypd_RhWGMmEXgaJdN38Y6rRYBpAocQ9-73Za6Kgc1_cCnn5s4uXjtuP1uKectmjn3QVvjIfdHX7GYmvMtQo3TYCJc6DfsfhHSdr7pxHuRu7vosFKwSw3-4ucBigpW1KJEPe-p4mmwduBB3MBN1mroRpARSGP29Xi2dC_nkAQz1aUdg"/>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-container-margin-mob md:px-container-margin-desk py-stack-lg space-y-stack-lg">
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- PM-JAY Digital Health Card (Primary Anchor) -->
+<section class="md:col-span-8 group">
+<div class="relative overflow-hidden rounded-xl h-full p-stack-lg bg-gradient-to-br from-primary to-on-primary-fixed-variant text-on-primary card-shadow transition-transform duration-300 hover:scale-[1.01]">
+<!-- Background Decoration -->
+<div class="absolute -right-20 -top-20 w-64 h-64 bg-primary-fixed-dim/10 rounded-full blur-3xl"></div>
+<div class="absolute -left-10 -bottom-10 w-48 h-48 bg-primary-container/20 rounded-full blur-2xl"></div>
+<div class="relative z-10 flex flex-col h-full justify-between gap-8">
+<div class="flex justify-between items-start">
+<div class="space-y-1">
+<span class="font-label-sm text-label-sm uppercase tracking-widest opacity-80">Government of India</span>
+<h2 class="font-headline-md text-headline-md leading-tight">Ayushman Bharat (PM-JAY)</h2>
+</div>
+<div class="bg-white p-2 rounded-lg shadow-sm">
+<img class="w-20 h-20" data-alt="A high-resolution, sharp medical QR code generated for digital identification. The QR code is perfectly centered on a white background with a small green cross icon in the center. The surrounding design is minimalist and clean, suggesting secure data access in a professional healthcare application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiNVR0kQcDkHWDUogg2SvzSxIfLSm2ff1Hh9zCaNMvLLqEjTT2UwUnCbpPS9nFWOkmsZReeyzvM-YDNituJgiE8WfofT2dMKeaQ3_Z9tkfUb0t8bWHbHiawq56r7PWl-WAXM_-aSShsh-FQOakQNKRsZl6HKUOfCvPl8adtmUhEKbKmiAOYVrz9aeHAcvuXiYYQ1j1UR8lM3EyI-53Xr6RDlvYLYzAnB_OJOwc25cD_lHNiuoh3ABxYw"/>
+</div>
+</div>
+<div class="flex flex-col md:flex-row gap-8 items-end justify-between">
+<div class="space-y-4 w-full md:w-auto">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-lg border-2 border-on-primary/30 overflow-hidden shadow-inner">
+<img class="w-full h-full object-cover" data-alt="A passport-style identification photo of Majid Shaikh, looking directly at the camera with a neutral and calm expression. The background is a solid light grey. The image is clear and well-lit, emphasizing trust and identity for a medical health card system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBt5yLh8IMFqdVb3bnUlhv4TkPskBPDZToo0zOcFf0SQ4R6Soehy2Q_rNcAt7bDcMUud-p3OCD22gSp4KJJZDW9DSLK5FtL9GuEOUJm8VRqaucCzlE9J2uqATQLtRn9d7CoJNczmPbwy2STSF_bgQOrDw8sVvDAi7O3l3H3ycWzrReK5xfQWbLer7nW9Ic5E7uSC9MSXQeHiDwdriBQR3Y8ohWaf4XHyHEKAwmhrvlNEJ5_N6fG48digg"/>
+</div>
+<div>
+<p class="font-title-md text-title-md">Majid Shaikh</p>
+<p class="font-label-lg text-label-lg opacity-90 tracking-wider">ABHA ID: 91-4325-6789-0123</p>
+</div>
+</div>
+<div class="flex gap-6">
+<div>
+<p class="font-label-sm text-label-sm opacity-70">GENDER</p>
+<p class="font-body-md text-body-md font-semibold">Male</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm opacity-70">DATE OF BIRTH</p>
+<p class="font-body-md text-body-md font-semibold">12 Jan 1998</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm opacity-70">VALID UPTO</p>
+<p class="font-body-md text-body-md font-semibold">Life-time</p>
+</div>
+</div>
+</div>
+<div class="flex gap-3 w-full md:w-auto">
+<button class="flex-1 md:flex-none bg-surface-container-lowest text-primary px-6 py-3 rounded-xl font-title-md ripple-effect flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">download</span>
+                                    Download
+                                </button>
+<button class="flex-1 md:flex-none border border-on-primary/40 text-on-primary px-6 py-3 rounded-xl font-title-md hover:bg-on-primary/10 transition-all duration-200 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">share</span>
+                                    Share
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Coverage Summary Card -->
+<section class="md:col-span-4">
+<div class="bg-surface rounded-xl p-stack-lg border border-outline-variant h-full flex flex-col justify-between card-shadow">
+<div class="space-y-stack-md">
+<div class="flex items-center justify-between">
+<h3 class="font-title-md text-title-md text-primary">Coverage Balance</h3>
+<span class="material-symbols-outlined text-tertiary">info</span>
+</div>
+<div class="py-4">
+<div class="flex items-baseline gap-1">
+<span class="font-display-lg text-display-lg text-on-surface">₹5.00</span>
+<span class="font-title-lg text-title-lg text-on-surface-variant">Lakhs</span>
+</div>
+<p class="font-label-lg text-label-lg text-outline">Available for the current year</p>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-3 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[92%] rounded-full shadow-sm"></div>
+</div>
+<div class="flex justify-between font-label-sm text-label-sm">
+<span class="text-primary font-bold">92% Remaining</span>
+<span class="text-on-surface-variant">Used: ₹40,000</span>
+</div>
+</div>
+<button class="w-full mt-stack-lg py-3 rounded-xl border-1.5 border-primary text-primary font-title-md hover:bg-primary-container/10 transition-colors duration-200">
+                        View Claims History
+                    </button>
+</div>
+</section>
+<!-- Linked Family Members -->
+<section class="md:col-span-7">
+<div class="bg-surface rounded-xl p-stack-lg border border-outline-variant card-shadow space-y-stack-lg">
+<div class="flex items-center justify-between">
+<h3 class="font-title-lg text-title-lg text-on-surface">Linked Family Members</h3>
+<button class="text-primary font-label-lg flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-[18px]">person_add</span> Add Member
+                        </button>
+</div>
+<div class="space-y-stack-md">
+<!-- Member 1 -->
+<div class="flex items-center justify-between p-3 rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A portrait of an elderly South Asian man, Sikandar Shaikh, Majid's father. He has a warm smile and is wearing a traditional light-colored kurta. The background is a clean, softly blurred indoor setting. The photography follows a consistent professional clinical style with bright, natural lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPMrOKy7LfhUWzAQtOvpSgP5QTbItUitToIrcD3VyGp8WcHdlaGlPsrxmh1OPE3A-pfrjnyNPlLJJYEZwMgZZpQ1y38p9H9mNZqwPkCWsbk93TMbXgPTNV5tJmT5rUspZbTqPW69APQpqLzG-Ll8vS3iwPjCecLKP-9SiRQG72MPAYDiuGne83Wg6YOQ8Z19fLIFlW99zrhB8oYjhymKWTYaVx5HigIOBsswDocoqQe8geRX7jf5oN5A"/>
+</div>
+<div>
+<p class="font-title-md text-title-md">Sikandar Shaikh</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Father • ABHA ID: 91-0012-XXXX</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+<!-- Member 2 -->
+<div class="flex items-center justify-between p-3 rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A headshot of a middle-aged South Asian woman, Mumtaz Shaikh, Majid's mother. She is wearing a colorful saree and has a kind, dignified expression. The image is brightly lit with a clean medical clinic aesthetic. Every detail is crisp, suggesting high-quality identity photography for a healthcare app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRtSfno_oIO8kcQfa6yrUAqgbn3O6L0D3TmfI1RoPnSQ297BK-zzZ1m5n2v0Qswo01G6dddYYtj-MZM2KOObgDszqLPURTHQzn7KNMlNTG25JSRx7aMv1x75nfL5Rd3369F54b1-B0Mz1c4YARASYwArsZ3Ij8ndQRWUpz6VpL8itfh_SAOpILZe5ks-2dIrB4QBUpFnWM8gE-c_VMom7p7Rq9RBr8YAjhEJ_X62eyYmxzVz24y9WDaA"/>
+</div>
+<div>
+<p class="font-title-md text-title-md">Mumtaz Shaikh</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Mother • ABHA ID: 91-8823-XXXX</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Hospital Finder Action -->
+<section class="md:col-span-5">
+<div class="relative rounded-xl overflow-hidden h-full card-shadow group">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" data-alt="A stylized map view of a modern urban area with several medical cross icons indicating hospital locations. The map uses a clean, light-colored theme with soft greens and blues, avoiding visual clutter. High-key lighting makes the map look professional and integrated into a healthcare UI." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDWflShugFoM-FRw4zGlmh7vq13ljSeaPnOxu6qm-0-iwrc8QQI3Gz4svSvm8cyCz10lUWaN4yaZvsAfFOJSoeG61vSbs5NVL9mHlS_w2qwLR4DbiGCsrYSgQyZ7wqrc3yyebFh_RLndEg94R_8v1Vp3RYaqYLb3f5e4s8ozHrzGOZgoZKHn54z3ZcIs6EY57lhAm2m361wAch5wZJkDX60nipUvsAtdFeTlCSSeEf2kr8G66te1VLcsg')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div class="relative z-10 h-full p-stack-lg flex flex-col justify-end gap-stack-md">
+<div class="bg-primary/90 backdrop-blur-md self-start px-3 py-1 rounded-full text-on-primary font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">my_location</span>
+                            Detecting Location...
+                        </div>
+<h3 class="font-headline-sm text-headline-sm text-white">Find PM-JAY Empanelled Hospitals</h3>
+<p class="text-white/80 font-body-md">Locate nearby government and private hospitals offering free cashless treatment.</p>
+<button class="w-full bg-primary text-white py-4 rounded-xl font-title-md floating-button-shadow hover:brightness-110 transition-all flex items-center justify-center gap-2 mt-2">
+<span class="material-symbols-outlined">map</span>
+                            Explore Nearby Hospitals
+                        </button>
+</div>
+</div>
+</section>
+<!-- Quick Links / Secondary Info -->
+<section class="md:col-span-12 grid grid-cols-2 md:grid-cols-4 gap-gutter">
+<div class="bg-surface p-stack-md rounded-xl border border-outline-variant flex items-center gap-4 card-shadow hover:bg-surface-container transition-colors cursor-pointer">
+<div class="w-12 h-12 rounded-lg bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">verified_user</span>
+</div>
+<div class="flex-1">
+<p class="font-title-md text-title-md">Policy Details</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">View Benefits</p>
+</div>
+</div>
+<div class="bg-surface p-stack-md rounded-xl border border-outline-variant flex items-center gap-4 card-shadow hover:bg-surface-container transition-colors cursor-pointer">
+<div class="w-12 h-12 rounded-lg bg-tertiary-container flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined">headset_mic</span>
+</div>
+<div class="flex-1">
+<p class="font-title-md text-title-md">Help Desk</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">24/7 Support</p>
+</div>
+</div>
+<div class="bg-surface p-stack-md rounded-xl border border-outline-variant flex items-center gap-4 card-shadow hover:bg-surface-container transition-colors cursor-pointer">
+<div class="w-12 h-12 rounded-lg bg-primary-fixed flex items-center justify-center text-on-primary-fixed-variant">
+<span class="material-symbols-outlined">history</span>
+</div>
+<div class="flex-1">
+<p class="font-title-md text-title-md">Past Visits</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Treatment History</p>
+</div>
+</div>
+<div class="bg-surface p-stack-md rounded-xl border border-outline-variant flex items-center gap-4 card-shadow hover:bg-surface-container transition-colors cursor-pointer">
+<div class="w-12 h-12 rounded-lg bg-error-container flex items-center justify-center text-on-error-container">
+<span class="material-symbols-outlined">emergency_share</span>
+</div>
+<div class="flex-1">
+<p class="font-title-md text-title-md">Emergency</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Quick Connect</p>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-base pb-safe pt-2 bg-surface-container shadow-md rounded-t-xl border-t border-outline-variant">
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1.5 scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">badge</span>
+<span class="font-label-sm text-label-sm">ABHA Card</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-label-sm text-label-sm">Assistant</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2">
+<span class="material-symbols-outlined">notifications</span>
+<span class="font-label-sm text-label-sm">Alerts</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</div>
+</nav>
+<!-- Desktop Navigation Drawer (Hidden on mobile) -->
+<aside class="hidden md:flex fixed left-0 top-0 h-full w-80 bg-surface shadow-lg border-r border-outline-variant flex-col py-stack-lg">
+<div class="px-container-margin-desk mb-8">
+<div class="flex items-center gap-3 mb-stack-lg">
+<span class="material-symbols-outlined text-primary text-4xl">medical_services</span>
+<span class="font-headline-md text-headline-md text-primary font-bold">Aarogya Vault</span>
+</div>
+<div class="p-4 bg-surface-container-low rounded-xl border border-outline-variant flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-primary">
+<img class="w-full h-full object-cover" data-alt="A small thumbnail profile picture of Majid Shaikh for a sidebar UI component. The photo is a professional headshot with soft lighting and a neutral grey background, maintaining consistent character identity across the app screens." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcYJdJDUhql65H8MWqZK0ry8CmQVrBKF8a3lMxEx5p7SslUkJQUkCzSjFZNbuqGhfXYrbs1CxrGAe08iGRQB3AW9WDcKzcv60GlLnFGQQxoXiel3-x4w7SczQVne9oAn87-KDwi4r1pe8VXauqGsIH938ijdDgu4LbrbQie_C8tfly8oL4kGp8a-tyJBGKAWOvhmhTxu_BocMgrHADSho_rsGs7FHXQvTvjhJDXVke3Yftmkf_c6KICw"/>
+</div>
+<div>
+<p class="font-title-md text-title-md">Majid Shaikh</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">26 Years, Male</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-4 px-container-margin-desk py-3 text-on-surface-variant hover:bg-surface-container-low rounded-r-full mr-4 transition-colors" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-body-md">Medical History</span>
+</a>
+<a class="flex items-center gap-4 px-container-margin-desk py-3 text-on-surface-variant hover:bg-surface-container-low rounded-r-full mr-4 transition-colors" href="#">
+<span class="material-symbols-outlined">prescriptions</span>
+<span class="font-body-md">Prescriptions</span>
+</a>
+<a class="flex items-center gap-4 px-container-margin-desk py-3 bg-secondary-container text-on-secondary-container font-bold rounded-r-full mr-4 transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">badge</span>
+<span class="font-body-md">Ayushman Bharat Card</span>
+</a>
+<a class="flex items-center gap-4 px-container-margin-desk py-3 text-on-surface-variant hover:bg-surface-container-low rounded-r-full mr-4 transition-colors" href="#">
+<span class="material-symbols-outlined">qr_code_2</span>
+<span class="font-body-md">Emergency QR</span>
+</a>
+<div class="my-stack-lg border-t border-outline-variant mx-container-margin-desk"></div>
+<a class="flex items-center gap-4 px-container-margin-desk py-3 text-on-surface-variant hover:bg-surface-container-low rounded-r-full mr-4 transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+<a class="flex items-center gap-4 px-container-margin-desk py-3 text-on-surface-variant hover:bg-surface-container-low rounded-r-full mr-4 transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md">Help &amp; Support</span>
+</a>
+</nav>
+<div class="px-container-margin-desk mt-auto">
+<button class="w-full flex items-center justify-center gap-2 py-3 text-error border border-error/30 rounded-xl hover:bg-error/5 transition-colors">
+<span class="material-symbols-outlined">logout</span>
+                Logout
+            </button>
+</div>
+</aside>
+<script>
+        // Simple micro-interaction for cards
+        document.querySelectorAll('.ripple-effect').forEach(button => {
+            button.addEventListener('click', function(e) {
+                this.classList.add('scale-[0.98]');
+                setTimeout(() => this.classList.remove('scale-[0.98]'), 150);
+            });
+        });
+    </script>
+</body></html>

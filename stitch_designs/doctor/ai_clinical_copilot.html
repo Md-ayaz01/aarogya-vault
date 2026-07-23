@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aarogya Vault - AI Copilot</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f2f4f6",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed": "#002117",
+                    "surface": "#f7f9fb",
+                    "on-tertiary-fixed-variant": "#004395",
+                    "outline": "#6c7a74",
+                    "error": "#ba1a1a",
+                    "surface-container-high": "#e6e8ea",
+                    "error-container": "#ffdad6",
+                    "primary-fixed-dim": "#59dcb5",
+                    "on-secondary": "#ffffff",
+                    "on-primary-container": "#003427",
+                    "inverse-surface": "#2d3133",
+                    "inverse-primary": "#59dcb5",
+                    "background": "#f7f9fb",
+                    "on-secondary-container": "#586377",
+                    "on-error-container": "#93000a",
+                    "primary-container": "#00a884",
+                    "on-tertiary-container": "#002b63",
+                    "tertiary-fixed-dim": "#adc6ff",
+                    "on-background": "#191c1e",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-surface": "#191c1e",
+                    "on-tertiary-fixed": "#001a42",
+                    "on-secondary-fixed-variant": "#3c475a",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed": "#d8e3fb",
+                    "secondary": "#545f73",
+                    "tertiary": "#005ac2",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-on-surface": "#eff1f3",
+                    "primary-fixed": "#79f9d0",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed": "#111c2d",
+                    "secondary-container": "#d5e0f8",
+                    "on-surface-variant": "#3d4a44",
+                    "tertiary-container": "#5592ff",
+                    "surface-variant": "#e0e3e5",
+                    "surface-dim": "#d8dadc",
+                    "primary": "#006b53",
+                    "on-primary-fixed-variant": "#00513e",
+                    "surface-bright": "#f7f9fb",
+                    "secondary-fixed-dim": "#bcc7de",
+                    "surface-container": "#eceef0",
+                    "surface-tint": "#006b53",
+                    "tertiary-fixed": "#d8e2ff",
+                    "outline-variant": "#bccac2"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "grid-gutter": "16px",
+                    "container-padding": "24px",
+                    "unit": "4px",
+                    "density-compact": "8px",
+                    "density-comfortable": "16px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Hanken Grotesk"],
+                    "data-mono": ["JetBrains Mono"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "title-sm": ["Inter"],
+                    "display-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "data-mono": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .typing-dot {
+            animation: typing-blink 1.4s infinite both;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing-blink {
+            0%, 80%, 100% { opacity: 0; }
+            40% { opacity: 1; }
+        }
+        .stream-text::after {
+            content: '|';
+            animation: cursor-blink 0.8s infinite;
+        }
+        @keyframes cursor-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .clinical-glow {
+            box-shadow: 0 0 20px rgba(0, 107, 83, 0.05);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #bccac2;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-surface w-full top-0 border-b border-outline-variant flex justify-between items-center px-container-padding h-16 sticky z-50">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container overflow-hidden">
+<span class="material-symbols-outlined">health_and_safety</span>
+</div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Aarogya Vault</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-colors duration-200">
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-[20px]">person</span>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col md:flex-row max-w-[1600px] mx-auto w-full overflow-hidden">
+<!-- Left Sidebar: Patient Context (Collapsible on mobile) -->
+<aside class="hidden md:flex flex-col w-80 border-r border-outline-variant bg-surface-container-lowest p-density-comfortable">
+<div class="mb-6">
+<h2 class="font-label-caps text-label-caps text-on-surface-variant mb-4 uppercase">Current Context</h2>
+<div class="p-4 bg-surface-container rounded-lg border border-outline-variant">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">person</span>
+</div>
+<div>
+<p class="font-title-sm text-title-sm">Aditi Sharma</p>
+<p class="font-data-mono text-data-mono text-on-surface-variant">ID: #4402-B</p>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<span class="text-[12px] text-on-surface-variant">Age/Sex</span>
+<span class="text-[12px] font-semibold">32 / F</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-[12px] text-on-surface-variant">Vitals</span>
+<span class="text-[12px] font-semibold text-primary">Stable</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex-1">
+<h2 class="font-label-caps text-label-caps text-on-surface-variant mb-4 uppercase">Recent Lab Trends</h2>
+<div class="space-y-3">
+<div class="p-3 border border-outline-variant rounded bg-white">
+<div class="flex justify-between mb-1">
+<span class="text-[12px] font-medium">HbA1c</span>
+<span class="text-[12px] font-data-mono text-error">7.2%</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-error" style="width: 72%"></div>
+</div>
+</div>
+<div class="p-3 border border-outline-variant rounded bg-white">
+<div class="flex justify-between mb-1">
+<span class="text-[12px] font-medium">BP (Systolic)</span>
+<span class="text-[12px] font-data-mono text-primary">118 mmHg</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 55%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-auto p-4 bg-tertiary-container/10 border border-tertiary/20 rounded-lg">
+<p class="text-[11px] font-bold text-tertiary uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">info</span>
+                    System Status
+                </p>
+<p class="text-[12px] text-on-tertiary-container mt-1">Medical Knowledge Base updated 2h ago (ICD-11 ready).</p>
+</div>
+</aside>
+<!-- AI Chat Interface -->
+<section class="flex-1 flex flex-col h-[calc(100vh-64px-72px)] md:h-[calc(100vh-64px)] relative bg-surface-bright">
+<!-- Chat Header -->
+<div class="flex items-center justify-between px-6 py-4 border-b border-outline-variant bg-white/80 backdrop-blur-md sticky top-0 z-10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-[18px]">smart_toy</span>
+</div>
+<div>
+<h3 class="font-title-sm text-title-sm">Clinical Copilot</h3>
+<p class="text-[12px] text-on-surface-variant flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                            Analyzing patient history...
+                        </p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 text-[12px] font-semibold border border-outline-variant rounded hover:bg-surface-container transition-all">Clear History</button>
+<button class="px-3 py-1.5 text-[12px] font-semibold bg-primary text-white rounded shadow-sm hover:opacity-90 transition-all">Export SOAP</button>
+</div>
+</div>
+<!-- Messages Area -->
+<div class="flex-1 overflow-y-auto p-6 space-y-8 scroll-smooth" id="chat-messages">
+<!-- User Message -->
+<div class="flex justify-end">
+<div class="max-w-[80%] bg-secondary-container text-on-secondary-container p-4 rounded-xl rounded-tr-none shadow-sm">
+<p class="font-body-md text-body-md">Generate a SOAP note for today's encounter with Aditi Sharma. Focus on her chronic fatigue symptoms and recent lab results showing elevated HbA1c.</p>
+<span class="block text-[10px] mt-2 text-right opacity-60">14:22 PM</span>
+</div>
+</div>
+<!-- AI Response (Streaming Animation Target) -->
+<div class="flex justify-start gap-4">
+<div class="w-8 h-8 rounded-full bg-primary-container flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container text-[18px]">auto_awesome</span>
+</div>
+<div class="max-w-[85%] space-y-4">
+<div class="bg-white border border-outline-variant p-5 rounded-xl rounded-tl-none clinical-glow">
+<div class="flex items-center gap-2 mb-4 border-b border-outline-variant pb-2">
+<span class="font-label-caps text-label-caps text-primary">SOAP NOTE DRAFT</span>
+<span class="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full">AUTO-GENERATED</span>
+</div>
+<div class="space-y-4 text-on-surface">
+<div>
+<h4 class="text-[12px] font-bold text-on-surface-variant mb-1 uppercase">Subjective</h4>
+<p class="font-body-md text-body-md stream-text leading-relaxed">
+                                        Patient reports persistent fatigue over the last 3 weeks, notably "worse in the late afternoons." Denies recent illness, fever, or weight changes. Describes increased thirst and frequent urination over the same period.
+                                    </p>
+</div>
+<div class="opacity-0 transition-opacity duration-500" id="streaming-content">
+<h4 class="text-[12px] font-bold text-on-surface-variant mb-1 uppercase">Objective</h4>
+<ul class="list-disc ml-5 space-y-1 font-body-sm text-body-sm">
+<li>BP: 118/76 mmHg | HR: 72 bpm | Temp: 98.4°F</li>
+<li>Labs: HbA1c 7.2% (High, previously 6.4%)</li>
+<li>Fasting Glucose: 142 mg/dL</li>
+</ul>
+</div>
+<div class="flex gap-1 py-2" id="typing-indicator">
+<span class="w-1.5 h-1.5 rounded-full bg-primary/40 typing-dot"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary/40 typing-dot"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary/40 typing-dot"></span>
+</div>
+</div>
+</div>
+<!-- Secondary Context Card -->
+<div class="bg-tertiary-container/5 border-l-4 border-tertiary p-4 rounded-r-lg">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-tertiary text-[20px]">lightbulb</span>
+<div>
+<p class="text-[13px] font-semibold text-on-tertiary-container">Clinical Insight</p>
+<p class="text-[12px] text-on-tertiary-container/80 mt-1">Based on the HbA1c trend and patient symptoms, consider screening for early-stage Type 2 Diabetes Mellitus. Patient's current fatigue correlates with glycemic variability.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Input Area with Suggestions -->
+<div class="p-6 bg-white border-t border-outline-variant">
+<!-- Suggested Chips -->
+<div class="flex gap-2 mb-4 overflow-x-auto pb-2 no-scrollbar">
+<button class="whitespace-nowrap px-4 py-2 bg-surface-container rounded-lg border border-outline-variant text-[12px] font-medium hover:bg-primary-container hover:text-on-primary-container hover:border-primary transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">compare_arrows</span>
+                        Compare Reports
+                    </button>
+<button class="whitespace-nowrap px-4 py-2 bg-surface-container rounded-lg border border-outline-variant text-[12px] font-medium hover:bg-primary-container hover:text-on-primary-container hover:border-primary transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">pill</span>
+                        Medicine Interaction
+                    </button>
+<button class="whitespace-nowrap px-4 py-2 bg-surface-container rounded-lg border border-outline-variant text-[12px] font-medium hover:bg-primary-container hover:text-on-primary-container hover:border-primary transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">history</span>
+                        Risk Assessment
+                    </button>
+<button class="whitespace-nowrap px-4 py-2 bg-surface-container rounded-lg border border-outline-variant text-[12px] font-medium hover:bg-primary-container hover:text-on-primary-container hover:border-primary transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">description</span>
+                        Summary for Referal
+                    </button>
+</div>
+<!-- Main Input -->
+<div class="relative">
+<div class="flex items-center gap-3 bg-surface-container-low border border-outline p-2 rounded-xl focus-within:border-primary transition-colors">
+<button class="p-2 text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-body-md placeholder:text-on-surface-variant/50" placeholder="Ask Copilot for analysis, summaries, or interactions..." type="text"/>
+<button class="p-2 text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined">mic</span>
+</button>
+<button class="w-10 h-10 bg-primary text-white rounded-lg flex items-center justify-center hover:bg-on-primary-fixed-variant shadow-sm transition-all">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+<p class="text-[10px] text-center mt-3 text-on-surface-variant/70 italic">AI results should be verified by a medical professional before clinical decisions.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 flex justify-around items-center py-density-compact bg-surface-container-lowest border-t border-outline-variant shadow-sm h-[72px]">
+<div class="flex flex-col items-center justify-center text-secondary">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-caps text-label-caps">Dashboard</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-caps text-label-caps">Patients</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-caps text-label-caps">Appointments</span>
+</div>
+<!-- Active AI Copilot -->
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<span class="font-label-caps text-label-caps">AI Copilot</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-caps text-label-caps">Profile</span>
+</div>
+</nav>
+<script>
+        // Micro-interaction: Simulation of streaming response
+        document.addEventListener('DOMContentLoaded', () => {
+            const streamText = document.querySelector('.stream-text');
+            const streamingContent = document.getElementById('streaming-content');
+            const typingIndicator = document.getElementById('typing-indicator');
+            const chatMessages = document.getElementById('chat-messages');
+
+            setTimeout(() => {
+                // Show the next block
+                typingIndicator.classList.add('opacity-0');
+                streamingContent.classList.remove('opacity-0');
+                
+                // Add follow-up text for assessment
+                const assessmentDiv = document.createElement('div');
+                assessmentDiv.innerHTML = `
+                    <h4 class="text-[12px] font-bold text-on-surface-variant mb-1 uppercase">Assessment & Plan</h4>
+                    <p class="font-body-md text-body-md leading-relaxed animate-pulse">
+                        Analyzing Assessment...
+                    </p>
+                `;
+                streamingContent.parentNode.appendChild(assessmentDiv);
+                
+                // Final reveal
+                setTimeout(() => {
+                    assessmentDiv.querySelector('p').classList.remove('animate-pulse');
+                    assessmentDiv.querySelector('p').innerHTML = `Hyperglycemia, uncontrolled. Probable new-onset T2DM. Plan: Order Comprehensive Metabolic Panel (CMP), Urine Microalbumin, and schedule Nutritional Counseling. Consider initiation of Metformin 500mg daily.`;
+                    typingIndicator.remove();
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 2000);
+
+            }, 3000);
+        });
+
+        // Simple smooth scroll to bottom helper
+        const scrollToBottom = () => {
+            const chatMessages = document.getElementById('chat-messages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        };
+    </script>
+</body></html>

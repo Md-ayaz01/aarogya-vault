@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Health Assistant | Aarogya Vault</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#5a5f64",
+                        "secondary-fixed": "#d4e3ff",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed": "#171c20",
+                        "inverse-on-surface": "#f0f0f3",
+                        "on-surface": "#1a1c1e",
+                        "surface-container-highest": "#e2e2e5",
+                        "secondary-container": "#68abff",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#3d4a44",
+                        "on-tertiary-fixed-variant": "#42474c",
+                        "outline": "#6c7a74",
+                        "secondary": "#0060ac",
+                        "surface-tint": "#006b53",
+                        "on-tertiary": "#ffffff",
+                        "surface-variant": "#e2e2e5",
+                        "on-tertiary-container": "#292e32",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed": "#001c39",
+                        "surface": "#f9f9fc",
+                        "surface-container-low": "#f3f3f6",
+                        "primary-container": "#00a884",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#006b53",
+                        "on-secondary-container": "#003e73",
+                        "primary-fixed": "#79f9d0",
+                        "tertiary-fixed": "#dfe3e9",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#bccac2",
+                        "primary-fixed-dim": "#59dcb5",
+                        "on-secondary-fixed-variant": "#004883",
+                        "on-primary-container": "#003427",
+                        "surface-dim": "#dadadc",
+                        "surface-container": "#eeeef0",
+                        "tertiary-fixed-dim": "#c2c7cd",
+                        "surface-bright": "#f9f9fc",
+                        "inverse-surface": "#2f3133",
+                        "on-primary-fixed": "#002117",
+                        "background": "#f9f9fc",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#90959a",
+                        "on-error-container": "#93000a",
+                        "on-background": "#1a1c1e",
+                        "inverse-primary": "#59dcb5",
+                        "surface-container-high": "#e8e8ea",
+                        "on-primary-fixed-variant": "#00513e",
+                        "secondary-fixed-dim": "#a4c9ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-md": "12px",
+                        "stack-sm": "4px",
+                        "container-margin-mob": "16px",
+                        "base": "8px",
+                        "gutter": "16px",
+                        "container-margin-desk": "24px",
+                        "stack-lg": "24px"
+                    },
+                    "fontFamily": {
+                        "label-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "title-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "label-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "500" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400" }],
+                        "display-lg": ["57px", { "lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "title-lg": ["22px", { "lineHeight": "28px", "fontWeight": "500" }],
+                        "title-md": ["16px", { "lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400" }],
+                        "headline-md": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "headline-sm": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "label-sm": ["11px", { "lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chat-bubble-left {
+            border-radius: 20px 20px 20px 4px;
+        }
+        .chat-bubble-right {
+            border-radius: 20px 20px 4px 20px;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- Top App Bar -->
+<header class="bg-surface shadow-sm docked full-width top-0 z-50 flex justify-between items-center w-full px-container-margin-mob md:px-container-margin-desk py-base">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-primary-fixed flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a young man named Majid, looking friendly and confident, set against a soft medical office background. The lighting is bright and clean, echoing a professional healthcare environment with a soft teal and white color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZUqUu4G6P17ZLqn_xkOQ78Q8nOiRV1rO7nfzhvx2_s0gKtcRf67A_9Rv6bo-4VVbyCt5D1E3hz-155Xz_pFZuXpHDQkN1i9dMsEgmFgxT4HGfyEmoilCDMPnkiWhntZ0ME9I-LMD2HsrqmJJ9IxXUdlBscUv7i9due6zBejsFjbrBHEA7uChyolhHBM3JviOfmysVSC0fOgjnDo4F-0wHTzNpKVaK57Cqi7v7Q3xQ7BKFK4MwEySYlw"/>
+</div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">Aarogya Vault</h1>
+</div>
+<button class="p-2 rounded-full hover:bg-surface-variant/50 transition-all active:scale-95">
+<span class="material-symbols-outlined text-primary">search</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col md:flex-row max-w-7xl mx-auto w-full px-container-margin-mob md:px-container-margin-desk pt-stack-lg pb-32 gap-stack-lg">
+<!-- Left Column: Suggestions & Features (Bento Style) -->
+<aside class="w-full md:w-1/3 flex flex-col gap-stack-md">
+<div class="p-stack-md bg-surface-container-low rounded-xl border border-outline-variant shadow-sm transition-all hover:shadow-md">
+<div class="flex items-center gap-2 mb-stack-md text-primary">
+<span class="material-symbols-outlined">auto_awesome</span>
+<h2 class="font-title-md text-title-md">AI Insights</h2>
+</div>
+<div class="grid grid-cols-1 gap-base">
+<!-- Feature Card 1 -->
+<button class="flex items-start gap-3 p-3 bg-surface-container-lowest rounded-lg border border-outline-variant hover:bg-primary-container/10 transition-colors text-left group">
+<div class="bg-primary/10 p-2 rounded-lg text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">description</span>
+</div>
+<div>
+<p class="font-title-md text-body-md font-semibold">Explain my report</p>
+<p class="text-label-sm text-on-surface-variant">Get a simple explanation of your recent blood work.</p>
+</div>
+</button>
+<!-- Feature Card 2 -->
+<button class="flex items-start gap-3 p-3 bg-surface-container-lowest rounded-lg border border-outline-variant hover:bg-primary-container/10 transition-colors text-left group">
+<div class="bg-primary/10 p-2 rounded-lg text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">medical_services</span>
+</div>
+<div>
+<p class="font-title-md text-body-md font-semibold">Check symptoms</p>
+<p class="text-label-sm text-on-surface-variant">Describe how you feel for a preliminary analysis.</p>
+</div>
+</button>
+<!-- Feature Card 3 -->
+<button class="flex items-start gap-3 p-3 bg-surface-container-lowest rounded-lg border border-outline-variant hover:bg-primary-container/10 transition-colors text-left group">
+<div class="bg-primary/10 p-2 rounded-lg text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">health_metrics</span>
+</div>
+<div>
+<p class="font-title-md text-body-md font-semibold">Health Tips</p>
+<p class="text-label-sm text-on-surface-variant">Personalized advice based on your medical history.</p>
+</div>
+</button>
+</div>
+</div>
+<!-- Promotion/Atmospheric Section -->
+<div class="relative overflow-hidden rounded-xl h-48 bg-primary-container text-on-primary-container p-stack-md flex flex-col justify-end">
+
+<div class="relative z-10">
+<p class="font-title-lg text-title-lg font-bold leading-tight">Your AI Assistant is ready.</p>
+<p class="font-body-md text-body-md opacity-90">Secure, private, and always available for your health questions.</p>
+</div>
+</div>
+</aside>
+<!-- Right Column: Chat Interface -->
+<section class="flex-grow flex flex-col bg-surface border border-outline-variant rounded-xl shadow-sm overflow-hidden h-[600px] md:h-auto">
+<!-- Chat Header -->
+<div class="p-4 border-b border-outline-variant bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-white">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md">AI Health Assistant</h3>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+<span class="text-label-sm text-on-surface-variant uppercase tracking-wider">Online</span>
+</div>
+</div>
+</div>
+<button class="p-2 rounded-full hover:bg-surface-variant/50">
+<span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+</button>
+</div>
+<!-- Messages Area -->
+<div class="flex-grow p-4 overflow-y-auto space-y-4 bg-surface-container-lowest">
+<!-- AI Welcome Message -->
+<div class="flex items-start gap-3 max-w-[85%]">
+<div class="w-8 h-8 rounded-full bg-primary-container flex-shrink-0 flex items-center justify-center text-white text-xs">
+<span class="material-symbols-outlined text-sm">smart_toy</span>
+</div>
+<div class="chat-bubble-left bg-surface-container-high p-4 text-on-surface shadow-sm">
+<p class="font-body-md text-body-md">Hello, Majid! I've analyzed your latest lab reports from Apollo Hospital. Your Hemoglobin levels look great. Would you like me to explain the slight elevation in your Cholesterol levels?</p>
+<span class="block mt-2 text-[10px] text-on-surface-variant uppercase text-right">10:30 AM</span>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex items-start gap-3 max-w-[85%] ml-auto flex-row-reverse">
+<div class="w-8 h-8 rounded-full bg-primary flex-shrink-0 flex items-center justify-center text-white text-xs overflow-hidden border border-primary">
+<img class="w-full h-full object-cover" data-alt="Close-up of Majid's profile picture for a chat interface, showing a young adult male with a friendly expression. Clean healthcare UI aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlrLaP9RgOr_UjGdkBllfEAJDYRrQPObsJWYHZxe8621HzT2zTkgLVLx2JegHQWbNYsG1w4YD5oQOk5uLRDADjdeft_fKFZW7F8KLn3hmoQ33WHkB8MzegvDdfw1epb1v3mwxs8uQLnRWxqr63Po7wY6qaRsqUOirGRWEhcOVNGmw_50ovJ8eOUi16bi221OuzOs-0w8EKpEp8s9BmmA7adhCA5H75-Kif3PSKtsMGlg0xzev-1NYwzA"/>
+</div>
+<div class="chat-bubble-right bg-primary p-4 text-on-primary shadow-sm">
+<p class="font-body-md text-body-md">Yes, please explain that. Also, should I be concerned about the LDL reading?</p>
+<span class="block mt-2 text-[10px] text-primary-fixed-dim uppercase text-left">10:32 AM</span>
+</div>
+</div>
+<!-- AI Response Message -->
+<div class="flex items-start gap-3 max-w-[85%]">
+<div class="w-8 h-8 rounded-full bg-primary-container flex-shrink-0 flex items-center justify-center text-white text-xs">
+<span class="material-symbols-outlined text-sm">smart_toy</span>
+</div>
+<div class="chat-bubble-left bg-surface-container-high p-4 text-on-surface shadow-sm">
+<p class="font-body-md text-body-md">Your LDL is 135 mg/dL, which is slightly above the optimal range (&lt; 100 mg/dL). It's not at an emergency level, but it's worth discussing with your doctor during your next visit. I can suggest some dietary changes to help lower it if you'd like?</p>
+<div class="mt-3 flex flex-wrap gap-2">
+<button class="px-3 py-1.5 rounded-full bg-white border border-primary text-primary text-label-sm font-semibold hover:bg-primary-container/10 transition-colors">Dietary Tips</button>
+<button class="px-3 py-1.5 rounded-full bg-white border border-primary text-primary text-label-sm font-semibold hover:bg-primary-container/10 transition-colors">Book Consultation</button>
+</div>
+<span class="block mt-2 text-[10px] text-on-surface-variant uppercase text-right">10:33 AM</span>
+</div>
+</div>
+</div>
+<!-- Input Area -->
+<div class="p-4 border-t border-outline-variant bg-surface-container-low">
+<div class="flex items-center gap-2 bg-surface-container-lowest rounded-full border border-outline-variant px-4 py-2 shadow-inner">
+<button class="p-1.5 rounded-full hover:bg-surface-variant text-primary transition-colors">
+<span class="material-symbols-outlined">add_circle</span>
+</button>
+<input class="flex-grow bg-transparent border-none focus:ring-0 text-body-md text-on-surface placeholder:text-outline" placeholder="Ask me anything..." type="text"/>
+<button class="p-1.5 rounded-full hover:bg-surface-variant text-primary transition-colors">
+<span class="material-symbols-outlined">mic</span>
+</button>
+<button class="p-2 rounded-full bg-primary text-on-primary shadow-md hover:shadow-lg active:scale-95 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container dark:bg-surface-container-high border-t border-outline-variant dark:border-outline shadow-md flex justify-around items-center px-base pb-safe pt-2 md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-highest" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-highest" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-sm text-label-sm">Records</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1.5 scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<span class="font-label-sm text-label-sm">AI Assistant</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-highest" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span class="font-label-sm text-label-sm">Alerts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-highest" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<!-- Desktop Sidebar Simulation -->
+<div class="hidden md:flex fixed left-0 top-0 h-full w-20 lg:w-64 bg-surface border-r border-outline-variant flex-col py-stack-lg items-center lg:items-stretch">
+<div class="px-6 mb-stack-lg">
+<h2 class="hidden lg:block font-headline-sm text-headline-sm font-bold text-primary">Aarogya Vault</h2>
+<div class="lg:hidden w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white">
+<span class="material-symbols-outlined">add_circle</span>
+</div>
+</div>
+<div class="flex-grow flex flex-col gap-2">
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="hidden lg:block font-body-md">Home</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="hidden lg:block font-body-md">Records</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 bg-secondary-container text-on-secondary-container font-bold rounded-r-full mr-4 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<span class="hidden lg:block font-body-md">AI Assistant</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span class="hidden lg:block font-body-md">Alerts</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="hidden lg:block font-body-md">Settings</span>
+</a>
+</div>
+<div class="px-4 mt-auto">
+<div class="p-3 bg-surface-container-low rounded-xl flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden bg-primary-fixed">
+<img class="w-full h-full object-cover" data-alt="Majid's profile picture for the desktop sidebar, showing a professional and clear portrait of a 26-year-old male. Minimalist healthcare theme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMCViiY7X7GgDnUObeg1EBf-pQ-b3wQCGgo3YvV6esOE0MLUITpZr_Z5ogCcmnmQeqqBeTTkVuVeyS0ckiAhwMVrFyAr-fHJ67v0hs2CkmXAZOTsJbjVN4_JZXfLZDpalpg6fdnfOuxJn-c7S2GinABs5oIywkacnDUVwiy9Y4ltNtLjdVSz1WiWnQSEiuVz85CCDxr8wv436gqA9ch5W7kGKNlYk7qV2eeBZqUar8Bfgixwoi2o-xgA"/>
+</div>
+<div class="hidden lg:block overflow-hidden">
+<p class="font-label-lg text-on-surface truncate">Majid Shaikh</p>
+<p class="text-[10px] text-on-surface-variant uppercase">Premium Plan</p>
+</div>
+</div>
+</div>
+</div>
+<script>
+        // Micro-interaction for input focus
+        const chatInput = document.querySelector('input');
+        const inputContainer = chatInput.parentElement;
+        
+        chatInput.addEventListener('focus', () => {
+            inputContainer.classList.add('border-primary', 'ring-2', 'ring-primary/20');
+        });
+        
+        chatInput.addEventListener('blur', () => {
+            inputContainer.classList.remove('border-primary', 'ring-2', 'ring-primary/20');
+        });
+
+        // Simple scroll to bottom on load
+        const messageArea = document.querySelector('.overflow-y-auto');
+        messageArea.scrollTop = messageArea.scrollHeight;
+    </script>
+</body></html>

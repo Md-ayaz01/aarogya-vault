@@ -1,0 +1,65 @@
+# ============================================================
+# AAROGYA VAULT - MASTER GITIGNORE
+# ============================================================
+
+# Secret & Environment Files (CRITICAL: NEVER COMMIT)
+.env
+.env.*
+!.env.example
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+# Service Accounts & Private Keys
+firebase-service-account*.json
+*.pem
+*.key
+*.pkcs12
+*.crt
+*.pfx
+
+# Local Database Files
+*.db
+*.sqlite
+*.sqlite3
+
+# Python / Virtual Environment
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Flutter & Dart Build Artifacts
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+build/
+/build/
+aarogya_vault_app/build/
+aarogya_vault_app/.dart_tool/
+aarogya_vault_app/.pub/
+aarogya_vault_app/.flutter-plugins
+aarogya_vault_app/.flutter-plugins-dependencies
+apps/doctor_app/build/
+apps/doctor_app/.dart_tool/
+apps/doctor_app/.pub/
+apps/doctor_app/.flutter-plugins
+apps/doctor_app/.flutter-plugins-dependencies
+
+# IDE, OS, & Temporary Files
+.idea/
+.vscode/
+.DS_Store
+*.swp
+*.swo
+*.log
+*.tmp
+screencap.png

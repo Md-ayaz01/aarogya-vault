@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Find Specialists - Aarogya Vault</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#00513e",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#2f3133",
+                        "secondary": "#0060ac",
+                        "on-secondary-fixed-variant": "#004883",
+                        "secondary-container": "#68abff",
+                        "surface-container-highest": "#e2e2e5",
+                        "on-secondary-fixed": "#001c39",
+                        "on-secondary-container": "#003e73",
+                        "tertiary-fixed-dim": "#c2c7cd",
+                        "surface-container": "#eeeef0",
+                        "on-tertiary-fixed": "#171c20",
+                        "secondary-fixed": "#d4e3ff",
+                        "on-background": "#1a1c1e",
+                        "surface-bright": "#f9f9fc",
+                        "tertiary-fixed": "#dfe3e9",
+                        "primary-container": "#00a884",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#e8e8ea",
+                        "on-tertiary-container": "#292e32",
+                        "secondary-fixed-dim": "#a4c9ff",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#59dcb5",
+                        "primary": "#006b53",
+                        "tertiary": "#5a5f64",
+                        "background": "#f9f9fc",
+                        "on-primary-container": "#003427",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#3d4a44",
+                        "inverse-primary": "#59dcb5",
+                        "tertiary-container": "#90959a",
+                        "inverse-on-surface": "#f0f0f3",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-variant": "#e2e2e5",
+                        "surface-dim": "#dadadc",
+                        "surface": "#f9f9fc",
+                        "outline-variant": "#bccac2",
+                        "surface-tint": "#006b53",
+                        "outline": "#6c7a74",
+                        "on-tertiary-fixed-variant": "#42474c",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f3f3f6",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#1a1c1e",
+                        "on-primary-fixed": "#002117",
+                        "primary-fixed": "#79f9d0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "24px",
+                        "gutter": "16px",
+                        "base": "8px",
+                        "container-margin-desk": "24px",
+                        "stack-sm": "4px",
+                        "stack-md": "12px",
+                        "container-margin-mob": "16px"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "600"}],
+                        "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "label-sm": ["11px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                        "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .ripple-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple-effect:after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+            background-repeat: no-repeat;
+            background-position: 50%;
+            transform: scale(10, 10);
+            opacity: 0;
+            transition: transform .5s, opacity 1s;
+        }
+        .ripple-effect:active:after {
+            transform: scale(0, 0);
+            opacity: .3;
+            transition: 0s;
+        }
+        .card-elevation {
+            box-shadow: 0px 4px 12px rgba(0,0,0,0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #bccac2;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top AppBar -->
+<header class="bg-surface dark:bg-inverse-surface shadow-sm docked full-width top-0 z-50 flex justify-between items-center w-full px-container-margin-mob md:px-container-margin-desk py-base sticky">
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-surface-variant/50 transition-all active:scale 0.98x">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed">arrow_back</span>
+</button>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed">Aarogya Vault</h1>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 rounded-full hover:bg-surface-variant/50 transition-all active:scale 0.98x">
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional, friendly close-up headshot of a person named Majid for a healthcare profile. The lighting is soft and natural, suggesting a secure and trustworthy digital environment. He is wearing a simple casual shirt against a clean, out-of-focus medical office background. The style is crisp and modern, reflecting high-end clinical precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3Ujyeyx1JDVnt25eevcUQx3xQGJXHst3Mj-KoO05Lau9F_XZB6xXnwFjg9gmsHFoB3dA3eqRQ31QnxKmfDgJ6yzwcNbVm5npEC-lOSSqgTIlmDSdZn9r_f3-QQrtWq8sc8NXTCnRzrUYvVxkmk_-tjFefoOKxqarDg_8dw3FLXppijgvAEMnqW6f5iF-rcDBdeZBURsyRMWqLCm-07KSWTfl1KwqKcuzgueuG8HFcbtPsTcMmDCFlzA"/>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-container-margin-mob md:px-container-margin-desk pt-stack-lg pb-32">
+<!-- Search & View Toggle Section -->
+<section class="flex flex-col md:flex-row justify-between items-start md:items-center gap-stack-md mb-stack-lg">
+<div class="flex-1 w-full md:max-w-2xl">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-12 pr-4 py-4 bg-surface-container-low border-none rounded-xl font-body-lg text-on-surface focus:ring-2 focus:ring-primary transition-all shadow-sm" placeholder="Search for specialists, clinics, or conditions..." type="text"/>
+</div>
+</div>
+<div class="flex items-center bg-surface-container-high rounded-full p-1 self-end md:self-auto">
+<button class="flex items-center gap-2 px-6 py-2 rounded-full bg-primary-container text-on-primary-container font-label-lg transition-all shadow-sm" id="listViewBtn">
+<span class="material-symbols-outlined">list</span>
+<span>List</span>
+</button>
+<button class="flex items-center gap-2 px-6 py-2 rounded-full text-on-surface-variant font-label-lg hover:bg-surface-variant/50 transition-all" id="mapViewBtn">
+<span class="material-symbols-outlined">map</span>
+<span>Map</span>
+</button>
+</div>
+</section>
+<!-- Filters Section -->
+<section class="mb-stack-lg overflow-x-auto whitespace-nowrap pb-2 custom-scrollbar">
+<div class="flex gap-stack-md">
+<!-- Specialty Filter -->
+<div class="relative inline-block">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-full font-label-lg text-on-surface-variant hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">medical_services</span>
+<span>Specialty</span>
+<span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+</div>
+<!-- Distance Filter -->
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-full font-label-lg text-on-surface-variant hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">near_me</span>
+<span>Distance: <span class="text-primary font-bold">5km</span></span>
+</button>
+<!-- Availability Filter -->
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-full font-label-lg text-on-surface-variant hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">event_available</span>
+<span>Available Today</span>
+</button>
+<!-- Rating Filter -->
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-full font-label-lg text-on-surface-variant hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">star</span>
+<span>4.5+ Rating</span>
+</button>
+<!-- Clear Filters -->
+<button class="flex items-center gap-2 px-4 py-2 text-primary font-label-lg hover:underline transition-all">
+<span>Clear All</span>
+</button>
+</div>
+</section>
+<!-- Main Content Area (List of Doctors) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-stack-lg" id="resultsContainer">
+<!-- Doctor Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl card-elevation p-stack-md hover:border-primary/50 transition-all duration-300 flex flex-col h-full group">
+<div class="flex gap-stack-md mb-stack-md">
+<div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A professional medical portrait of Dr. Ravi Sharma, a male cardiologist in his 40s wearing a white doctor's coat and a stethoscope. He has a warm, confident smile, set against a blurred, bright clinical background. The photography is high-end, clean, and follows a medical aesthetic with soft lighting and natural skin tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHfLCa3YBVVpBA-LZbZzZRSITOVlMntmoCXH-CzvebOld_wF9l23CiQxe29sZD0XyFirosd8OJ75UCE0toG-mQLwaRRtlTMMDMEfLcrTrPIxK2ksp1nfBMmkD8eYOTf4ls05-JxLHS5PEC4hHiu2_kQ5TXbpovsqFjd9etTAAIfivmBfA0JAwqE1L1f74KA-7FLHtnaZiRk9r_wJf5RWowhvYpvIB10YmFzT2-QO32sirVXZ-GhhpHgg"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-title-md text-title-md text-on-surface">Dr. Ravi Sharma</h3>
+<p class="font-body-md text-primary font-semibold">Cardiology Specialist</p>
+</div>
+<div class="flex items-center gap-1 bg-primary-container/20 px-2 py-0.5 rounded text-primary">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm">4.9</span>
+</div>
+</div>
+<p class="font-label-sm text-on-surface-variant mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">work</span> 18 Years Exp.
+                        </p>
+<p class="font-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span> Apollo Hospital, Indore
+                        </p>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mb-stack-md">
+<span class="px-2 py-1 bg-surface-container-high rounded-full font-label-sm text-on-surface-variant">Heart Surgery</span>
+<span class="px-2 py-1 bg-surface-container-high rounded-full font-label-sm text-on-surface-variant">Hypertension</span>
+</div>
+<div class="mt-auto pt-stack-md border-t border-outline-variant flex gap-stack-md items-center">
+<div class="flex-1">
+<p class="font-label-sm text-on-surface-variant">Next Available</p>
+<p class="font-title-md text-on-surface">Tomorrow, 10:00 AM</p>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2.5 rounded-xl font-label-lg ripple-effect transition-all shadow-md active:scale-95">
+                        Book Now
+                    </button>
+</div>
+</div>
+<!-- Doctor Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl card-elevation p-stack-md hover:border-primary/50 transition-all duration-300 flex flex-col h-full group">
+<div class="flex gap-stack-md mb-stack-md">
+<div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A professional medical portrait of Dr. Ananya Iyer, a female neurologist in her 30s. She is wearing a modern teal medical scrub with a lanyard. Her expression is focused and compassionate. The lighting is bright and airy, typical of a high-end private healthcare facility. Minimalist clinical setting in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZrQ9KT3ldStktobclL47ee21C6-kx5_0ENDXmLL5E3IN0hhNMfH1C9Ka5I1veviap4tB9PrqUuuBq-p3N4Z8NdfUNpJaVv93UzIXfJ2ES6yDNZPk-yvxwW8HChshIU3dqgbEohkBb9L6psq8bJCKzA_wiHpqCEtUqob_xX7kLQ-SpFCMuHhf5SF2QH8SVRwNnUk7l4poRC76j9bxbJDdO1SOfEVPzI_JI7H2zIszuBGj07NiwOTx3mQ"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-title-md text-title-md text-on-surface">Dr. Ananya Iyer</h3>
+<p class="font-body-md text-primary font-semibold">Neurologist</p>
+</div>
+<div class="flex items-center gap-1 bg-primary-container/20 px-2 py-0.5 rounded text-primary">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm">4.8</span>
+</div>
+</div>
+<p class="font-label-sm text-on-surface-variant mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">work</span> 12 Years Exp.
+                        </p>
+<p class="font-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span> City Care Hospital, Indore
+                        </p>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mb-stack-md">
+<span class="px-2 py-1 bg-surface-container-high rounded-full font-label-sm text-on-surface-variant">Epilepsy</span>
+<span class="px-2 py-1 bg-surface-container-high rounded-full font-label-sm text-on-surface-variant">Migraine Specialist</span>
+</div>
+<div class="mt-auto pt-stack-md border-t border-outline-variant flex gap-stack-md items-center">
+<div class="flex-1">
+<p class="font-label-sm text-on-surface-variant">Next Available</p>
+<p class="font-title-md text-on-surface">Today, 04:30 PM</p>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2.5 rounded-xl font-label-lg ripple-effect transition-all shadow-md active:scale-95">
+                        Book Now
+                    </button>
+</div>
+</div>
+<!-- Doctor Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl card-elevation p-stack-md hover:border-primary/50 transition-all duration-300 flex flex-col h-full group">
+<div class="flex gap-stack-md mb-stack-md">
+<div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A high-resolution headshot of Dr. Vikram Mehta, an orthopedic surgeon in his early 50s. He has a distinguished appearance, wearing a tailored navy suit with a white shirt, suggesting an executive level medical professional. Background is a sleek, modern hospital lobby with soft glowing architectural lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB__vqa4ExRoChNuWxhNMvpzEZ07XJbNaStmB0o9Jsw1cfplX2-ONhxc92UTTdmzlgCNOoTgTSR2pptCCKuMf7ScIhiiCJvCqLcjEIUAjsJnOMvzVFlfd_IhPORKgY5RbXuP1xrvVVFYwGTBSqSjBBU95xZ6YYzDMNWZZsqtwWoY4OD4SHqniJSl7eo53PXI91K9o5-BmS5E4trKKg6fj3Y5-MZZwbC_v2w7haZf4LNVrTva8t0Gz6OAw"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-title-md text-title-md text-on-surface">Dr. Vikram Mehta</h3>
+<p class="font-body-md text-primary font-semibold">Orthopedic Surgeon</p>
+</div>
+<div class="flex items-center gap-1 bg-primary-container/20 px-2 py-0.5 rounded text-primary">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm">4.7</span>
+</div>
+</div>
+<p class="font-label-sm text-on-surface-variant mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">work</span> 25 Years Exp.
+                        </p>
+<p class="font-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span> Ortho Centre, Vijay Nagar
+                        </p>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mb-stack-md">
+<span class="px-2 py-1 bg-surface-container-high rounded-full font-label-sm text-on-surface-variant">Joint Replacement</span>
+<span class="px-2 py-1 bg-surface-container-high rounded-full font-label-sm text-on-surface-variant">Sports Injury</span>
+</div>
+<div class="mt-auto pt-stack-md border-t border-outline-variant flex gap-stack-md items-center">
+<div class="flex-1">
+<p class="font-label-sm text-on-surface-variant">Next Available</p>
+<p class="font-title-md text-on-surface">Wed, 11:00 AM</p>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2.5 rounded-xl font-label-lg ripple-effect transition-all shadow-md active:scale-95">
+                        Book Now
+                    </button>
+</div>
+</div>
+<!-- Doctor Card 4 (Near Location) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl card-elevation p-stack-md hover:border-primary/50 transition-all duration-300 flex flex-col h-full group">
+<div class="flex gap-stack-md mb-stack-md">
+<div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Professional studio portrait of Dr. Sarah Qureshi, a young pediatrician with a bright and welcoming smile. She is wearing a colorful stethoscope over her white coat. The background is softly out of focus, featuring playful warm colors suitable for a pediatric setting. High-key lighting, corporate healthcare style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtnOzpOL4p6zFyTMvHKi2Hg4CZ-0z8LS6Y7eFD9UoqijdInmD-O-hWXaE2ubdq4jb382CH3P6qElEJqNTqWxSi-bR7SEfn-uMCssEoDa2RazxulQF1j2XmCcUwuSv2t5lRD148k4HtIvqf9oVcX3kuAoecyS9IRa83CBsGgbSu-Kimw_zJiR-6y4GdQbqesknE6f4LTzCqVy3OLDynt9zNKpQW4GC2MpIXXxBjfSMddpwic572ThDltw"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-title-md text-title-md text-on-surface">Dr. Sarah Qureshi</h3>
+<p class="font-body-md text-primary font-semibold">Pediatrician</p>
+</div>
+<div class="flex items-center gap-1 bg-primary-container/20 px-2 py-0.5 rounded text-primary">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm">4.9</span>
+</div>
+</div>
+<p class="font-label-sm text-on-surface-variant mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">work</span> 9 Years Exp.
+                        </p>
+<p class="font-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span> 1.2 km away
+                        </p>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mb-stack-md">
+<span class="px-2 py-1 bg-surface-container-high rounded-full font-label-sm text-on-surface-variant">Child Nutrition</span>
+<span class="px-2 py-1 bg-surface-container-high rounded-full font-label-sm text-on-surface-variant">Vaccinations</span>
+</div>
+<div class="mt-auto pt-stack-md border-t border-outline-variant flex gap-stack-md items-center">
+<div class="flex-1">
+<p class="font-label-sm text-on-surface-variant">Next Available</p>
+<p class="font-title-md text-on-surface">Today, 06:00 PM</p>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2.5 rounded-xl font-label-lg ripple-effect transition-all shadow-md active:scale-95">
+                        Book Now
+                    </button>
+</div>
+</div>
+</div>
+<!-- Empty State (Hidden) -->
+<div class="hidden flex-col items-center justify-center py-20 text-center" id="emptyState">
+<span class="material-symbols-outlined text-[64px] text-outline-variant mb-4">search_off</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface-variant">No specialists found</h2>
+<p class="font-body-md text-outline">Try adjusting your filters or searching for something else.</p>
+<button class="mt-stack-lg text-primary font-title-md">Reset All Filters</button>
+</div>
+</main>
+<!-- Map Modal Overlay (Controlled by script) -->
+<div class="fixed inset-0 z-[60] bg-surface hidden flex-col" id="mapContainer">
+<header class="bg-surface shadow-sm px-container-margin-mob py-base flex justify-between items-center">
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-surface-variant/50" id="closeMapBtn">
+<span class="material-symbols-outlined">close</span>
+</button>
+<h2 class="font-title-lg text-title-lg text-primary">Clinics Near You</h2>
+</div>
+<div class="flex gap-2">
+<button class="p-2 rounded-full bg-surface-container-high"><span class="material-symbols-outlined">filter_list</span></button>
+</div>
+</header>
+<div class="relative flex-1 bg-surface-container overflow-hidden">
+<!-- Simulated Map Component -->
+<div class="absolute inset-0 grayscale opacity-50 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px]"></div>
+<div class="w-full h-full bg-cover bg-center" data-location="Indore" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBG1T2VE80dpGosBJUcBxGJvGS1ryRSCx-9-F5I2vNVXqStKsh11-iwQmfi7Gg3RsPlO06W96a2am1r7JHfvkVEYR3aTThJHX8NNngz8o8lqgLEmVrScJRDBLroXlg-3S0ZcQMp9bv_ZWmEIasDdMWdNsYtX7ATVNXtaJJjanR2n47mkesxdVCMjyJFX2FWdzqrliqa0D5ZdOsbZKgix-P84AArCCf_nDolrzfgQl9tCLJpB9t6cwwsww')"></div>
+<!-- Map Markers -->
+<div class="absolute top-1/3 left-1/4 group cursor-pointer">
+<div class="bg-primary text-on-primary p-2 rounded-full shadow-lg scale-110">
+<span class="material-symbols-outlined text-[20px]">medical_services</span>
+</div>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-40 bg-surface-container-lowest p-2 rounded-xl shadow-xl hidden group-hover:block">
+<p class="font-title-md text-on-surface text-[12px]">Apollo Hospital</p>
+<p class="font-label-sm text-primary">Dr. Ravi Sharma</p>
+</div>
+</div>
+<div class="absolute top-2/3 right-1/3 group cursor-pointer">
+<div class="bg-primary text-on-primary p-2 rounded-full shadow-lg">
+<span class="material-symbols-outlined text-[20px]">medical_services</span>
+</div>
+</div>
+<!-- Floating Card in Map View -->
+<div class="absolute bottom-6 left-6 right-6 md:left-1/2 md:-translate-x-1/2 md:max-w-md">
+<div class="bg-surface-container-lowest rounded-2xl shadow-2xl p-4 flex gap-4 border border-primary/20">
+<div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A portrait of Dr. Ravi Sharma as previously described, shown in a small card preview for a map interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqEGQ0jInt8Dw1bWWfVUL67Kg4N6iFyIcxFxr4t7j2HJvidR01H_0V015bh-LURcOAcQ0N8aIsVzqgTsKSz_mAHwvCt3ithkDW9jsB7OO0Wg2JKD7-IyzImLhvrKALckNuf-S5YNII7csHx2Kin6BjhngCxbuqWY8nqd_621HZ9cGPWVOgBfrVDKzUCcAk0lxhEkxRJ3K0r7YSyRKA9-jN1SsejF2aGzUOSmMsYJ-_DKhpDciz_V1ANA"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="font-title-md text-on-surface">Dr. Ravi Sharma</h4>
+<span class="font-label-sm text-primary font-bold">4.9 ★</span>
+</div>
+<p class="font-label-sm text-on-surface-variant">Cardiologist • 0.8 km</p>
+<button class="mt-2 w-full bg-primary text-on-primary py-2 rounded-lg font-label-lg">View Profile</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-base pb-safe pt-2 bg-surface-container dark:bg-surface-container-high shadow-md rounded-t-xl border-t border-outline-variant dark:border-outline">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:bg-surface-container-highest transition-all rounded-xl" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-on-primary-fixed-variant text-on-primary-container dark:text-primary-fixed rounded-full px-4 py-1.5 scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">medical_services</span>
+<span class="font-label-sm text-label-sm">Specialists</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:bg-surface-container-highest transition-all rounded-xl" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-label-sm text-label-sm">AI Assistant</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:bg-surface-container-highest transition-all rounded-xl relative" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span class="font-label-sm text-label-sm">Alerts</span>
+<span class="absolute top-2 right-4 w-2 h-2 bg-error rounded-full"></span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:bg-surface-container-highest transition-all rounded-xl" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        const listViewBtn = document.getElementById('listViewBtn');
+        const mapViewBtn = document.getElementById('mapViewBtn');
+        const mapContainer = document.getElementById('mapContainer');
+        const closeMapBtn = document.getElementById('closeMapBtn');
+
+        function toggleView(isMap) {
+            if (isMap) {
+                mapContainer.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+            } else {
+                mapContainer.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+        }
+
+        mapViewBtn.addEventListener('click', () => {
+            mapViewBtn.classList.add('bg-primary-container', 'text-on-primary-container', 'shadow-sm');
+            mapViewBtn.classList.remove('text-on-surface-variant');
+            listViewBtn.classList.remove('bg-primary-container', 'text-on-primary-container', 'shadow-sm');
+            listViewBtn.classList.add('text-on-surface-variant');
+            toggleView(true);
+        });
+
+        listViewBtn.addEventListener('click', () => {
+            listViewBtn.classList.add('bg-primary-container', 'text-on-primary-container', 'shadow-sm');
+            listViewBtn.classList.remove('text-on-surface-variant');
+            mapViewBtn.classList.remove('bg-primary-container', 'text-on-primary-container', 'shadow-sm');
+            mapViewBtn.classList.add('text-on-surface-variant');
+            toggleView(false);
+        });
+
+        closeMapBtn.addEventListener('click', () => {
+            listViewBtn.click();
+        });
+
+        // Simple search interaction
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('input', (e) => {
+            const val = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('#resultsContainer > div');
+            let foundCount = 0;
+            
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                if (text.includes(val)) {
+                    card.style.display = 'flex';
+                    foundCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            const emptyState = document.getElementById('emptyState');
+            if (foundCount === 0) {
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+            } else {
+                emptyState.classList.add('hidden');
+                emptyState.classList.remove('flex');
+            }
+        });
+    </script>
+</body></html>

@@ -1,0 +1,20 @@
+from app.models.models import (
+    User,
+    Profile,
+    MedicalHistory,
+    LabReport,
+    Prescription,
+    PrescriptionItem,
+    MedicineReminder,
+    Appointment,
+    AuditLog,
+    AIChatMessage,
+    ConsentSetting,
+    Notification,
+    EmergencyContact,
+    QRToken,
+    OTPSession,
+    RefreshToken,
+    DoctorProfile,
+    DoctorPatientAccess
+)

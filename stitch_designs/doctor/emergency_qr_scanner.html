@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aarogya Vault | Emergency QR Scanner</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#f7f9fb",
+                        "on-secondary": "#ffffff",
+                        "background": "#f7f9fb",
+                        "on-surface-variant": "#3d4a44",
+                        "inverse-surface": "#2d3133",
+                        "on-primary-fixed": "#002117",
+                        "primary-container": "#00a884",
+                        "outline": "#6c7a74",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary": "#005ac2",
+                        "surface-dim": "#d8dadc",
+                        "secondary-fixed": "#d8e3fb",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#eceef0",
+                        "tertiary-container": "#5592ff",
+                        "inverse-primary": "#59dcb5",
+                        "surface-container-high": "#e6e8ea",
+                        "secondary-container": "#d5e0f8",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#d8e2ff",
+                        "primary": "#006b53",
+                        "on-tertiary-fixed": "#001a42",
+                        "on-primary-fixed-variant": "#00513e",
+                        "on-tertiary-fixed-variant": "#004395",
+                        "on-background": "#191c1e",
+                        "surface-tint": "#006b53",
+                        "on-primary-container": "#003427",
+                        "on-tertiary-container": "#002b63",
+                        "primary-fixed-dim": "#59dcb5",
+                        "on-secondary-container": "#586377",
+                        "primary-fixed": "#79f9d0",
+                        "surface-variant": "#e0e3e5",
+                        "surface-bright": "#f7f9fb",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#bcc7de",
+                        "on-secondary-fixed-variant": "#3c475a",
+                        "on-secondary-fixed": "#111c2d",
+                        "secondary": "#545f73",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#adc6ff",
+                        "on-surface": "#191c1e",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#bccac2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "grid-gutter": "16px",
+                        "container-padding": "24px",
+                        "density-compact": "8px",
+                        "density-comfortable": "16px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Hanken Grotesk"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "title-sm": ["Inter"],
+                        "data-mono": ["JetBrains Mono"],
+                        "label-caps": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "title-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "data-mono": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .scanning-line {
+            height: 2px;
+            background: #00a884;
+            box-shadow: 0 0 15px #00a884;
+            animation: scan 2.5s ease-in-out infinite;
+        }
+        @keyframes scan {
+            0%, 100% { top: 0%; }
+            50% { top: 100%; }
+        }
+        .scanner-frame-corner {
+            width: 32px;
+            height: 32px;
+            border-color: #00a884;
+            position: absolute;
+        }
+        .corner-tl { top: -2px; left: -2px; border-top-width: 4px; border-left-width: 4px; }
+        .corner-tr { top: -2px; right: -2px; border-top-width: 4px; border-right-width: 4px; }
+        .corner-bl { bottom: -2px; left: -2px; border-bottom-width: 4px; border-left-width: 4px; }
+        .corner-br { bottom: -2px; right: -2px; border-bottom-width: 4px; border-right-width: 4px; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col">
+<!-- Top AppBar (from JSON blueprint) -->
+<header class="bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline flex justify-between items-center w-full px-container-padding h-16 sticky top-0 z-50">
+<div class="flex items-center gap-density-comfortable">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A clean, clinical logo design for a medical application named Aarogya Vault. The logo features a minimalist green cross integrated with a stylized digital pulse line. The background is a crisp white with a soft, modern glow, reflecting an expert and analytical atmosphere. High-resolution vector style with professional lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFIJ3HS8eHQKzSXRuypXKUFdsVvXEfalpOY2L6LkvyrwSFDYHLhPcRoLJr73__v18lKHIdfgIZmwoNY-csZE3aFI-NIAEreXhtLNP_ORDHgvLJoOboMJNZfFD8uytqVEH84VPR2Zr9AHUPj81cDAx_C_WLU6CCdflyHPfOuKYz7xHkNiojG2hUP60B1XG8SlzFHFr4zY88HD1k_VxjWyh7TRqqTtnNJR9Tv8U4pRyaSYP3cE2K8RztBg"/>
+</div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">Aarogya Vault</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 transition-colors duration-200 hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim" data-icon="search">search</span>
+</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-grow flex flex-col items-center justify-center p-container-padding max-w-[1600px] mx-auto w-full">
+<!-- Clinical Context Alert -->
+<div class="w-full max-w-md mb-8 flex items-center gap-3 bg-secondary-container p-4 rounded-lg border-l-4 border-primary">
+<span class="material-symbols-outlined text-primary" data-icon="emergency_home">emergency_home</span>
+<div>
+<p class="font-title-sm text-title-sm text-on-secondary-container">Emergency Access Mode</p>
+<p class="font-body-sm text-body-sm text-on-secondary-container opacity-80">Scan patient QR code for immediate vital records.</p>
+</div>
+</div>
+<!-- Scanner Section -->
+<div class="relative w-full max-w-md aspect-square bg-inverse-surface overflow-hidden rounded-xl shadow-2xl group">
+<!-- Simulated Camera Feed -->
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-60" data-alt="A POV shot from a high-end medical tablet camera looking at a patient's wristband with a QR code. The setting is a dimly lit, high-tech emergency room with soft ambient blue and green lights. The focus is sharp on the QR code, with a cinematic bokeh effect in the background of medical monitors and equipment. Crisp, realistic medical photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLZDYEd_h62Zv-pujl847ZEhtOQ6UlcmbSQMw2S4MqTDDj-eAqIR6Zrl5HNH_3WDoKVob3Ca8vm0Dfyc4LKFKsaADJXbHuv4GmHXOfQUMXh0ghByaDGJoAKU7SoFReswbmrD7ePyouyCJYtI-LbWxHuV4Te9mxvRFvXKRuiMhrrxwxH-SL8qjFQIbqDg4fgBN0lUonfLd6p0Y42A1yh6YFZUPOEQJD_or35dzKHAeHdi9Kbl5BPM9kfQ"/>
+</div>
+<!-- Viewfinder Overlay -->
+<div class="absolute inset-0 z-10 flex items-center justify-center">
+<!-- Dimmed surrounding areas -->
+<div class="absolute inset-0 bg-black/40"></div>
+<!-- Clear Scanning Hole -->
+<div class="relative w-64 h-64 bg-transparent border-2 border-primary/30 rounded-lg">
+<!-- Scanner Frame Corners -->
+<div class="scanner-frame-corner corner-tl"></div>
+<div class="scanner-frame-corner corner-tr"></div>
+<div class="scanner-frame-corner corner-bl"></div>
+<div class="scanner-frame-corner corner-br"></div>
+<!-- Animated Scanning Line -->
+<div class="scanning-line absolute w-full z-20"></div>
+</div>
+</div>
+<!-- Focus Indicator UI -->
+<div class="absolute bottom-6 left-0 right-0 z-30 flex justify-center">
+<div class="bg-black/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-caps text-label-caps text-white">READY TO SCAN</span>
+</div>
+</div>
+</div>
+<!-- Action & Info Section -->
+<div class="w-full max-w-md mt-10 space-y-6">
+<div class="grid grid-cols-1 gap-4">
+<button class="w-full h-12 bg-primary text-on-primary font-title-sm text-title-sm rounded-lg flex items-center justify-center gap-2 hover:brightness-110 transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="qr_code_scanner">qr_code_scanner</span>
+                    Recenter Scanner
+                </button>
+<div class="relative flex items-center py-2">
+<div class="flex-grow border-t border-outline-variant"></div>
+<span class="flex-shrink mx-4 font-label-caps text-label-caps text-outline">OR</span>
+<div class="flex-grow border-t border-outline-variant"></div>
+</div>
+<button class="w-full h-12 border border-outline text-on-surface font-title-sm text-title-sm rounded-lg flex items-center justify-center gap-2 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="search_check">search_check</span>
+                    Manual Search by ID
+                </button>
+</div>
+<!-- Explanation Cards - High Density Bento Grid Style -->
+<div class="grid grid-cols-3 gap-2">
+<div class="bg-surface-container-low p-3 rounded border border-outline-variant text-center space-y-1">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="bloodtype">bloodtype</span>
+<p class="font-label-caps text-[10px] text-outline uppercase">Blood Group</p>
+</div>
+<div class="bg-surface-container-low p-3 rounded border border-outline-variant text-center space-y-1">
+<span class="material-symbols-outlined text-error text-[20px]" data-icon="warning">warning</span>
+<p class="font-label-caps text-[10px] text-outline uppercase">Allergies</p>
+</div>
+<div class="bg-surface-container-low p-3 rounded border border-outline-variant text-center space-y-1">
+<span class="material-symbols-outlined text-tertiary text-[20px]" data-icon="contact_emergency">contact_emergency</span>
+<p class="font-label-caps text-[10px] text-outline uppercase">Contacts</p>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-center px-4 leading-relaxed italic">
+                Scanning provides instant authorization-free access to life-critical information for verified medical professionals.
+            </p>
+</div>
+</main>
+<!-- Bottom Navigation (from JSON blueprint) -->
+<footer class="md:hidden">
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center py-density-compact bg-surface-container-lowest dark:bg-surface-container-low border-t border-outline-variant dark:border-outline shadow-sm">
+<div class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-transform duration-150 scale-95 cursor-pointer p-2">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-caps text-label-caps">Dashboard</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-transform duration-150 scale-95 cursor-pointer p-2">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-caps text-label-caps">Patients</span>
+</div>
+<!-- Active Appointment/Scanner context -->
+<div class="flex flex-col items-center justify-center bg-primary-container dark:bg-on-primary-fixed-variant text-on-primary-container dark:text-primary-fixed rounded-full px-4 py-1 transition-transform duration-150 scale-100 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-caps text-label-caps">Appointments</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-transform duration-150 scale-95 cursor-pointer p-2">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+<span class="font-label-caps text-label-caps">AI Copilot</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-transform duration-150 scale-95 cursor-pointer p-2">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-caps text-label-caps">Profile</span>
+</div>
+</nav>
+</footer>
+<script>
+        // Simple Micro-interaction: Focus simulation
+        const scannerFrame = document.querySelector('.relative.w-64.h-64');
+        setInterval(() => {
+            scannerFrame.classList.add('scale-[1.02]');
+            setTimeout(() => {
+                scannerFrame.classList.remove('scale-[1.02]');
+            }, 1000);
+        }, 3000);
+
+        // Feedback sound simulation (visual only)
+        document.querySelector('button.bg-primary').addEventListener('click', () => {
+            const feedback = document.createElement('div');
+            feedback.className = 'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-on-surface text-surface px-6 py-3 rounded-lg font-title-sm z-[60] animate-bounce';
+            feedback.innerText = 'Recalibrating Lens...';
+            document.body.appendChild(feedback);
+            setTimeout(() => feedback.remove(), 2000);
+        });
+    </script>
+</body></html>

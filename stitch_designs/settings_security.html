@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Settings &amp; Security - Aarogya Vault</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-surface": "#2f3133",
+                    "on-secondary-fixed": "#001c39",
+                    "secondary": "#0060ac",
+                    "inverse-primary": "#59dcb5",
+                    "surface-container-low": "#f3f3f6",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed-dim": "#c2c7cd",
+                    "error": "#ba1a1a",
+                    "secondary-fixed-dim": "#a4c9ff",
+                    "on-surface-variant": "#3d4a44",
+                    "on-secondary-fixed-variant": "#004883",
+                    "on-primary-fixed-variant": "#00513e",
+                    "primary-fixed": "#79f9d0",
+                    "surface": "#f9f9fc",
+                    "outline-variant": "#bccac2",
+                    "background": "#f9f9fc",
+                    "on-background": "#1a1c1e",
+                    "surface-container-high": "#e8e8ea",
+                    "on-tertiary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "surface-tint": "#006b53",
+                    "on-error": "#ffffff",
+                    "surface-container": "#eeeef0",
+                    "surface-bright": "#f9f9fc",
+                    "on-secondary-container": "#003e73",
+                    "tertiary": "#5a5f64",
+                    "on-surface": "#1a1c1e",
+                    "surface-variant": "#e2e2e5",
+                    "on-tertiary-fixed-variant": "#42474c",
+                    "surface-container-highest": "#e2e2e5",
+                    "on-primary-fixed": "#002117",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed-dim": "#59dcb5",
+                    "outline": "#6c7a74",
+                    "on-tertiary-container": "#292e32",
+                    "on-primary-container": "#003427",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed": "#d4e3ff",
+                    "tertiary-container": "#90959a",
+                    "primary": "#006b53",
+                    "secondary-container": "#68abff",
+                    "primary-container": "#00a884",
+                    "on-tertiary-fixed": "#171c20",
+                    "inverse-on-surface": "#f0f0f3",
+                    "tertiary-fixed": "#dfe3e9",
+                    "surface-dim": "#dadadc"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "stack-sm": "4px",
+                    "stack-md": "12px",
+                    "container-margin-mob": "16px",
+                    "container-margin-desk": "24px",
+                    "gutter": "16px",
+                    "stack-lg": "24px"
+            },
+            "fontFamily": {
+                    "title-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "label-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "title-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "600"}],
+                    "label-sm": ["11px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .settings-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .settings-card:active {
+            transform: scale(0.98);
+        }
+        .custom-switch:checked {
+            background-color: #006b53;
+        }
+        .custom-switch {
+            appearance: none;
+            width: 44px;
+            height: 24px;
+            background: #e2e2e5;
+            border-radius: 999px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .custom-switch::before {
+            content: "";
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            left: 3px;
+            top: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        .custom-switch:checked::before {
+            transform: translateX(20px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-32 md:pb-0">
+<!-- Top App Bar -->
+<header class="bg-surface dark:bg-inverse-surface shadow-sm sticky top-0 z-50 flex justify-between items-center w-full px-container-margin-mob md:px-container-margin-desk py-base h-16">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary p-2 hover:bg-surface-variant/50 rounded-full transition-all duration-200">arrow_back</button>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed">Settings</h1>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant p-2 hover:bg-surface-variant/50 rounded-full transition-all duration-200">search</span>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container">
+<img class="w-full h-full object-cover" data-alt="A clean, professional headshot of a Middle Eastern male professional named Majid Shaikh, wearing a modern clinical white coat and smiling warmly against a soft-focus medical office background. The lighting is bright and airy, reflecting a light-mode clinical precision UI aesthetic with emerald and soft blue highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5D_znQRt1ocrbKcE3Rqu3ToiDFSkGfB3c1fT6QO67QKEWhmCVf17vyWRCWdxSgU055--lleSjHakfSuDd4ewu6PDSY5JD5ZI0nldDmI_IF03ZXE8lFHAp20e6jy7nnB0TV5yqEsXE4NH1_C6yAgz4MZkcMxVYPQaBxWZjFSmeddVCWtKPzH6S8z0GMbPsNYt5LJPeQfb4X7gBWT4nwta0far8wtBER3bnImJrNMjUj_RcrcHS1Mi8Qw"/>
+</div>
+</div>
+</header>
+<main class="max-w-4xl mx-auto px-container-margin-mob md:px-container-margin-desk py-stack-lg">
+<!-- Account Section -->
+<section class="mb-stack-lg">
+<h2 class="font-title-lg text-title-lg text-primary mb-stack-md flex items-center gap-2">
+<span class="material-symbols-outlined">person</span>
+                Account
+            </h2>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<!-- Personal Info -->
+<button class="w-full flex items-center justify-between p-4 hover:bg-surface-variant/20 transition-colors settings-card">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">badge</span>
+</div>
+<div class="text-left">
+<p class="font-title-md text-title-md">Personal Info</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Majid Shaikh, 26, Male, O+</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</button>
+<div class="h-[1px] bg-outline-variant mx-4"></div>
+<!-- Password -->
+<button class="w-full flex items-center justify-between p-4 hover:bg-surface-variant/20 transition-colors settings-card">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">lock_reset</span>
+</div>
+<div class="text-left">
+<p class="font-title-md text-title-md">Password &amp; Security</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Last changed 3 months ago</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- Privacy & Security Section -->
+<section class="mb-stack-lg">
+<h2 class="font-title-lg text-title-lg text-primary mb-stack-md flex items-center gap-2">
+<span class="material-symbols-outlined">security</span>
+                Privacy &amp; Security
+            </h2>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<!-- Biometric -->
+<div class="w-full flex items-center justify-between p-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">fingerprint</span>
+</div>
+<div class="text-left">
+<p class="font-title-md text-title-md">Biometric Unlock</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Use Fingerprint or Face ID</p>
+</div>
+</div>
+<input checked="" class="custom-switch" type="checkbox"/>
+</div>
+<div class="h-[1px] bg-outline-variant mx-4"></div>
+<!-- Emergency QR -->
+<button class="w-full flex items-center justify-between p-4 hover:bg-surface-variant/20 transition-colors settings-card">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-error-container/20 flex items-center justify-center text-error">
+<span class="material-symbols-outlined">qr_code_2</span>
+</div>
+<div class="text-left">
+<p class="font-title-md text-title-md">Emergency QR Permissions</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Manage who sees your emergency profile</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- Notifications Section -->
+<section class="mb-stack-lg">
+<h2 class="font-title-lg text-title-lg text-primary mb-stack-md flex items-center gap-2">
+<span class="material-symbols-outlined">notifications_active</span>
+                Notifications
+            </h2>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<!-- Medicine Alerts -->
+<div class="w-full flex items-center justify-between p-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">medication</span>
+</div>
+<div class="text-left">
+<p class="font-title-md text-title-md">Medicine Alerts</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Reminders for scheduled doses</p>
+</div>
+</div>
+<input checked="" class="custom-switch" type="checkbox"/>
+</div>
+<div class="h-[1px] bg-outline-variant mx-4"></div>
+<!-- Health Tips -->
+<div class="w-full flex items-center justify-between p-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-tertiary-container/20 flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined">tips_and_updates</span>
+</div>
+<div class="text-left">
+<p class="font-title-md text-title-md">Health Tips</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Daily wellness and prevention insights</p>
+</div>
+</div>
+<input class="custom-switch" type="checkbox"/>
+</div>
+</div>
+</section>
+<!-- System Section -->
+<section class="mb-stack-lg">
+<h2 class="font-title-lg text-title-lg text-primary mb-stack-md flex items-center gap-2">
+<span class="material-symbols-outlined">settings_suggest</span>
+                System
+            </h2>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<!-- Dark Mode -->
+<div class="w-full flex items-center justify-between p-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-on-surface/5 flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined">dark_mode</span>
+</div>
+<div class="text-left">
+<p class="font-title-md text-title-md">Dark Mode</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Reduce eye strain at night</p>
+</div>
+</div>
+<input class="custom-switch" id="dark-mode-toggle" type="checkbox"/>
+</div>
+<div class="h-[1px] bg-outline-variant mx-4"></div>
+<!-- Language -->
+<button class="w-full flex items-center justify-between p-4 hover:bg-surface-variant/20 transition-colors settings-card">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-on-surface/5 flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined">translate</span>
+</div>
+<div class="text-left">
+<p class="font-title-md text-title-md">Language</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Currently set to English (US)</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">expand_more</span>
+</button>
+</div>
+</section>
+<!-- Danger Zone -->
+<div class="mt-12 flex flex-col items-center gap-4">
+<button class="w-full max-w-xs py-3 px-6 bg-error rounded-xl font-title-md text-on-primary shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">logout</span>
+                Logout
+            </button>
+<p class="font-label-sm text-label-sm text-outline">Aarogya Vault v2.4.1 (Stable Build)</p>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Hidden on Desktop) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-base pb-safe pt-2 bg-surface-container dark:bg-surface-container-high border-t border-outline-variant dark:border-outline shadow-md">
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm mt-1">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-sm text-label-sm mt-1">Records</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-label-sm text-label-sm mt-1">AI</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2">
+<span class="material-symbols-outlined">notifications</span>
+<span class="font-label-sm text-label-sm mt-1">Alerts</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1.5 scale-95">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profile</span>
+</div>
+</nav>
+<script>
+        // Simple micro-interaction for the dark mode toggle
+        const toggle = document.getElementById('dark-mode-toggle');
+        toggle.addEventListener('change', () => {
+            if (toggle.checked) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Ripples and button feedback
+        document.querySelectorAll('.settings-card').forEach(btn => {
+            btn.addEventListener('mousedown', function() {
+                this.classList.add('scale-95');
+            });
+            btn.addEventListener('mouseup', function() {
+                this.classList.remove('scale-95');
+            });
+            btn.addEventListener('mouseleave', function() {
+                this.classList.remove('scale-95');
+            });
+        });
+    </script>
+</body></html>

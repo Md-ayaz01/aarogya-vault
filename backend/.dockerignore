@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+env/
+venv/
+ENV/
+.git/
+.gitignore
+.env
+*.db
+aarogya_vault.db
+temp_empty.db
+uploads/
+migrations/versions/*.pyc
