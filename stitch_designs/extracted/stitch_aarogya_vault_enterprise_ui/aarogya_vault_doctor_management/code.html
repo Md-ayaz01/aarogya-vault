@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Doctor Management | Aarogya Vault</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-bright": "#f8f9ff",
+                    "primary-fixed": "#79f9d0",
+                    "inverse-primary": "#59dcb5",
+                    "surface-container-low": "#eff4ff",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed": "#c9e6ff",
+                    "surface-container-highest": "#d3e4fe",
+                    "primary-fixed-dim": "#59dcb5",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-high": "#dce9ff",
+                    "on-primary-fixed-variant": "#00513e",
+                    "on-primary": "#ffffff",
+                    "outline": "#6c7a74",
+                    "on-tertiary-fixed-variant": "#004c6e",
+                    "background": "#f8f9ff",
+                    "surface-variant": "#d3e4fe",
+                    "tertiary-container": "#009ee0",
+                    "on-secondary-fixed-variant": "#3c475a",
+                    "on-primary-container": "#003427",
+                    "on-tertiary-container": "#003149",
+                    "inverse-on-surface": "#eaf1ff",
+                    "surface-container": "#e5eeff",
+                    "primary-container": "#00a884",
+                    "on-secondary-fixed": "#111c2d",
+                    "outline-variant": "#bccac2",
+                    "on-surface-variant": "#3d4a44",
+                    "on-error": "#ffffff",
+                    "on-background": "#0b1c30",
+                    "on-surface": "#0b1c30",
+                    "surface-dim": "#cbdbf5",
+                    "tertiary": "#006591",
+                    "secondary": "#545f73",
+                    "on-secondary-container": "#586377",
+                    "tertiary-fixed-dim": "#89ceff",
+                    "error": "#ba1a1a",
+                    "primary": "#006b53",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#d5e0f8",
+                    "on-tertiary": "#ffffff",
+                    "inverse-surface": "#213145",
+                    "on-tertiary-fixed": "#001e2f",
+                    "surface-tint": "#006b53",
+                    "secondary-fixed": "#d8e3fb",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed-dim": "#bcc7de",
+                    "surface": "#f8f9ff",
+                    "on-primary-fixed": "#002117"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sidebar-width": "260px",
+                    "container-padding": "24px",
+                    "density-high": "8px",
+                    "gutter": "16px",
+                    "unit": "4px",
+                    "density-ultra": "4px",
+                    "inspector-width": "320px"
+            },
+            "fontFamily": {
+                    "title-sm": ["Hanken Grotesk"],
+                    "body-md": ["Inter"],
+                    "data-tabular": ["Inter"],
+                    "display-lg": ["Hanken Grotesk"],
+                    "label-caps": ["Inter"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "title-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "data-tabular": ["13px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #bccac2; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6c7a74; }
+        .sidebar-active-accent { border-left: 4px solid #79f9d0; }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-hidden">
+<!-- Global Side Navigation -->
+<aside class="fixed flex flex-col h-full z-40 bg-secondary dark:bg-inverse-surface border-r border-outline-variant w-sidebar-width left-0 top-0">
+<div class="p-6">
+<h1 class="font-headline-md text-headline-md font-bold text-primary-fixed dark:text-inverse-primary tracking-tight">Aarogya Vault</h1>
+<p class="text-[10px] uppercase tracking-widest text-secondary-fixed-dim opacity-70 mt-1">Admin Terminal</p>
+</div>
+<nav class="flex-1 px-2 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-body-md">Patients</span>
+</a>
+<!-- Active Tab: Doctors -->
+<a class="flex items-center gap-3 px-4 py-3 border-l-4 border-primary-fixed bg-on-secondary-fixed-variant/10 text-primary-fixed font-bold" href="#">
+<span class="material-symbols-outlined" data-icon="medical_services">medical_services</span>
+<span class="font-body-md">Doctors</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined" data-icon="biotech">biotech</span>
+<span class="font-body-md">Laboratory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined" data-icon="medication">medication</span>
+<span class="font-body-md">Pharmacy</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-body-md">Billing</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-body-md">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto p-4 border-t border-outline-variant/30">
+<a class="flex items-center gap-3 px-4 py-2 text-secondary-fixed-dim hover:text-primary-fixed transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-body-md">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-secondary-fixed-dim hover:text-primary-fixed transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-body-md">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- Main View Shell -->
+<main class="ml-sidebar-width flex flex-col h-screen overflow-hidden">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center h-16 px-6 bg-surface-bright dark:bg-background border-b border-outline-variant z-30 sticky top-0">
+<div class="flex items-center gap-6 flex-1">
+<div class="relative w-96 group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container rounded border-none text-body-sm focus:ring-2 focus:ring-primary transition-all" placeholder="Search doctor by name, ID, or specialization..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</button>
+<div class="h-8 w-px bg-outline-variant mx-2"></div>
+<div class="flex items-center gap-3 pl-2">
+<div class="text-right">
+<p class="font-title-sm text-on-surface leading-none">Admin Profile</p>
+<p class="text-[10px] text-on-surface-variant">Systems Overseer</p>
+</div>
+<img class="w-10 h-10 rounded-full border border-outline-variant object-cover" data-alt="A professional studio portrait of a hospital administrator in a minimalist setting. The person is wearing business casual attire, looking directly at the camera with a confident and helpful expression. Soft, even lighting emphasizes a clean, clinical aesthetic with a palette of soft whites and corporate blues." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBn0ICZzdrpRe7bwehtJ0qqMoZdsb0F4aa_Xvx2LWXfOmX8iy5AZyt4UabUlJlix_dyKXTQB0UQE7htYCXg2S7z0sIUNogULkP84JQFda_GaZdPCG-3nuLKphhi8K4e8J0YkTPG1v2QHUwKjCt1eqqZ0soIe8uKp50CqpSxi-Y09O3MwoWhCjBKOrv_GWEFrod5kcEnGLgKf1bhp-KRaOW0ZfYgzdNdbyhjiKThIOpq9SMWkbTU58w_-Q"/>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="flex-1 overflow-y-auto p-6 space-y-6">
+<!-- Page Header & Action -->
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface">Doctor Directory</h2>
+<p class="text-on-surface-variant font-body-md mt-1">Manage 142 medical professionals across 12 departments.</p>
+</div>
+<button class="flex items-center gap-2 bg-primary-container text-on-primary-container px-6 py-2.5 rounded font-title-sm hover:opacity-90 transition-all shadow-sm active:scale-95">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+                    Add New Doctor
+                </button>
+</div>
+<!-- Dashboard Bento Grid -->
+<div class="bento-grid">
+<!-- Main Directory Table -->
+<div class="col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm flex flex-col">
+<div class="px-6 py-4 border-b border-outline-variant bg-surface-container-low flex items-center justify-between">
+<h3 class="font-title-sm text-on-surface">Physician Registry</h3>
+<div class="flex gap-2">
+<button class="text-xs font-label-caps text-secondary px-3 py-1 border border-outline-variant rounded hover:bg-surface-container transition-colors">EXPORT CSV</button>
+<button class="text-xs font-label-caps text-secondary px-3 py-1 border border-outline-variant rounded hover:bg-surface-container transition-colors">FILTER</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high/50">
+<th class="px-6 py-3 font-label-caps text-on-surface-variant border-b border-outline-variant">NAME &amp; ID</th>
+<th class="px-6 py-3 font-label-caps text-on-surface-variant border-b border-outline-variant">SPECIALIZATION</th>
+<th class="px-6 py-3 font-label-caps text-on-surface-variant border-b border-outline-variant">DEPARTMENT</th>
+<th class="px-6 py-3 font-label-caps text-on-surface-variant border-b border-outline-variant">STATUS</th>
+<th class="px-6 py-3 font-label-caps text-on-surface-variant border-b border-outline-variant text-right">METRICS</th>
+<th class="px-6 py-3 font-label-caps text-on-surface-variant border-b border-outline-variant">ACTIONS</th>
+</tr>
+</thead>
+<tbody class="text-data-tabular">
+<tr class="hover:bg-primary/5 transition-colors border-b border-outline-variant/30 group">
+<td class="px-6 py-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-bold text-xs">SA</div>
+<div>
+<p class="font-bold text-on-surface">Dr. Sarah Al-Fayed</p>
+<p class="text-[10px] text-on-surface-variant">ID: DOC-9921</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-3 text-on-surface">Cardiology</td>
+<td class="px-6 py-3 text-on-surface">Heart &amp; Vascular</td>
+<td class="px-6 py-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#00a8841a] text-primary font-bold text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                                            ON-DUTY
+                                        </span>
+</td>
+<td class="px-6 py-3 text-right">
+<div class="flex flex-col items-end">
+<span class="font-bold text-primary">98%</span>
+<span class="text-[9px] text-on-surface-variant uppercase">Patient Sat.</span>
+</div>
+</td>
+<td class="px-6 py-3">
+<div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span></button>
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-lg" data-icon="edit">edit</span></button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-primary/5 transition-colors border-b border-outline-variant/30 group">
+<td class="px-6 py-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary-container font-bold text-xs">MC</div>
+<div>
+<p class="font-bold text-on-surface">Dr. Marcus Chen</p>
+<p class="text-[10px] text-on-surface-variant">ID: DOC-4412</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-3 text-on-surface">Neurology</td>
+<td class="px-6 py-3 text-on-surface">Neurosciences</td>
+<td class="px-6 py-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-error/10 text-error font-bold text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                                            OFF-DUTY
+                                        </span>
+</td>
+<td class="px-6 py-3 text-right">
+<div class="flex flex-col items-end">
+<span class="font-bold text-on-surface">92%</span>
+<span class="text-[9px] text-on-surface-variant uppercase">Patient Sat.</span>
+</div>
+</td>
+<td class="px-6 py-3">
+<div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span></button>
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-lg" data-icon="edit">edit</span></button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-primary/5 transition-colors border-b border-outline-variant/30 group">
+<td class="px-6 py-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-bold text-xs">ER</div>
+<div>
+<p class="font-bold text-on-surface">Dr. Elena Rodriguez</p>
+<p class="text-[10px] text-on-surface-variant">ID: DOC-8822</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-3 text-on-surface">Pediatrics</td>
+<td class="px-6 py-3 text-on-surface">Maternal Care</td>
+<td class="px-6 py-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#00a8841a] text-primary font-bold text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                                            ON-DUTY
+                                        </span>
+</td>
+<td class="px-6 py-3 text-right">
+<div class="flex flex-col items-end">
+<span class="font-bold text-primary">99%</span>
+<span class="text-[9px] text-on-surface-variant uppercase">Patient Sat.</span>
+</div>
+</td>
+<td class="px-6 py-3">
+<div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span></button>
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-lg" data-icon="edit">edit</span></button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-primary/5 transition-colors border-b border-outline-variant/30 group">
+<td class="px-6 py-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-dim flex items-center justify-center text-on-surface font-bold text-xs">JK</div>
+<div>
+<p class="font-bold text-on-surface">Dr. Julian Kovic</p>
+<p class="text-[10px] text-on-surface-variant">ID: DOC-7714</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-3 text-on-surface">Oncology</td>
+<td class="px-6 py-3 text-on-surface">Cancer Research</td>
+<td class="px-6 py-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-error/10 text-error font-bold text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                                            ON LEAVE
+                                        </span>
+</td>
+<td class="px-6 py-3 text-right">
+<div class="flex flex-col items-end">
+<span class="font-bold text-on-surface">94%</span>
+<span class="text-[9px] text-on-surface-variant uppercase">Patient Sat.</span>
+</div>
+</td>
+<td class="px-6 py-3">
+<div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span></button>
+<button class="p-1 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-lg" data-icon="edit">edit</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="mt-auto px-6 py-3 bg-surface-container-lowest border-t border-outline-variant flex justify-between items-center">
+<p class="text-xs text-on-surface-variant">Showing 1-15 of 142 records</p>
+<div class="flex gap-1">
+<button class="p-1 hover:bg-surface-container rounded disabled:opacity-30"><span class="material-symbols-outlined">chevron_left</span></button>
+<button class="px-2 text-xs font-bold bg-primary-container text-on-primary-container rounded">1</button>
+<button class="px-2 text-xs hover:bg-surface-container rounded">2</button>
+<button class="px-2 text-xs hover:bg-surface-container rounded">3</button>
+<button class="p-1 hover:bg-surface-container rounded"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+</div>
+<!-- Right Sidebar: Calendar & Quick Metrics -->
+<div class="col-span-4 space-y-6">
+<!-- Performance Metrics Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm">
+<h3 class="font-title-sm text-on-surface mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="trending_up">trending_up</span>
+                            Departmental Efficiency
+                        </h3>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-on-surface-variant">Cardiology</span>
+<span class="font-bold">94%</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 94%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-on-surface-variant">Neurology</span>
+<span class="font-bold">88%</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 88%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-on-surface-variant">Pediatrics</span>
+<span class="font-bold">91%</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-tertiary-container" style="width: 91%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Leave Management Overview (Calendar Style) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 shadow-sm">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-title-sm text-on-surface">Leave Tracker</h3>
+<span class="text-xs font-bold text-on-surface-variant uppercase">Oct 2023</span>
+</div>
+<div class="grid grid-cols-7 gap-1 text-center mb-2">
+<span class="text-[9px] font-label-caps text-on-surface-variant">M</span>
+<span class="text-[9px] font-label-caps text-on-surface-variant">T</span>
+<span class="text-[9px] font-label-caps text-on-surface-variant">W</span>
+<span class="text-[9px] font-label-caps text-on-surface-variant">T</span>
+<span class="text-[9px] font-label-caps text-on-surface-variant">F</span>
+<span class="text-[9px] font-label-caps text-on-surface-variant">S</span>
+<span class="text-[9px] font-label-caps text-on-surface-variant">S</span>
+</div>
+<div class="grid grid-cols-7 gap-1">
+<!-- Simple Dummy Calendar -->
+<div class="aspect-square flex items-center justify-center text-[11px] rounded hover:bg-surface-container cursor-default text-on-surface-variant opacity-40">25</div>
+<div class="aspect-square flex items-center justify-center text-[11px] rounded hover:bg-surface-container cursor-default text-on-surface-variant opacity-40">26</div>
+<div class="aspect-square flex items-center justify-center text-[11px] rounded hover:bg-surface-container cursor-default text-on-surface-variant opacity-40">27</div>
+<div class="aspect-square flex items-center justify-center text-[11px] rounded hover:bg-surface-container cursor-default text-on-surface-variant opacity-40">28</div>
+<div class="aspect-square flex items-center justify-center text-[11px] rounded hover:bg-surface-container cursor-default text-on-surface-variant opacity-40">29</div>
+<div class="aspect-square flex items-center justify-center text-[11px] rounded hover:bg-surface-container cursor-default text-on-surface-variant opacity-40">30</div>
+<div class="aspect-square flex items-center justify-center text-[11px] rounded hover:bg-surface-container cursor-default font-bold text-primary">1</div>
+<div class="aspect-square flex items-center justify-center text-[11px] rounded hover:bg-surface-container cursor-default">2</div>
+<div class="aspect-square flex items-center justify-center text-[11px] rounded bg-error-container text-on-error-container font-bold">3</div>
+<div class="aspect-square flex items-center justify-center text-[11px] rounded hover:bg-surface-container cursor-default">4</div>
+<div class="aspect-square flex items-center justify-center text-[11px] rounded hover:bg-surface-container cursor-default">5</div>
+<div class="aspect-square flex items-center justify-center text-[11px] rounded bg-error-container text-on-error-container font-bold">6</div>
+<div class="aspect-square flex items-center justify-center text-[11px] rounded hover:bg-surface-container cursor-default">7</div>
+<div class="aspect-square flex items-center justify-center text-[11px] rounded hover:bg-surface-container cursor-default">8</div>
+<div class="aspect-square flex items-center justify-center text-[11px] rounded hover:bg-surface-container cursor-default">9</div>
+<div class="aspect-square flex items-center justify-center text-[11px] rounded hover:bg-surface-container cursor-default">10</div>
+<div class="aspect-square flex items-center justify-center text-[11px] rounded bg-primary-container/20 border border-primary/20 font-bold">11</div>
+<div class="aspect-square flex items-center justify-center text-[11px] rounded hover:bg-surface-container cursor-default">12</div>
+<div class="aspect-square flex items-center justify-center text-[11px] rounded hover:bg-surface-container cursor-default">13</div>
+<div class="aspect-square flex items-center justify-center text-[11px] rounded hover:bg-surface-container cursor-default">14</div>
+<div class="aspect-square flex items-center justify-center text-[11px] rounded hover:bg-surface-container cursor-default">15</div>
+</div>
+<div class="mt-4 pt-4 border-t border-outline-variant space-y-2">
+<div class="flex items-center gap-2 text-[10px]">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="text-on-surface-variant"><span class="font-bold text-on-surface">4 Doctors</span> on Sick Leave today</span>
+</div>
+<div class="flex items-center gap-2 text-[10px]">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-on-surface-variant"><span class="font-bold text-on-surface">Today</span> Current Date Highlight</span>
+</div>
+</div>
+<button class="w-full mt-4 py-2 bg-surface-container hover:bg-surface-container-high text-on-surface font-title-sm text-xs rounded transition-colors">Review Leave Requests</button>
+</div>
+<!-- Quick Insights Animation -->
+<div class="relative bg-inverse-surface rounded-xl p-5 overflow-hidden h-48 group">
+
+<div class="relative z-10">
+<h4 class="text-primary-fixed font-bold text-sm">System Health</h4>
+<p class="text-secondary-fixed-dim text-xs mt-1">Personnel capacity is optimal for current patient load.</p>
+<div class="mt-6 flex items-baseline gap-1">
+<span class="text-primary-fixed font-display-lg text-3xl">92.4%</span>
+<span class="text-on-secondary-fixed-variant text-[10px] uppercase font-bold tracking-tighter">Availability Index</span>
+</div>
+</div>
+<div class="absolute bottom-4 right-4 bg-primary-fixed text-on-primary-fixed px-2 py-1 rounded text-[10px] font-bold">STABLE</div>
+</div>
+</div>
+</div>
+<!-- Footer Meta -->
+<footer class="flex justify-between items-center py-6 border-t border-outline-variant text-[11px] text-on-surface-variant">
+<div class="flex gap-4">
+<span>© 2023 Aarogya Vault Medical Systems</span>
+<a class="hover:text-primary underline transition-colors" href="#">Data Privacy Protocol</a>
+<a class="hover:text-primary underline transition-colors" href="#">System Logs</a>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span>Server Status: Secure Connection Active</span>
+</div>
+</footer>
+</div>
+</main>
+<!-- Contextual Details Pane (Hidden by Default, can be toggled) -->
+<div class="fixed right-0 top-0 h-full w-inspector-width bg-surface-bright border-l border-outline-variant shadow-2xl z-50 translate-x-full transition-transform duration-300" id="inspector">
+<div class="p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-on-surface">Doctor Profile</h3>
+<button class="p-1 hover:bg-surface-container rounded" onclick="document.getElementById('inspector').classList.add('translate-x-full')"><span class="material-symbols-outlined">close</span></button>
+</div>
+<div class="flex flex-col items-center text-center mb-8">
+<img class="w-24 h-24 rounded-full border-4 border-primary-container/30 object-cover mb-4" data-alt="A detailed closeup of a professional physician, showcasing approachable authority. The doctor is wearing a clean white coat with a stethoscope around their neck. The background is a soft-focus medical office with light wood accents and clinical white equipment. The lighting is bright and high-key, reinforcing the reliable and sterile hospital environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCOpVZuEq9b3O5ab3r-dx8lDp2-Rvo3_emzGP3A1Jy3f-_AUR3RLpMUOfvcg0Gegs6sNwBcmElkV_WZSwIEsHlBTbTDvEvn8fvpsR7gIUWf7jBMtUAaYh32JPTbeC9jbqs_DoWAK4pR-bRC0zFR6Aq5tGDK6mXYylonIsqU7Hc70ywZC9AzYFdNSEn9koGvJL3km0b-qBvRUXJG6TshMd_Ib1YNmNIC6waKNXjf1Y0bhHWlRUIfQQkpA"/>
+<h4 class="font-title-sm text-lg">Dr. Sarah Al-Fayed</h4>
+<p class="text-primary font-bold text-xs uppercase tracking-widest">Senior Cardiologist</p>
+</div>
+<div class="space-y-6">
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container p-3 rounded">
+<p class="text-[10px] font-label-caps text-on-surface-variant mb-1">PATIENTS TODAY</p>
+<p class="font-bold text-xl">12</p>
+</div>
+<div class="bg-surface-container p-3 rounded">
+<p class="text-[10px] font-label-caps text-on-surface-variant mb-1">AVG RATING</p>
+<p class="font-bold text-xl text-primary">4.9/5</p>
+</div>
+</div>
+<div>
+<h5 class="text-xs font-bold text-on-surface-variant mb-3 border-b border-outline-variant pb-1">CONTACT INFORMATION</h5>
+<div class="space-y-3">
+<div class="flex items-center gap-3 text-body-sm">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="mail">mail</span>
+                            s.alfayed@aarogyavault.com
+                        </div>
+<div class="flex items-center gap-3 text-body-sm">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="phone">phone</span>
+                            +1 (555) 092-1144
+                        </div>
+</div>
+</div>
+<div class="pt-4 flex gap-2">
+<button class="flex-1 py-2.5 bg-primary text-white font-bold rounded hover:opacity-90 transition-all text-xs">Assign Shift</button>
+<button class="flex-1 py-2.5 border border-outline text-on-surface font-bold rounded hover:bg-surface-container transition-all text-xs">Full Portfolio</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+        // Micro-interaction for table rows to show the inspector
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('click', () => {
+                const inspector = document.getElementById('inspector');
+                inspector.classList.remove('translate-x-full');
+            });
+        });
+
+        // Hover animation logic for table cells
+        const tableRows = document.querySelectorAll('tbody tr');
+        tableRows.forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                row.querySelector('.material-symbols-outlined').style.fontVariationSettings = "'FILL' 1";
+            });
+            row.addEventListener('mouseleave', () => {
+                row.querySelector('.material-symbols-outlined').style.fontVariationSettings = "'FILL' 0";
+            });
+        });
+    </script>
+</body></html>

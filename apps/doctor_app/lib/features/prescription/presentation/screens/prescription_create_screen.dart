@@ -6,7 +6,7 @@ import '../../../../core/network/api_client.dart';
 class PrescriptionCreateScreen extends StatefulWidget {
   final int patientId;
   final String patientName;
-  const PrescriptionCreateScreen({Key? key, required this.patientId, required this.patientName}) : super(key: key);
+  const PrescriptionCreateScreen({super.key, required this.patientId, required this.patientName});
 
   @override
   State<PrescriptionCreateScreen> createState() => _PrescriptionCreateScreenState();

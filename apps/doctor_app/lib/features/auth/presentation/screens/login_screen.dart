@@ -5,10 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../../../core/di/locator.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/database/local_db.dart';
-import '../../../../core/theme/app_theme.dart';
-
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -30,15 +28,6 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.dispose();
     _phoneController.dispose();
     super.dispose();
-  }
-
-  bool _isSupabaseActive() {
-    try {
-      Supabase.instance.client;
-      return true;
-    } catch (_) {
-      return false;
-    }
   }
 
   Future<void> _handleLogin() async {

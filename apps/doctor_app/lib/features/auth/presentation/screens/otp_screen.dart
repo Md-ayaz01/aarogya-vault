@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../../core/di/locator.dart';
 import '../../../../core/network/api_client.dart';
@@ -9,7 +8,7 @@ import '../../../../core/database/local_db.dart';
 class OTPScreen extends StatefulWidget {
   final String phone;
   final String? verificationId;
-  const OTPScreen({Key? key, required this.phone, this.verificationId}) : super(key: key);
+  const OTPScreen({super.key, required this.phone, this.verificationId});
 
   @override
   State<OTPScreen> createState() => _OTPScreenState();

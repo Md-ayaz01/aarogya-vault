@@ -128,9 +128,8 @@ def test_doctor_app_workflows():
 
     # 1. Login Patient
     print("1. Logging in Patient...")
-    patient_login = client.post("/api/v1/auth/login", json={
-        "email": "test_patient@aarogyavault.com",
-        "password": "Password123"
+    patient_login = client.post("/api/v1/auth/verify-firebase-otp", json={
+        "id_token": "mock_token_+919999900001"
     })
     assert patient_login.status_code == 200, "Patient login failed"
     patient_token = patient_login.json()["access_token"]
@@ -139,9 +138,8 @@ def test_doctor_app_workflows():
 
     # 2. Login Doctor
     print("2. Logging in Authorized Doctor...")
-    doctor_login = client.post("/api/v1/auth/login", json={
-        "email": "test_doctor@aarogyavault.com",
-        "password": "Password123"
+    doctor_login = client.post("/api/v1/auth/verify-firebase-otp", json={
+        "id_token": "mock_token_+919999900002"
     })
     assert doctor_login.status_code == 200, "Doctor login failed"
     doctor_token = doctor_login.json()["access_token"]
@@ -150,14 +148,14 @@ def test_doctor_app_workflows():
 
     # 3. Login Unauthorized Doctor
     print("3. Logging in Unauthorized Doctor...")
-    unauth_doctor_login = client.post("/api/v1/auth/login", json={
-        "email": "unauth_doctor@aarogyavault.com",
-        "password": "Password123"
+    unauth_doctor_login = client.post("/api/v1/auth/verify-firebase-otp", json={
+        "id_token": "mock_token_+919999900003"
     })
-    assert unauth_doctor_login.status_code == 200
+    assert unauth_doctor_login.status_code == 200, "Unauthorized doctor login failed"
     unauth_doctor_token = unauth_doctor_login.json()["access_token"]
     unauth_doctor_headers = {"Authorization": f"Bearer {unauth_doctor_token}"}
     print("   [PASS] Unauthorized doctor logged in successfully.")
+
 
     # 4. Patient attempts doctor dashboard -> 403
     print("4. Testing Patient accessing doctor dashboard (expects 403)...")

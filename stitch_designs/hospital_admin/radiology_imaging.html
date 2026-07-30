@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Radiology &amp; Imaging | Aarogya Vault</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .sidebar-active {
+            border-left-width: 4px;
+        }
+        /* Custom scrollbar for data-heavy density */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #bccac2;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6c7a74;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#213145",
+                        "on-tertiary-container": "#003149",
+                        "on-primary-fixed-variant": "#00513e",
+                        "tertiary-container": "#009ee0",
+                        "surface-tint": "#006b53",
+                        "background": "#f8f9ff",
+                        "tertiary-fixed-dim": "#89ceff",
+                        "primary-fixed-dim": "#59dcb5",
+                        "inverse-primary": "#59dcb5",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "secondary": "#545f73",
+                        "surface-dim": "#cbdbf5",
+                        "secondary-fixed": "#d8e3fb",
+                        "secondary-fixed-dim": "#bcc7de",
+                        "on-background": "#0b1c30",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container": "#e5eeff",
+                        "error": "#ba1a1a",
+                        "tertiary": "#006591",
+                        "primary": "#006b53",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#003427",
+                        "on-secondary-container": "#586377",
+                        "outline": "#6c7a74",
+                        "secondary-container": "#d5e0f8",
+                        "on-tertiary-fixed": "#001e2f",
+                        "on-secondary-fixed-variant": "#3c475a",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#c9e6ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "primary-fixed": "#79f9d0",
+                        "on-tertiary-fixed-variant": "#004c6e",
+                        "on-surface-variant": "#3d4a44",
+                        "surface-container-high": "#dce9ff",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#002117",
+                        "on-secondary-fixed": "#111c2d",
+                        "on-surface": "#0b1c30",
+                        "surface-variant": "#d3e4fe",
+                        "surface": "#f8f9ff",
+                        "surface-bright": "#f8f9ff",
+                        "outline-variant": "#bccac2",
+                        "primary-container": "#00a884",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "density-ultra": "4px",
+                        "unit": "4px",
+                        "inspector-width": "320px",
+                        "density-high": "8px",
+                        "sidebar-width": "260px",
+                        "gutter": "16px",
+                        "container-padding": "24px"
+                    },
+                    "fontFamily": {
+                        "title-sm": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "data-tabular": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "title-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "data-tabular": ["13px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary-container selection:text-white">
+<!-- SIDEBAR NAVIGATION (Shared Component) -->
+<aside class="fixed flex flex-col h-full z-40 bg-secondary dark:bg-inverse-surface border-r border-outline-variant w-[260px] left-0 top-0">
+<div class="p-6">
+<h1 class="font-headline-md text-headline-md font-bold text-primary-fixed dark:text-inverse-primary leading-tight">Aarogya Vault</h1>
+<p class="text-[10px] uppercase tracking-widest text-primary-fixed/60 font-bold mt-1">Admin Terminal</p>
+</div>
+<nav class="flex-1 px-2 space-y-1">
+<!-- Navigation Items Mapping from JSON -->
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-body-md text-body-md">Patients</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">medical_services</span>
+<span class="font-body-md text-body-md">Doctors</span>
+</a>
+<!-- ACTIVE TAB: Laboratory (Mapping Radiology intent) -->
+<a class="flex items-center gap-3 px-4 py-3 border-l-4 border-primary-fixed bg-on-secondary-fixed-variant/10 text-primary-fixed font-bold" href="#">
+<span class="material-symbols-outlined">biotech</span>
+<span class="font-body-md text-body-md">Laboratory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">medication</span>
+<span class="font-body-md text-body-md">Pharmacy</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body-md text-body-md">Billing</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-md text-body-md">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-outline-variant/30">
+<a class="flex items-center gap-3 px-4 py-2 text-secondary-fixed-dim hover:text-primary-fixed transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md text-body-md">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-secondary-fixed-dim hover:text-primary-fixed transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-md text-body-md">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- MAIN CONTENT AREA -->
+<main class="ml-[260px] min-h-screen flex flex-col">
+<!-- TOP APP BAR (Shared Component) -->
+<header class="flex justify-between items-center h-16 px-6 bg-surface-bright dark:bg-background border-b border-outline-variant sticky top-0 z-30">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg text-body-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Search Patient ID or Scan Reference..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 border-r border-outline-variant pr-6">
+<button class="relative p-2 rounded-full hover:bg-surface-container-high transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined text-on-surface-variant">history</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined text-on-surface-variant">help</span>
+</button>
+</div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="font-title-sm text-[13px] leading-tight text-on-surface">Admin Terminal</p>
+<p class="text-[11px] text-on-surface-variant uppercase font-bold tracking-tight">Super User</p>
+</div>
+<img class="w-10 h-10 rounded-full border-2 border-primary-container object-cover" data-alt="A professional headshot of a hospital administrator, a man in his late 40s with sharp features and a calm expression, wearing a tailored navy suit and glasses. The background is a blurred high-tech medical facility with soft blue and green ambient lighting, maintaining a clean corporate and professional healthcare aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD03-6DQlTGZILurEN-bMVMD4gJMvTtcUWfoclAcQvIle-QbZczM2fI2E7aoxdCEQSSqef4oY6DJ128twEyZYne3W8caGThLld6jlwOpxcfnjQIwfF6-ISQA8CcUJ1FyY_VddzTg2SUiyo3GU-GfAas6wBAFEqFoQAmpj4O6V_CzJPqLbyb7MtTAlHWKKlWBExN2TmlPollgbQ0kB7spNkTin1cctP-uuS6c5T8u2E8DHhhrpFIvHghzQ"/>
+</div>
+</div>
+</header>
+<!-- DASHBOARD WORKSPACE -->
+<div class="p-6 space-y-6">
+<!-- PAGE HEADER ACTIONS -->
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface">Radiology &amp; Imaging</h2>
+<p class="text-on-surface-variant font-body-md mt-1">Diagnostic Intelligence &amp; Image Management System</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2.5 bg-surface-container-high text-on-surface-variant border border-outline-variant rounded-lg hover:bg-surface-container-highest transition-all active:scale-95 font-title-sm text-sm">
+<span class="material-symbols-outlined text-lg">compare_arrows</span>
+                        Comparison View
+                    </button>
+<button class="flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary rounded-lg hover:opacity-90 transition-all shadow-sm active:scale-95 font-title-sm text-sm">
+<span class="material-symbols-outlined text-lg">cloud_upload</span>
+                        Upload Imaging
+                    </button>
+</div>
+</div>
+<!-- BENTO GRID LAYOUT -->
+<div class="grid grid-cols-12 gap-6">
+<!-- RECENT SCANS GALLERY -->
+<div class="col-span-12 lg:col-span-8 space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="font-title-sm text-title-sm text-on-surface">Recent Diagnostic Scans</h3>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-label-caps uppercase text-[10px]">All</span>
+<span class="px-3 py-1 hover:bg-surface-container-high text-on-surface-variant rounded-full text-label-caps uppercase text-[10px] cursor-pointer">MRI</span>
+<span class="px-3 py-1 hover:bg-surface-container-high text-on-surface-variant rounded-full text-label-caps uppercase text-[10px] cursor-pointer">CT</span>
+<span class="px-3 py-1 hover:bg-surface-container-high text-on-surface-variant rounded-full text-label-caps uppercase text-[10px] cursor-pointer">X-Ray</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+<!-- SCAN CARD 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden hover:shadow-lg transition-all group cursor-pointer">
+<div class="relative aspect-square bg-inverse-surface flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A high-resolution axial T2-weighted MRI scan of a human brain, showing intricate neural structures in grayscale. The image is presented on a clean, technical dark background with subtle blue diagnostic overlays and crosshair markers, reflecting a modern radiology terminal aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuArV_lenSDrYLc2RBzWh8t1PtU-Hni7ioEqcoeSlIOpZjtQM5ZOdQb5fcQTsL3_u8GYliv4QKgZqgkoVE0BD-2pl9Crv1XqO6mU3mBS59O4jb09MSCKNyBNv65rz3Hxn63RfDOpP3iucpwFsKhiLKZuZd7Oi34V2HkRZXbCPXc4jKkUC7FDTBQhviqO_BZb5tTAxUAVm71NfU-EEZkCBMpfVbz2cjibfKnLt12Oj9ENeTQAX-HGVIjZjg"/>
+<div class="absolute top-2 left-2 bg-black/50 backdrop-blur-md px-2 py-1 rounded text-[10px] text-white font-mono">BRAIN_MRI_042</div>
+<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-4xl" style="font-variation-settings: 'FILL' 1;">open_in_full</span>
+</div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<p class="font-bold text-on-surface text-sm">Elena Rodriguez</p>
+<p class="text-xs text-on-surface-variant">ID: #P-90882</p>
+</div>
+<span class="px-2 py-0.5 bg-error/10 text-error rounded text-[10px] font-bold uppercase">Critical</span>
+</div>
+<div class="flex items-center gap-2 text-[11px] text-on-surface-variant mt-3 pt-3 border-t border-outline-variant/30">
+<span class="material-symbols-outlined text-sm">calendar_month</span> 24 Oct 2023
+                                    <span class="material-symbols-outlined text-sm ml-2">schedule</span> 14:20
+                                </div>
+</div>
+</div>
+<!-- SCAN CARD 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden hover:shadow-lg transition-all group cursor-pointer">
+<div class="relative aspect-square bg-inverse-surface flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A professional chest X-ray image showing the ribcage, lungs, and heart silhouette in sharp black and white contrast. The image has a clinical technical feel with digital measurement labels and patient information masked out, set against a dark, minimalist laboratory background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAa4R6VZG3a-6YOY72ytY6N8LkHvtYWJbBLPDT3WLuG6Spk2YAwYjsO7Mx94-_e2eK6IbCv6XAeo6HS9LJWoZeNwasUfslVIO4NF5CsTz4FNZ-XuaA0XB7kmhKRHBgGl6ZFndxNLnq9Vx8jqtt5L9tHPt0QROY0iaTJKEggw-FsiajD5sYGQczO7uI0HjoTqLBh-7-uNHkqa4wTaOSms_EmEsvKrU_GGSHwxDxGWhIk2wRc_NXj1KyYQg"/>
+<div class="absolute top-2 left-2 bg-black/50 backdrop-blur-md px-2 py-1 rounded text-[10px] text-white font-mono">CHEST_XRAY_115</div>
+<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-4xl" style="font-variation-settings: 'FILL' 1;">open_in_full</span>
+</div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<p class="font-bold text-on-surface text-sm">Marcus Thorne</p>
+<p class="text-xs text-on-surface-variant">ID: #P-88219</p>
+</div>
+<span class="px-2 py-0.5 bg-green-500/10 text-green-600 rounded text-[10px] font-bold uppercase">Stable</span>
+</div>
+<div class="flex items-center gap-2 text-[11px] text-on-surface-variant mt-3 pt-3 border-t border-outline-variant/30">
+<span class="material-symbols-outlined text-sm">calendar_month</span> 23 Oct 2023
+                                    <span class="material-symbols-outlined text-sm ml-2">schedule</span> 09:15
+                                </div>
+</div>
+</div>
+<!-- SCAN CARD 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden hover:shadow-lg transition-all group cursor-pointer">
+<div class="relative aspect-square bg-inverse-surface flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A high-contrast CT scan of the abdomen and pelvic region showing skeletal structure and soft tissues in cross-section. The image is rendered in high-definition monochrome with subtle cyan highlights on specific anatomical areas, styled for a high-end medical research dashboard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9XUF8Vp_UhIY1WYowSmCuu_nXP3N765zVkJq5QnauEp252sTG0XWSb8DFOM02y1FgfqYeRLDt8RnV_GoTT1e-761r1P-WlE3JmMeTxGH3EJrX5gFH4nAPQZ-eNP8zTUKjOT3XlX3PZcOIu7wRm2n07aT5oYkb1GcljqHUueIA0_ImJzpTofvrxkJVWPmwaXLZ85EHGoYrNYfobgzoBHsP1FWvOuPg_xDpYMLmq_AADkdxT3mWkX283A"/>
+<div class="absolute top-2 left-2 bg-black/50 backdrop-blur-md px-2 py-1 rounded text-[10px] text-white font-mono">ABD_CT_672</div>
+<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-4xl" style="font-variation-settings: 'FILL' 1;">open_in_full</span>
+</div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<div>
+<p class="font-bold text-on-surface text-sm">Sarah Jenkins</p>
+<p class="text-xs text-on-surface-variant">ID: #P-77211</p>
+</div>
+<span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container rounded text-[10px] font-bold uppercase">Routine</span>
+</div>
+<div class="flex items-center gap-2 text-[11px] text-on-surface-variant mt-3 pt-3 border-t border-outline-variant/30">
+<span class="material-symbols-outlined text-sm">calendar_month</span> 23 Oct 2023
+                                    <span class="material-symbols-outlined text-sm ml-2">schedule</span> 16:45
+                                </div>
+</div>
+</div>
+</div>
+<!-- DATA TABLE OF PENDING REPORTS -->
+<div class="mt-8 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+<div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h3 class="font-title-sm text-title-sm text-on-surface">Queue Management</h3>
+<span class="text-xs text-on-surface-variant">12 Pending Reports</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-high/50">
+<tr>
+<th class="px-6 py-3 text-label-caps text-[10px] uppercase tracking-wider text-on-surface-variant">Patient Name</th>
+<th class="px-6 py-3 text-label-caps text-[10px] uppercase tracking-wider text-on-surface-variant">Type</th>
+<th class="px-6 py-3 text-label-caps text-[10px] uppercase tracking-wider text-on-surface-variant">Status</th>
+<th class="px-6 py-3 text-label-caps text-[10px] uppercase tracking-wider text-on-surface-variant">Assigned Radiologist</th>
+<th class="px-6 py-3 text-label-caps text-[10px] uppercase tracking-wider text-on-surface-variant text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30 font-data-tabular">
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-4 text-sm font-semibold">David Chen <span class="text-xs font-normal text-on-surface-variant ml-2">#P-2210</span></td>
+<td class="px-6 py-4 text-xs">Lumbar MRI</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-1.5 text-[11px] font-bold text-tertiary">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span> IN REVIEW
+                                            </span>
+</td>
+<td class="px-6 py-4 text-xs">Dr. Aris Varma</td>
+<td class="px-6 py-4 text-right">
+<button class="p-1 hover:bg-surface-container-highest rounded text-primary transition-all">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+<button class="p-1 hover:bg-surface-container-highest rounded text-on-surface-variant transition-all ml-1">
+<span class="material-symbols-outlined text-lg">more_vert</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-4 text-sm font-semibold">Linda Wu <span class="text-xs font-normal text-on-surface-variant ml-2">#P-1109</span></td>
+<td class="px-6 py-4 text-xs">Contrast CT</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-1.5 text-[11px] font-bold text-error">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> URGENT
+                                            </span>
+</td>
+<td class="px-6 py-4 text-xs">Dr. Sarah Miller</td>
+<td class="px-6 py-4 text-right">
+<button class="p-1 hover:bg-surface-container-highest rounded text-primary transition-all">
+<span class="material-symbols-outlined text-lg">visibility</span>
+</button>
+<button class="p-1 hover:bg-surface-container-highest rounded text-on-surface-variant transition-all ml-1">
+<span class="material-symbols-outlined text-lg">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- RIGHT INSPECTOR PANE: ANALYSIS TOOL -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+<!-- COMPARISON TOOL UI -->
+<div class="bg-inverse-surface text-white rounded-xl shadow-xl overflow-hidden flex flex-col">
+<div class="p-4 border-b border-white/10 flex items-center justify-between">
+<span class="font-title-sm text-sm">Comparison Tool</span>
+<span class="material-symbols-outlined text-white/50 cursor-pointer">close</span>
+</div>
+<div class="p-4 space-y-4">
+<div class="grid grid-cols-2 gap-2">
+<div class="space-y-2">
+<div class="aspect-[3/4] bg-black rounded border border-white/20 relative overflow-hidden flex items-center justify-center group">
+<img class="w-full h-full object-cover opacity-60" data-alt="A comparative view of a brain MRI from 6 months ago, showing slightly different contrast levels. The image is on a dark diagnostic background with white measurement lines indicating area of interest." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAF9nhdi773jPVK4Xib3rXUeLhznE92UsRdwOASqnfYkXz5Ap0lsPQt33KxLr_UNM_5DHkaFpOY1m5CrAGv851QL3RZhatD2oqvqbhND1TOdovab1NKju67SyS2J_A60vWWLpNt3IjoTLEFi3UY-Vmf_6ZD2_EaQL19xv2M9lAybWFpMlB5_8Fkx-xTYP7pQU4Yo3SW53cj2WX4l9TLiv5901uVdHs44WPbEexnfJBihyHvI4QeBH1Fg"/>
+<div class="absolute bottom-2 left-2 text-[9px] bg-black/60 px-1 rounded uppercase tracking-tighter">OCT 2022</div>
+<button class="absolute inset-0 m-auto w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm hidden group-hover:flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm">add</span>
+</button>
+</div>
+<p class="text-[10px] text-center text-white/60">Baseline Scan</p>
+</div>
+<div class="space-y-2">
+<div class="aspect-[3/4] bg-black rounded border-2 border-primary-container relative overflow-hidden flex items-center justify-center group">
+<img class="w-full h-full object-cover" data-alt="A comparative view of a modern brain MRI from today, with sharp clarity and artificial intelligence assisted highlighting on a specific neural pathway. The aesthetic is clean, technological, and medical." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUckWLsL_OSSsPBnW557WliosWBZLS78T8YyayzR3WfxR1hM0o_r-KhQAffrHoeDjVbmguGvAQEpKVoDGOl7OPWMndQMxLXuroVkEEQrQpsPA69cUu-0zDIr4vcdsypqdJv2OhFST9xnm45b35SwrB1Sf9fEAvqmTNIjVfUE3obgZJ60uqd02d-5sdwbE9DSJeE7GHMPF7nDgn-CPm_kHWq6X_7QzbVLFNvpaKz8EIEmiAkhchC4L7kw"/>
+<div class="absolute bottom-2 left-2 text-[9px] bg-primary-container px-1 rounded uppercase tracking-tighter">CURRENT</div>
+<button class="absolute inset-0 m-auto w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm hidden group-hover:flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm">sync</span>
+</button>
+</div>
+<p class="text-[10px] text-center text-primary-fixed">Active Scan</p>
+</div>
+</div>
+<div class="space-y-3 bg-white/5 p-3 rounded-lg border border-white/10">
+<h4 class="text-[11px] font-bold uppercase tracking-widest text-white/40">Analysis Controls</h4>
+<div class="flex items-center justify-between text-xs">
+<span>Sync Pan/Zoom</span>
+<div class="w-8 h-4 bg-primary rounded-full relative cursor-pointer">
+<div class="absolute right-0.5 top-0.5 w-3 h-3 bg-white rounded-full"></div>
+</div>
+</div>
+<div class="flex items-center justify-between text-xs">
+<span>AI Detection Layer</span>
+<div class="w-8 h-4 bg-white/20 rounded-full relative cursor-pointer">
+<div class="absolute left-0.5 top-0.5 w-3 h-3 bg-white rounded-full"></div>
+</div>
+</div>
+<div class="pt-2">
+<label class="text-[10px] text-white/40 block mb-1">Opacity Contrast</label>
+<input class="w-full accent-primary h-1 bg-white/20 rounded-lg appearance-none cursor-pointer" type="range"/>
+</div>
+</div>
+<button class="w-full py-2 bg-white text-inverse-surface rounded-lg font-bold text-xs hover:bg-primary-fixed transition-colors">
+                                Generate Differential Report
+                            </button>
+</div>
+</div>
+<!-- RADIOLOGIST WORKLOAD -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-5 space-y-4">
+<h3 class="font-title-sm text-title-sm text-on-surface">Imaging Performance</h3>
+<div class="space-y-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-tertiary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary">speed</span>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant">Avg. Turnaround Time</p>
+<p class="font-bold text-lg">2.4 <span class="text-xs font-normal">Hours</span></p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">analytics</span>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant">Today's Volume</p>
+<p class="font-bold text-lg">142 <span class="text-xs font-normal">Scans</span></p>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant/30">
+<button class="w-full text-center text-xs font-bold text-primary hover:underline">Download Daily Summary</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FLOATING ACTION BUTTON (Contextual: Upload) -->
+<!-- Suppressed based on JSON rule if needed, but here it's highly contextual for imaging upload -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary-container text-white rounded-full shadow-xl hover:shadow-2xl flex items-center justify-center active:scale-90 transition-all z-50">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">add</span>
+</button>
+<script>
+        // Micro-interaction: Sidebar highlight simulation
+        const navItems = document.querySelectorAll('aside nav a');
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                navItems.forEach(i => {
+                    i.classList.remove('border-l-4', 'border-primary-fixed', 'bg-on-secondary-fixed-variant/10', 'text-primary-fixed', 'font-bold');
+                    i.classList.add('text-secondary-fixed-dim');
+                });
+                item.classList.remove('text-secondary-fixed-dim');
+                item.classList.add('border-l-4', 'border-primary-fixed', 'bg-on-secondary-fixed-variant/10', 'text-primary-fixed', 'font-bold');
+            });
+        });
+
+        // Search Bar Focus Effect
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('scale-[1.02]');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('scale-[1.02]');
+        });
+    </script>
+</body></html>

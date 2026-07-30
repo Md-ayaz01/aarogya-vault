@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aarogya Vault | Enterprise Reporting &amp; Analytics</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Scripts -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#213145",
+                        "on-tertiary-container": "#003149",
+                        "on-primary-fixed-variant": "#00513e",
+                        "tertiary-container": "#009ee0",
+                        "surface-tint": "#006b53",
+                        "background": "#f8f9ff",
+                        "tertiary-fixed-dim": "#89ceff",
+                        "primary-fixed-dim": "#59dcb5",
+                        "inverse-primary": "#59dcb5",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "secondary": "#545f73",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container": "#e5eeff",
+                        "error": "#ba1a1a",
+                        "tertiary": "#006591",
+                        "primary": "#006b53",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#003427",
+                        "on-secondary-container": "#586377",
+                        "outline": "#6c7a74",
+                        "secondary-container": "#d5e0f8",
+                        "on-tertiary-fixed": "#001e2f",
+                        "on-secondary-fixed-variant": "#3c475a",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#c9e6ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "primary-fixed": "#79f9d0",
+                        "on-tertiary-fixed-variant": "#004c6e",
+                        "on-surface-variant": "#3d4a44",
+                        "surface-container-high": "#dce9ff",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#002117",
+                        "on-secondary-fixed": "#111c2d",
+                        "on-surface": "#0b1c30",
+                        "surface-variant": "#d3e4fe",
+                        "surface": "#f8f9ff",
+                        "surface-bright": "#f8f9ff",
+                        "outline-variant": "#bccac2",
+                        "primary-container": "#00a884",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "density-ultra": "4px",
+                        "unit": "4px",
+                        "inspector-width": "320px",
+                        "density-high": "8px",
+                        "sidebar-width": "260px",
+                        "gutter": "16px",
+                        "container-padding": "24px"
+                    },
+                    "fontFamily": {
+                        "title-sm": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "data-tabular": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "title-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "data-tabular": ["13px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .sidebar-active {
+            border-left: 4px solid #79f9d0;
+            background-color: rgba(60, 71, 90, 0.1);
+        }
+        body {
+            background-color: #f8f9ff;
+            color: #0b1c30;
+        }
+        .card-shadow {
+            border: 1px solid #bccac2;
+        }
+        .zebra-table tr:nth-child(even) {
+            background-color: rgba(248, 249, 255, 0.5);
+        }
+        .zebra-table tr:hover {
+            background-color: rgba(0, 168, 132, 0.05);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- Global Navigation: SideNavBar -->
+<aside class="fixed flex flex-col h-full z-40 bg-secondary dark:bg-inverse-surface border-r border-outline-variant w-[260px] left-0 top-0 transition-all duration-150 ease-in-out">
+<div class="px-6 py-8 flex flex-col gap-1">
+<h1 class="font-headline-md text-headline-md font-bold text-primary-fixed dark:text-inverse-primary">Aarogya Vault</h1>
+<p class="font-body-sm text-body-sm text-secondary-fixed-dim uppercase tracking-wider">Admin Terminal</p>
+</div>
+<nav class="flex-1 flex flex-col mt-4 overflow-y-auto">
+<!-- Navigation Items Mapping -->
+<a class="flex items-center gap-3 px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-body-md">Patients</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">medical_services</span>
+<span class="font-body-md">Doctors</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">biotech</span>
+<span class="font-body-md">Laboratory</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">medication</span>
+<span class="font-body-md">Pharmacy</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body-md">Billing</span>
+</a>
+<!-- Active State for Reports -->
+<a class="flex items-center gap-3 px-6 py-3 border-l-4 border-primary-fixed bg-on-secondary-fixed-variant/10 text-primary-fixed font-bold" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-md">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-outline-variant/30 py-6">
+<a class="flex items-center gap-3 px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md">Support</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-md">Sign Out</span>
+</a>
+<div class="px-6 mt-6 flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A professional headshot of a hospital administrator in a clean clinical setting, wearing business attire, high-key soft lighting, corporate professional photography style, shallow depth of field with a blurred medical office background, cool blue and sterile white tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGDYN3a5bfx5788w7u6DMF7kH9m9a2iSW3Q1R7tCfsYJDTJN-nm6ZO659t3KATBKPDPmeNCCXDcelpLJ84eSXS-bjYUmF9n3vpeubFrcJDPB1kY60FsrXaftef-OLlznhvvXvlXiK-UrfNshSHFrcYhMW-xrWpNeinaXW-_wDELwv0b9TC4eH70HtKjPYACnFAUYe5_GM2R8SnFARDSEJs6vTA-otnF9zhSYnpspHYcgwXMZqlgkljeA"/>
+<div class="overflow-hidden">
+<p class="font-body-sm font-bold text-primary-fixed truncate">Admin Profile</p>
+<p class="text-[10px] text-secondary-fixed-dim uppercase tracking-tighter">Chief Operations</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[260px] min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center h-16 px-6 sticky top-0 bg-surface-bright dark:bg-background border-b border-outline-variant z-30">
+<div class="flex items-center gap-4 w-1/3">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg pl-10 pr-4 py-2 text-body-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none" placeholder="Search analytics, records, or patients..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">history</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">help</span>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant"></div>
+<div class="flex items-center gap-3">
+<p class="font-title-sm text-title-sm text-primary">Enterprise Reporting</p>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-container-padding flex-1">
+<!-- Header & Filter Row -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface">Administrative Overview</h2>
+<p class="text-on-surface-variant font-body-md mt-1">Real-time performance metrics and institutional health indicators.</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 bg-surface-container-low border border-outline-variant px-3 py-2 rounded-lg">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">calendar_today</span>
+<select class="bg-transparent border-none focus:ring-0 text-body-sm font-medium text-on-surface p-0 cursor-pointer">
+<option>Last 30 Days</option>
+<option>Q3 FY2023</option>
+<option>Year to Date</option>
+<option>Custom Range</option>
+</select>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg font-body-sm flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined">download</span>
+                        Export Report
+                    </button>
+</div>
+</div>
+<!-- Bento Grid - Key Performance Indicators -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<!-- Hospital Performance Card -->
+<div class="bg-surface-container-lowest card-shadow p-6 flex flex-col gap-4 rounded-xl hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary">local_hospital</span>
+</div>
+<span class="flex items-center text-[12px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">+4.2%</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Hospital Performance</p>
+<h3 class="font-headline-md text-headline-md">92.4%</h3>
+<p class="text-body-sm text-on-surface-variant mt-2">Bed occupancy rate across all departments</p>
+</div>
+<div class="mt-auto pt-4 border-t border-outline-variant/30">
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[92.4%]"></div>
+</div>
+</div>
+</div>
+<!-- Patient Satisfaction Card -->
+<div class="bg-surface-container-lowest card-shadow p-6 flex flex-col gap-4 rounded-xl hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-tertiary/10 rounded-lg">
+<span class="material-symbols-outlined text-tertiary">sentiment_very_satisfied</span>
+</div>
+<span class="flex items-center text-[12px] font-bold text-tertiary bg-tertiary/10 px-2 py-0.5 rounded-full">High</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Patient Satisfaction</p>
+<h3 class="font-headline-md text-headline-md">4.8 / 5.0</h3>
+<p class="text-body-sm text-on-surface-variant mt-2">Average NPS score from 1,240 responses</p>
+</div>
+<div class="mt-auto pt-4 border-t border-outline-variant/30 flex gap-1">
+<span class="material-symbols-outlined text-tertiary text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary text-[20px]" style="font-variation-settings: 'FILL' 0.8;">star_half</span>
+</div>
+</div>
+<!-- Financial Health Card -->
+<div class="bg-surface-container-lowest card-shadow p-6 flex flex-col gap-4 rounded-xl hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-secondary/10 rounded-lg">
+<span class="material-symbols-outlined text-secondary">account_balance_wallet</span>
+</div>
+<span class="flex items-center text-[12px] font-bold text-error bg-error/10 px-2 py-0.5 rounded-full">-1.2%</span>
+</div>
+<div>
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">Financial Health</p>
+<h3 class="font-headline-md text-headline-md">$1.24M</h3>
+<p class="text-body-sm text-on-surface-variant mt-2">Revenue generated this month</p>
+</div>
+<div class="mt-auto pt-4 border-t border-outline-variant/30 flex justify-between text-body-sm">
+<span class="text-on-surface-variant">OpEx: $840k</span>
+<span class="font-bold text-primary">Margin: 32%</span>
+</div>
+</div>
+</div>
+<!-- Charts & Analytics Row -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+<!-- Trend Analysis -->
+<div class="lg:col-span-2 bg-surface-container-lowest card-shadow p-6 rounded-xl">
+<div class="flex justify-between items-center mb-6">
+<h4 class="font-title-sm text-title-sm">Monthly Operational Trends</h4>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span class="text-body-sm text-on-surface-variant">In-Patients</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-tertiary"></span>
+<span class="text-body-sm text-on-surface-variant">Out-Patients</span>
+</div>
+</div>
+</div>
+<!-- Chart Placeholder -->
+<div class="h-64 flex items-end justify-between gap-2 px-2 relative">
+<div class="absolute inset-x-0 top-0 bottom-0 flex flex-col justify-between pointer-events-none">
+<div class="border-b border-outline-variant/30 w-full h-0"></div>
+<div class="border-b border-outline-variant/30 w-full h-0"></div>
+<div class="border-b border-outline-variant/30 w-full h-0"></div>
+<div class="border-b border-outline-variant/30 w-full h-0"></div>
+</div>
+<!-- Bar chart simulation -->
+<div class="flex-1 flex flex-col items-center gap-2 group">
+<div class="w-full flex gap-1 items-end h-full">
+<div class="bg-primary/80 w-1/2 rounded-t-sm" style="height: 60%"></div>
+<div class="bg-tertiary/80 w-1/2 rounded-t-sm" style="height: 40%"></div>
+</div>
+<span class="text-[11px] font-label-caps text-on-surface-variant">JAN</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group">
+<div class="w-full flex gap-1 items-end h-full">
+<div class="bg-primary/80 w-1/2 rounded-t-sm" style="height: 75%"></div>
+<div class="bg-tertiary/80 w-1/2 rounded-t-sm" style="height: 55%"></div>
+</div>
+<span class="text-[11px] font-label-caps text-on-surface-variant">FEB</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group">
+<div class="w-full flex gap-1 items-end h-full">
+<div class="bg-primary/80 w-1/2 rounded-t-sm" style="height: 65%"></div>
+<div class="bg-tertiary/80 w-1/2 rounded-t-sm" style="height: 80%"></div>
+</div>
+<span class="text-[11px] font-label-caps text-on-surface-variant">MAR</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group">
+<div class="w-full flex gap-1 items-end h-full">
+<div class="bg-primary/80 w-1/2 rounded-t-sm" style="height: 90%"></div>
+<div class="bg-tertiary/80 w-1/2 rounded-t-sm" style="height: 65%"></div>
+</div>
+<span class="text-[11px] font-label-caps text-on-surface-variant">APR</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group">
+<div class="w-full flex gap-1 items-end h-full">
+<div class="bg-primary/80 w-1/2 rounded-t-sm" style="height: 80%"></div>
+<div class="bg-tertiary/80 w-1/2 rounded-t-sm" style="height: 45%"></div>
+</div>
+<span class="text-[11px] font-label-caps text-on-surface-variant">MAY</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group">
+<div class="w-full flex gap-1 items-end h-full">
+<div class="bg-primary/80 w-1/2 rounded-t-sm" style="height: 95%"></div>
+<div class="bg-tertiary/80 w-1/2 rounded-t-sm" style="height: 70%"></div>
+</div>
+<span class="text-[11px] font-label-caps text-on-surface-variant">JUN</span>
+</div>
+</div>
+</div>
+<!-- Allocation / Resource Card -->
+<div class="bg-surface-container-lowest card-shadow p-6 rounded-xl flex flex-col">
+<h4 class="font-title-sm text-title-sm mb-6">Staffing Resource Load</h4>
+<div class="flex-1 flex flex-col gap-6">
+<div class="space-y-2">
+<div class="flex justify-between text-body-sm">
+<span class="font-medium">Nursing Staff</span>
+<span>88% Load</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[88%]"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-body-sm">
+<span class="font-medium">General Physicians</span>
+<span>64% Load</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[64%]"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-body-sm">
+<span class="font-medium">Specialists</span>
+<span>94% Load</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-error w-[94%]"></div>
+</div>
+</div>
+<div class="mt-auto p-4 bg-surface-container-low rounded-lg">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-error">warning</span>
+<div>
+<p class="font-bold text-body-sm text-error">Capacity Warning</p>
+<p class="text-[12px] text-on-surface-variant">Cardiology specialists at critical threshold.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Detailed Data Table Section -->
+<div class="bg-surface-container-lowest card-shadow rounded-xl overflow-hidden mb-8">
+<div class="px-6 py-5 border-b border-outline-variant flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<h4 class="font-title-sm text-title-sm">Departmental Performance Ledger</h4>
+<div class="flex gap-2">
+<button class="bg-surface-container-high text-on-surface-variant px-3 py-1.5 rounded-lg text-body-sm flex items-center gap-2 border border-outline-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+                            PDF
+                        </button>
+<button class="bg-surface-container-high text-on-surface-variant px-3 py-1.5 rounded-lg text-body-sm flex items-center gap-2 border border-outline-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">table_chart</span>
+                            Excel
+                        </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left zebra-table">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-6 py-4 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Department Name</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Head of Dept.</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Patients (M)</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Efficiency</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider text-right">Revenue</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider text-center">Status</th>
+</tr>
+</thead>
+<tbody class="font-data-tabular text-data-tabular">
+<tr class="border-b border-outline-variant/30">
+<td class="px-6 py-4 font-medium text-on-surface">Cardiology</td>
+<td class="px-6 py-4 text-on-surface-variant">Dr. Sarah Jenkins</td>
+<td class="px-6 py-4">482</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span>94%</span>
+<div class="w-16 h-1.5 bg-surface-container rounded-full"><div class="h-full bg-primary w-[94%]"></div></div>
+</div>
+</td>
+<td class="px-6 py-4 text-right">$412,000</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center bg-primary/10 text-primary px-2 py-1 rounded text-[11px] font-bold">STABLE</span>
+</td>
+</tr>
+<tr class="border-b border-outline-variant/30">
+<td class="px-6 py-4 font-medium text-on-surface">Pediatrics</td>
+<td class="px-6 py-4 text-on-surface-variant">Dr. Michael Chen</td>
+<td class="px-6 py-4">315</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span>82%</span>
+<div class="w-16 h-1.5 bg-surface-container rounded-full"><div class="h-full bg-primary w-[82%]"></div></div>
+</div>
+</td>
+<td class="px-6 py-4 text-right">$208,500</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center bg-primary/10 text-primary px-2 py-1 rounded text-[11px] font-bold">STABLE</span>
+</td>
+</tr>
+<tr class="border-b border-outline-variant/30">
+<td class="px-6 py-4 font-medium text-on-surface">Emergency Care</td>
+<td class="px-6 py-4 text-on-surface-variant">Dr. Elena Rodriguez</td>
+<td class="px-6 py-4">1,120</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span>76%</span>
+<div class="w-16 h-1.5 bg-surface-container rounded-full"><div class="h-full bg-tertiary w-[76%]"></div></div>
+</div>
+</td>
+<td class="px-6 py-4 text-right">$156,000</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center bg-error/10 text-error px-2 py-1 rounded text-[11px] font-bold uppercase">Critical Load</span>
+</td>
+</tr>
+<tr class="border-b border-outline-variant/30">
+<td class="px-6 py-4 font-medium text-on-surface">Radiology</td>
+<td class="px-6 py-4 text-on-surface-variant">Dr. Alan Turing</td>
+<td class="px-6 py-4">256</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span>98%</span>
+<div class="w-16 h-1.5 bg-surface-container rounded-full"><div class="h-full bg-primary w-[98%]"></div></div>
+</div>
+</td>
+<td class="px-6 py-4 text-right">$315,200</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center bg-primary/10 text-primary px-2 py-1 rounded text-[11px] font-bold">OPTIMAL</span>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 font-medium text-on-surface">Neurology</td>
+<td class="px-6 py-4 text-on-surface-variant">Dr. James Wilson</td>
+<td class="px-6 py-4">184</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span>89%</span>
+<div class="w-16 h-1.5 bg-surface-container rounded-full"><div class="h-full bg-primary w-[89%]"></div></div>
+</div>
+</td>
+<td class="px-6 py-4 text-right">$294,000</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center bg-primary/10 text-primary px-2 py-1 rounded text-[11px] font-bold">STABLE</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-4 bg-surface-container-low/30 border-t border-outline-variant flex justify-between items-center">
+<p class="text-body-sm text-on-surface-variant">Showing 1-5 of 12 Departments</p>
+<div class="flex gap-2">
+<button class="p-1.5 rounded border border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-container transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="p-1.5 rounded border border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB Suppression: NO FAB on Reporting Screens per mandate -->
+<script>
+        // Simple Interaction logic for demo
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => {
+                btn.classList.add('scale-95');
+            });
+            btn.addEventListener('mouseup', () => {
+                btn.classList.remove('scale-95');
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.classList.remove('scale-95');
+            });
+        });
+
+        // Search highlight micro-interaction
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-2', 'ring-primary/20');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-2', 'ring-primary/20');
+        });
+    </script>
+</body></html>

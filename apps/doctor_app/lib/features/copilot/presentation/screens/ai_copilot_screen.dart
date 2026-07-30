@@ -4,7 +4,7 @@ import '../../../../core/network/api_client.dart';
 
 class AICopilotScreen extends StatefulWidget {
   final int patientId;
-  const AICopilotScreen({Key? key, required this.patientId}) : super(key: key);
+  const AICopilotScreen({super.key, required this.patientId});
 
   @override
   State<AICopilotScreen> createState() => _AICopilotScreenState();

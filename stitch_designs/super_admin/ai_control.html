@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aarogya Vault — Google Gemini AI Control Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Hanken+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #006B53;
+            --primary-container: #00A884;
+            --primary-fixed: #79F9D0;
+            --bg-dark: #0F172A;
+            --card-dark: #1E293B;
+            --text-light: #F8FAFC;
+            --text-muted: #94A3B8;
+            --border: rgba(188, 202, 194, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-dark); color: var(--text-light); display: flex; min-height: 100vh; }
+
+        aside { width: 280px; background: var(--card-dark); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+        .brand { padding: 24px; background: var(--primary); display: flex; align-items: center; gap: 12px; }
+        .brand-logo { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: var(--primary-fixed); font-weight: bold; font-size: 20px; }
+        .brand-title { font-family: 'Hanken Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: var(--primary-fixed); }
+        .brand-sub { font-size: 10px; color: rgba(255,255,255,0.7); letter-spacing: 1.5px; font-weight: 700; }
+
+        .nav-list { list-style: none; padding: 16px 0; overflow-y: auto; flex: 1; }
+        .nav-item a { display: flex; align-items: center; gap: 12px; padding: 12px 24px; color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 500; border-left: 4px solid transparent; transition: all 0.2s; }
+        .nav-item.active a { background: rgba(0, 107, 83, 0.2); color: var(--primary-fixed); border-left-color: var(--primary-fixed); font-weight: 600; }
+
+        main { flex: 1; padding: 32px; overflow-y: auto; }
+        .header-title { font-family: 'Hanken Grotesk', sans-serif; font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+        .header-desc { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+
+        .ai-card { background: var(--card-dark); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 16px; }
+        .ai-card-title { font-size: 20px; font-weight: 700; color: var(--primary-fixed); display: flex; justify-content: space-between; align-items: center; }
+        .chip { background: rgba(0, 107, 83, 0.3); color: var(--primary-fixed); padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; margin-right: 8px; margin-top: 12px; }
+    </style>
+</head>
+<body>
+    <aside>
+        <div class="brand">
+            <div class="brand-logo">SA</div>
+            <div>
+                <div class="brand-title">Aarogya Vault</div>
+                <div class="brand-sub">SUPER ADMIN PORTAL</div>
+            </div>
+        </div>
+        <ul class="nav-list">
+            <li class="nav-item"><a href="dashboard.html">Platform Dashboard</a></li>
+            <li class="nav-item"><a href="hospital_approvals.html">Hospital Approvals</a></li>
+            <li class="nav-item"><a href="doctor_verifications.html">Doctor Verification</a></li>
+            <li class="nav-item"><a href="patient_registry.html">Master Patient Registry</a></li>
+            <li class="nav-item active"><a href="ai_control.html">AI Control Center</a></li>
+        </ul>
+    </aside>
+
+    <main>
+        <h1 class="header-title">Google Gemini AI Control Center</h1>
+        <p class="header-desc">Clinical Copilot model prompt templates, temperature parameters & token rate limits</p>
+
+        <div class="ai-card">
+            <div class="ai-card-title">
+                <span>gemini-1.5-pro</span>
+                <span style="color: var(--primary-container); font-size: 14px;">ACTIVE</span>
+            </div>
+            <p style="color: var(--text-muted); margin-top: 8px; font-style: italic;">System Prompt: "You are Aarogya Vault Clinical Copilot AI."</p>
+            <div>
+                <span class="chip">Temperature: 0.7</span>
+                <span class="chip">Max Tokens: 2,048</span>
+                <span class="chip">Provider: Google Gemini API</span>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

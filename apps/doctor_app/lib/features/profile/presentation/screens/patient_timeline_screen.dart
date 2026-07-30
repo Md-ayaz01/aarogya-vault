@@ -4,7 +4,7 @@ import '../../../../core/network/api_client.dart';
 
 class PatientTimelineScreen extends StatefulWidget {
   final int patientId;
-  const PatientTimelineScreen({Key? key, required this.patientId}) : super(key: key);
+  const PatientTimelineScreen({super.key, required this.patientId});
 
   @override
   State<PatientTimelineScreen> createState() => _PatientTimelineScreenState();

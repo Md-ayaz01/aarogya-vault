@@ -33,7 +33,7 @@ void main() async {
 }
 
 class AarogyaVaultDoctorApp extends StatelessWidget {
-  const AarogyaVaultDoctorApp({Key? key}) : super(key: key);
+  const AarogyaVaultDoctorApp({super.key});
 
   @override
   Widget build(BuildContext context) {

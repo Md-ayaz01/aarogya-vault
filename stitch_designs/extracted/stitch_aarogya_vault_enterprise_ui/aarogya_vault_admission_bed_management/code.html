@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aarogya Vault - Admission &amp; Bed Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-surface": "#213145",
+                    "on-tertiary-container": "#003149",
+                    "on-primary-fixed-variant": "#00513e",
+                    "tertiary-container": "#009ee0",
+                    "surface-tint": "#006b53",
+                    "background": "#f8f9ff",
+                    "tertiary-fixed-dim": "#89ceff",
+                    "primary-fixed-dim": "#59dcb5",
+                    "inverse-primary": "#59dcb5",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-on-surface": "#eaf1ff",
+                    "secondary": "#545f73",
+                    "surface-dim": "#cbdbf5",
+                    "secondary-fixed": "#d8e3fb",
+                    "secondary-fixed-dim": "#bcc7de",
+                    "on-background": "#0b1c30",
+                    "surface-container-low": "#eff4ff",
+                    "surface-container": "#e5eeff",
+                    "error": "#ba1a1a",
+                    "tertiary": "#006591",
+                    "primary": "#006b53",
+                    "on-secondary": "#ffffff",
+                    "on-primary-container": "#003427",
+                    "on-secondary-container": "#586377",
+                    "outline": "#6c7a74",
+                    "secondary-container": "#d5e0f8",
+                    "on-tertiary-fixed": "#001e2f",
+                    "on-secondary-fixed-variant": "#3c475a",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed": "#c9e6ff",
+                    "surface-container-highest": "#d3e4fe",
+                    "primary-fixed": "#79f9d0",
+                    "on-tertiary-fixed-variant": "#004c6e",
+                    "on-surface-variant": "#3d4a44",
+                    "surface-variant": "#d3e4fe",
+                    "surface": "#f8f9ff",
+                    "surface-bright": "#f8f9ff",
+                    "outline-variant": "#bccac2",
+                    "primary-container": "#00a884",
+                    "error-container": "#ffdad6",
+                    "on-error": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "density-ultra": "4px",
+                    "unit": "4px",
+                    "inspector-width": "320px",
+                    "density-high": "8px",
+                    "sidebar-width": "260px",
+                    "gutter": "16px",
+                    "container-padding": "24px"
+            },
+            "fontFamily": {
+                    "title-sm": ["Hanken Grotesk"],
+                    "display-lg": ["Hanken Grotesk"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "data-tabular": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "title-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "data-tabular": ["13px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #f8f9ff; color: #0b1c30; -webkit-font-smoothing: antialiased; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        .sidebar-active { border-left-width: 4px; border-color: #79f9d0; background-color: rgba(60, 71, 90, 0.1); color: #79f9d0; font-weight: 700; }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(8px); border: 1px solid #bccac2; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="font-body-md text-body-md">
+<!-- Global Navigation: SideNavBar -->
+<nav class="fixed flex flex-col h-full z-40 bg-secondary dark:bg-inverse-surface border-r border-outline-variant h-screen w-sidebar-width left-0 top-0 transition-all duration-150 ease-in-out">
+<div class="p-6">
+<h1 class="font-headline-md text-headline-md font-bold text-primary-fixed dark:text-inverse-primary leading-tight">Aarogya Vault</h1>
+<p class="text-secondary-fixed-dim text-body-sm opacity-80 uppercase tracking-widest mt-1">Admin Terminal</p>
+</div>
+<div class="flex-1 overflow-y-auto hide-scrollbar mt-4">
+<div class="space-y-1">
+<!-- Navigation Items -->
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 border-l-4 border-primary-fixed bg-on-secondary-fixed-variant/10 text-primary-fixed font-bold" href="#">
+<span class="material-symbols-outlined">person</span>
+<span>Patients</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">medical_services</span>
+<span>Doctors</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">biotech</span>
+<span>Laboratory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">medication</span>
+<span>Pharmacy</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span>Billing</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span>Reports</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors hover:bg-on-secondary-fixed-variant/5" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</div>
+<div class="p-4 border-t border-outline-variant/30 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span>Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-secondary-fixed-dim hover:text-primary-fixed transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span>Sign Out</span>
+</a>
+</div>
+</nav>
+<!-- TopAppBar -->
+<header class="flex justify-between items-center h-16 px-6 ml-sidebar-width w-[calc(100%-sidebar-width)] z-30 sticky top-0 bg-surface-bright dark:bg-background border-b border-outline-variant">
+<div class="flex items-center gap-6 flex-1">
+<div class="relative w-96 group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 text-body-md focus:ring-2 focus:ring-primary focus:bg-surface-bright transition-all" placeholder="Search Patients, Doctors, or Wards..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-colors relative active:scale-95 duration-100">
+<span class="material-symbols-outlined text-primary">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined text-primary">history</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined text-primary">help</span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant mx-2"></div>
+<div class="flex items-center gap-3 cursor-pointer group">
+<div class="text-right">
+<p class="font-title-sm text-on-surface leading-tight">Admin Terminal</p>
+<p class="text-body-sm text-on-surface-variant">Super Admin</p>
+</div>
+<img class="w-10 h-10 rounded-full border-2 border-primary-container object-cover" data-alt="A professional headshot of a hospital administrator in a minimalist office setting, wearing a tailored navy blazer. Soft daylight illuminates the scene from a side window, creating a clean, modern corporate aesthetic. The background is a slightly out-of-focus high-end medical facility hallway." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-8Ag9AnOmJn5xJ9lJsZdWECHGgSw-NMI-uunb3lNWvAAm4ZtZetPX5K9PtNumbqtcdBbRJDAbJryBTL5w4_3siYPoaph7mv6oyFXul9FP3NvrUvZ1ArUXploUIfjOcr5PGSs_cvP7MlKy7nEzMWAPHSY-EnnlAzN2UvwtMiwvW9XT7U8eq2gDGLm0-yGXkP64xedmDnS1rDDseJkCmKSVpyGOTeN2YcWCtYPsYwpzMbAgGP2WI8KSdA"/>
+</div>
+</div>
+</header>
+<!-- Main Workspace -->
+<main class="ml-sidebar-width p-container-padding space-y-gutter">
+<!-- Dashboard Header -->
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface">IPD Admission &amp; Bed Management</h2>
+<p class="text-on-surface-variant">Real-time status of wards, occupancies, and pending admissions.</p>
+</div>
+<button class="flex items-center gap-2 bg-primary-container text-on-primary-container px-6 py-3 rounded-xl font-bold hover:brightness-110 shadow-sm transition-all active:scale-95">
+<span class="material-symbols-outlined">person_add</span>
+                Register New Admission
+            </button>
+</div>
+<!-- Analytics Overview Bento -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant flex flex-col justify-between h-32">
+<span class="text-label-caps text-on-surface-variant uppercase">Total Capacity</span>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-md text-display-lg text-primary">450</span>
+<span class="text-body-sm text-on-surface-variant">Beds Total</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant flex flex-col justify-between h-32">
+<span class="text-label-caps text-on-surface-variant uppercase">Current Occupancy</span>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-md text-display-lg text-tertiary">382</span>
+<span class="text-body-sm text-on-surface-variant">84.8% Full</span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full" style="width: 84.8%"></div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant flex flex-col justify-between h-32">
+<span class="text-label-caps text-on-surface-variant uppercase">Available Beds</span>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-md text-display-lg text-primary-container">68</span>
+<span class="text-body-sm text-on-surface-variant">Ready for Admiss.</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant flex flex-col justify-between h-32">
+<span class="text-label-caps text-on-surface-variant uppercase">Pending Discharges</span>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-md text-display-lg text-error">12</span>
+<span class="text-body-sm text-on-surface-variant">Process Today</span>
+</div>
+</div>
+</div>
+<!-- Ward Management Grid -->
+<div class="space-y-4">
+<div class="flex items-center justify-between border-b border-outline-variant pb-2">
+<h3 class="font-title-sm text-title-sm text-on-surface">Ward Status Overview</h3>
+<div class="flex gap-2">
+<span class="flex items-center gap-1 text-body-sm"><span class="w-2 h-2 rounded-full bg-error"></span> Occupied</span>
+<span class="flex items-center gap-1 text-body-sm"><span class="w-2 h-2 rounded-full bg-primary-container"></span> Vacant</span>
+<span class="flex items-center gap-1 text-body-sm"><span class="w-2 h-2 rounded-full bg-outline-variant"></span> Maintenance</span>
+</div>
+</div>
+<!-- ICU Section -->
+<div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant space-y-4">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">emergency</span>
+<h4 class="font-title-sm text-title-sm">ICU (Intensive Care Unit)</h4>
+<span class="bg-error/10 text-error px-2 py-0.5 rounded text-label-caps font-bold">CRITICAL CARE</span>
+</div>
+<span class="text-body-sm text-on-surface-variant">18/20 Beds Occupied (90%)</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-10 gap-density-high">
+<!-- Dynamic Bed Indicators -->
+<!-- Pattern: Occupied (Red), Vacant (Green) -->
+<script>
+                        for(let i=1; i<=20; i++) {
+                            const isOccupied = i <= 18;
+                            const colorClass = isOccupied ? 'bg-error text-on-error' : 'bg-primary-container text-on-primary-container';
+                            const tooltip = isOccupied ? 'Occupied - Bed #' + i : 'Vacant - Bed #' + i;
+                            document.write(`
+                                <div title="${tooltip}" class="group relative flex flex-col items-center justify-center h-12 rounded-lg ${colorClass} shadow-sm cursor-pointer hover:scale-105 transition-transform">
+                                    <span class="material-symbols-outlined text-sm">bed</span>
+                                    <span class="text-[10px] font-bold">#${i}</span>
+                                </div>
+                            `);
+                        }
+                    </script>
+</div>
+</div>
+<!-- Cardiology Section -->
+<div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant space-y-4">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<h4 class="font-title-sm text-title-sm">Cardiology Ward</h4>
+<span class="bg-tertiary/10 text-tertiary px-2 py-0.5 rounded text-label-caps font-bold">SPECIALTY</span>
+</div>
+<span class="text-body-sm text-on-surface-variant">32/45 Beds Occupied (71%)</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-10 gap-density-high">
+<script>
+                        for(let i=1; i<=45; i++) {
+                            const isOccupied = i <= 32;
+                            const colorClass = isOccupied ? 'bg-error text-on-error' : 'bg-primary-container text-on-primary-container';
+                            document.write(`
+                                <div class="flex flex-col items-center justify-center h-12 rounded-lg ${colorClass} opacity-90 shadow-sm cursor-pointer hover:opacity-100 transition-all">
+                                    <span class="material-symbols-outlined text-sm">bed</span>
+                                    <span class="text-[10px] font-bold">C-${i}</span>
+                                </div>
+                            `);
+                        }
+                    </script>
+</div>
+</div>
+<!-- General Ward Section -->
+<div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant space-y-4">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">group</span>
+<h4 class="font-title-sm text-title-sm">General Ward - East Wing</h4>
+</div>
+<span class="text-body-sm text-on-surface-variant">58/80 Beds Occupied (72%)</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-10 gap-density-high">
+<script>
+                        for(let i=1; i<=80; i++) {
+                            const isOccupied = i % 3 !== 0; // Randomizing visual density
+                            const colorClass = isOccupied ? 'bg-error text-on-error' : 'bg-primary-container text-on-primary-container';
+                            document.write(`
+                                <div class="flex flex-col items-center justify-center h-10 rounded-lg ${colorClass} opacity-80 shadow-sm">
+                                    <span class="text-[10px] font-bold">G-${i}</span>
+                                </div>
+                            `);
+                        }
+                    </script>
+</div>
+</div>
+</div>
+<!-- Active Patient Admission Cards (Horizontal Scrolling Grid) -->
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="font-title-sm text-title-sm text-on-surface">Recent Admissions &amp; Critical Monitoring</h3>
+<button class="text-primary font-bold text-body-sm flex items-center gap-1 hover:underline">View All Patients <span class="material-symbols-outlined">arrow_forward</span></button>
+</div>
+<div class="flex gap-gutter overflow-x-auto pb-4 hide-scrollbar">
+<!-- Patient Card 1 -->
+<div class="min-w-[320px] bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+<div class="p-4 border-b border-outline-variant bg-error/5 flex items-center justify-between">
+<span class="bg-error text-white text-[10px] font-bold px-2 py-0.5 rounded-full">ICU - Bed #04</span>
+<span class="material-symbols-outlined text-error">warning</span>
+</div>
+<div class="p-4 space-y-4">
+<div class="flex items-center gap-3">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="A portrait photo of a senior male patient with grey hair, looking calm but weary. Professional medical headshot style with soft neutral background and clean clinic lighting. High clarity and warm professional tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBytYx4cd_RwoYQ2RF2snt2eERPEejzLM9xLuD4JF9TgNCmhY-KDUHA1p9v81BAQfDfi1KIdr31mcVH0xdAr9L1kLaNQbEsoLh1RgOHQTY9EZjBDs0XMeNcplWg8jBHP1Zi7jzZ8oxF7gtEQpk2JjOznFL0j63NkPrEc8gisJ4jJslznNljEv9mnZMdTBbNaWev5ucJSW7tunw8nW-3mw9ziNqaBDV6D8n9wvke2McfXleD3mYm4Pplpw"/>
+<div>
+<h5 class="font-bold text-on-surface">Robert J. Wilson</h5>
+<p class="text-body-sm text-on-surface-variant">Reg ID: #IPD-8902</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<p class="text-label-caps text-on-surface-variant uppercase">Days Admitted</p>
+<p class="font-bold text-on-surface">12 Days</p>
+</div>
+<div class="space-y-1">
+<p class="text-label-caps text-on-surface-variant uppercase">Doctor Assigned</p>
+<p class="font-bold text-on-surface">Dr. Aris Thorne</p>
+</div>
+</div>
+<button class="w-full py-2 bg-surface-container text-primary font-bold rounded-lg text-body-sm hover:bg-surface-container-high transition-colors">View Vitals &amp; Chart</button>
+</div>
+</div>
+<!-- Patient Card 2 -->
+<div class="min-w-[320px] bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+<div class="p-4 border-b border-outline-variant bg-tertiary/5 flex items-center justify-between">
+<span class="bg-tertiary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">CARDIO - Bed #12</span>
+<span class="material-symbols-outlined text-tertiary">monitor_heart</span>
+</div>
+<div class="p-4 space-y-4">
+<div class="flex items-center gap-3">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="A portrait of a middle-aged female patient, calm and recovering. Professional hospital identification style lighting, bright and clinical. The aesthetic is clean, medical, and high-quality photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJqAU7kWsVBa87eHfxD9S202lAjiv9FWRptxECv-Pjed4kcLhOYFgErjYHuQv7JvHg0xsyODIwD8RAbHLD9CnAp9t5EgS1Tb_oL34HBS8WasX6xddY1SV9F6gapborxo--WpVD3dXRsrEEaVpCq5wru5Y5bhD1ZDj6DZNwUjdw__WJ4sGHuCYBWoX_JI-quqdFFUVaSfIOmkl_RPjENOdthiGFv9wizL3v84-3UM36Xc3wfBR1KbRbWQ"/>
+<div>
+<h5 class="font-bold text-on-surface">Elena S. Garcia</h5>
+<p class="text-body-sm text-on-surface-variant">Reg ID: #IPD-9120</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<p class="text-label-caps text-on-surface-variant uppercase">Days Admitted</p>
+<p class="font-bold text-on-surface">4 Days</p>
+</div>
+<div class="space-y-1">
+<p class="text-label-caps text-on-surface-variant uppercase">Doctor Assigned</p>
+<p class="font-bold text-on-surface">Dr. Sarah Chen</p>
+</div>
+</div>
+<button class="w-full py-2 bg-surface-container text-primary font-bold rounded-lg text-body-sm hover:bg-surface-container-high transition-colors">View Vitals &amp; Chart</button>
+</div>
+</div>
+<!-- Patient Card 3 -->
+<div class="min-w-[320px] bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+<div class="p-4 border-b border-outline-variant bg-secondary-container/30 flex items-center justify-between">
+<span class="bg-secondary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">GENERAL - Bed #32</span>
+<span class="material-symbols-outlined text-secondary">assignment</span>
+</div>
+<div class="p-4 space-y-4">
+<div class="flex items-center gap-3">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="A portrait of a young adult male patient in recovery. Clear clinical lighting, soft white background, focused on patient identity for medical records. High-resolution digital photography with professional hospital atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCewsIAv6YwDsXhjUIrEqIRPEOmurETxWizpkA3S2EbMr5vjPUnIZqBZbWoG-AKlnY27MVn-oxSSLVocFs1PlG3LuYCBb1wAQbKeClru0WLKZUizUT4Uybv38zErllmlqjKcJGhA3HbqiXOcNAgRGj-FdvESYhFO3VOeesRxzafeu4jsyok_3ABchoEnP_Yu4yJ7g67ruvac7G6DBguvST3MjYA4ugcFb5zUvruyzb5X7Hd7j2b6TFj8g"/>
+<div>
+<h5 class="font-bold text-on-surface">Michael O. Vance</h5>
+<p class="text-body-sm text-on-surface-variant">Reg ID: #IPD-8843</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<p class="text-label-caps text-on-surface-variant uppercase">Days Admitted</p>
+<p class="font-bold text-on-surface">2 Days</p>
+</div>
+<div class="space-y-1">
+<p class="text-label-caps text-on-surface-variant uppercase">Doctor Assigned</p>
+<p class="font-bold text-on-surface">Dr. James Roe</p>
+</div>
+</div>
+<button class="w-full py-2 bg-surface-container text-primary font-bold rounded-lg text-body-sm hover:bg-surface-container-high transition-colors">View Vitals &amp; Chart</button>
+</div>
+</div>
+<!-- Patient Card 4 -->
+<div class="min-w-[320px] bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm hover:shadow-md transition-shadow opacity-60">
+<div class="p-4 border-b border-outline-variant bg-primary-container/10 flex items-center justify-between">
+<span class="bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">GENERAL - Bed #45</span>
+<span class="material-symbols-outlined text-primary">check_circle</span>
+</div>
+<div class="p-4 space-y-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div>
+<h5 class="font-bold text-on-surface">Amina Kareem</h5>
+<p class="text-body-sm text-on-surface-variant">Reg ID: #IPD-7762</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<p class="text-label-caps text-on-surface-variant uppercase">Days Admitted</p>
+<p class="font-bold text-on-surface">8 Days</p>
+</div>
+<div class="space-y-1">
+<p class="text-label-caps text-on-surface-variant uppercase">Status</p>
+<p class="font-bold text-primary-container">Discharge Ready</p>
+</div>
+</div>
+<button class="w-full py-2 bg-primary-container text-white font-bold rounded-lg text-body-sm hover:brightness-110 transition-all">Process Discharge</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB (Only relevant for core actions) -->
+<div class="fixed bottom-8 right-8 z-50">
+<button class="flex items-center gap-2 bg-primary text-on-primary p-4 rounded-2xl shadow-xl hover:shadow-2xl transition-all active:scale-95 group">
+<span class="material-symbols-outlined group-hover:rotate-90 transition-transform">add</span>
+<span class="font-bold pr-2">Emergency Admission</span>
+</button>
+</div>
+<!-- Inspector/Detail Pane (Hidden by default, used for patient deep-dive) -->
+<aside class="fixed right-0 top-16 h-[calc(100vh-64px)] w-inspector-width bg-surface-bright border-l border-outline-variant z-20 translate-x-full transition-transform duration-300 ease-in-out" id="inspector-pane">
+<div class="p-6 space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="font-title-sm text-title-sm">Patient Snapshot</h3>
+<button class="p-1 hover:bg-surface-container rounded-full" onclick="toggleInspector()"><span class="material-symbols-outlined">close</span></button>
+</div>
+<div class="text-center space-y-2">
+<img class="w-24 h-24 rounded-full mx-auto border-4 border-primary-container object-cover" data-alt="Close-up medical portrait of a patient for identification. High-key clinical lighting, crisp focus, soft grey backdrop. The style is professional and authoritative, suitable for hospital administration software." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-cG-zrki_Y-ZJwgvfMdvcyE3E5BB4GbBKhdgQtBvHKxcLQRRQgdY9pVmBVbwN6ygsZ98jdu6KbaMtktxr87Hgx7dwZ49OK96Ax4NjXoczRnD2ohTCwUP619mAzuZdLJbqVuBcg3ZHdLB9pyA62tTFT68GSEbvoQjtYBmR1NN3viCYllFvj02NqTs5IoXHNvsOjJsJaJZYBfJiKFSVd6cYS1JI9fWFBZw7iZICDV8MeumgtC_Pk-3lzQ"/>
+<h4 class="font-headline-md text-headline-md">Robert J. Wilson</h4>
+<p class="text-body-sm text-on-surface-variant">ICU - Bed #04 | 68 yrs, Male</p>
+</div>
+<div class="space-y-4">
+<div class="bg-surface-container-low p-4 rounded-xl space-y-3">
+<p class="text-label-caps text-on-surface-variant uppercase">Critical Vitals</p>
+<div class="flex justify-between items-center">
+<span class="text-body-sm">Heart Rate</span>
+<span class="font-bold text-error">112 BPM</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-body-sm">SpO2</span>
+<span class="font-bold text-tertiary">94%</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-body-sm">BP</span>
+<span class="font-bold text-on-surface">140/90</span>
+</div>
+</div>
+<div class="space-y-2">
+<p class="text-label-caps text-on-surface-variant uppercase">Active Medications</p>
+<div class="flex items-center gap-2 p-2 bg-surface-container-lowest border border-outline-variant rounded-lg">
+<span class="material-symbols-outlined text-primary text-sm">pill</span>
+<span class="text-body-sm font-medium">Aspirin 81mg - 08:00 AM</span>
+</div>
+<div class="flex items-center gap-2 p-2 bg-surface-container-lowest border border-outline-variant rounded-lg">
+<span class="material-symbols-outlined text-primary text-sm">pill</span>
+<span class="text-body-sm font-medium">Lisinopril 10mg - 10:00 AM</span>
+</div>
+</div>
+</div>
+<button class="w-full py-3 bg-primary text-on-primary font-bold rounded-xl shadow-sm hover:brightness-110 active:scale-95 transition-all">Transfer Ward</button>
+</div>
+</aside>
+<script>
+        function toggleInspector() {
+            const pane = document.getElementById('inspector-pane');
+            pane.classList.toggle('translate-x-full');
+        }
+
+        // Demo interaction: Clicking a patient card opens inspector
+        document.querySelectorAll('.min-w-\\[320px\\]').forEach(card => {
+            card.addEventListener('click', () => {
+                const pane = document.getElementById('inspector-pane');
+                pane.classList.remove('translate-x-full');
+            });
+        });
+    </script>
+</body></html>

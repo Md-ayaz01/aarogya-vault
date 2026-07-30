@@ -5,7 +5,7 @@ import '../../../../core/theme/app_theme.dart';
 
 class PatientProfileScreen extends StatefulWidget {
   final int patientId;
-  const PatientProfileScreen({Key? key, required this.patientId}) : super(key: key);
+  const PatientProfileScreen({super.key, required this.patientId});
 
   @override
   State<PatientProfileScreen> createState() => _PatientProfileScreenState();

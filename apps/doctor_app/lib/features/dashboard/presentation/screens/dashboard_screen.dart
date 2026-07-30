@@ -7,7 +7,7 @@ import '../../../settings/presentation/screens/settings_screen.dart';
 import '../../../notifications/presentation/screens/notifications_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+  const DashboardScreen({super.key});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
