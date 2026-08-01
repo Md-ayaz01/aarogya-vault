@@ -768,13 +768,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                           style: GoogleFonts.inter(fontSize: 12, color: subtextColor),
                         ),
                       ),
-                      TextButton.icon(
-                        onPressed: _loadDoctorConsentData,
-                        icon: const Icon(Icons.refresh_rounded, size: 14),
-                        label: const Text('Refresh', style: TextStyle(fontSize: 12)),
-                        style: TextButton.styleFrom(
-                          foregroundColor: AppTheme.primary,
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      SizedBox(
+                        height: 32,
+                        child: TextButton.icon(
+                          onPressed: _loadDoctorConsentData,
+                          icon: const Icon(Icons.refresh_rounded, size: 14),
+                          label: const Text('Refresh', style: TextStyle(fontSize: 12)),
+                          style: TextButton.styleFrom(
+                            foregroundColor: AppTheme.primary,
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          ),
                         ),
                       ),
                     ],
@@ -836,15 +839,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                                     ),
                                   ),
                                 )
-                              : ElevatedButton(
-                                  onPressed: _grantingAccess ? null : () => _grantDoctorConsent(docId),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppTheme.primary,
-                                    foregroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              : SizedBox(
+                                  height: 36,
+                                  child: FilledButton(
+                                    onPressed: _grantingAccess ? null : () => _grantDoctorConsent(docId),
+                                    style: FilledButton.styleFrom(
+                                      backgroundColor: AppTheme.primary,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                    ),
+                                    child: const Text('Grant Access', style: TextStyle(fontSize: 12)),
                                   ),
-                                  child: const Text('Grant Access', style: TextStyle(fontSize: 12)),
                                 ),
                         ],
                       ),
