@@ -7,6 +7,7 @@ class ReportModel {
   final String status;
   final String fileName;
   final String summary;
+  final String fileUrl;
 
   ReportModel({
     required this.id,
@@ -17,6 +18,7 @@ class ReportModel {
     required this.status,
     required this.fileName,
     required this.summary,
+    required this.fileUrl,
   });
 
   factory ReportModel.fromJson(Map<String, dynamic> json) {
@@ -29,6 +31,7 @@ class ReportModel {
       status: json['status'] ?? 'Final',
       fileName: json['file_name'] ?? '',
       summary: json['summary'] ?? '',
+      fileUrl: json['file_url'] ?? '',
     );
   }
 
@@ -42,6 +45,7 @@ class ReportModel {
       'status': status,
       'file_name': fileName,
       'summary': summary,
+      'file_url': fileUrl,
     };
   }
 
@@ -56,6 +60,7 @@ class ReportModel {
         status: "Final",
         fileName: "blood_report_20240412.pdf",
         summary: "AI Summary: Hemoglobin, platelets, and white blood cell count are within healthy limits. Fasting glucose is 98 mg/dL. Suggest monitoring sugar intake.",
+        fileUrl: "",
       ),
       ReportModel(
         id: 2,
@@ -66,6 +71,7 @@ class ReportModel {
         status: "Final",
         fileName: "chest_xray_20240305.pdf",
         summary: "AI Summary: Normal chest radiograph. Lungs are clear. Cardiac silhouette is of normal size and configuration.",
+        fileUrl: "",
       ),
       ReportModel(
         id: 3,
@@ -76,6 +82,7 @@ class ReportModel {
         status: "Final",
         fileName: "mri_brain_20240222.pdf",
         summary: "AI Summary: Normal MRI of the brain. No intracranial mass, hemorrhage, or acute infarction.",
+        fileUrl: "",
       ),
       ReportModel(
         id: 4,
@@ -86,6 +93,7 @@ class ReportModel {
         status: "Final",
         fileName: "ecg_report_20240118.pdf",
         summary: "AI Summary: Normal sinus rhythm. Heart rate 72 bpm. Normal electrical axis.",
+        fileUrl: "",
       ),
       ReportModel(
         id: 5,
@@ -96,6 +104,7 @@ class ReportModel {
         status: "Final",
         fileName: "ct_abdomen_20231210.pdf",
         summary: "AI Summary: Normal CT abdomen. Visualized organs appear healthy with no abnormal masses or structural concerns.",
+        fileUrl: "",
       ),
     ];
   }

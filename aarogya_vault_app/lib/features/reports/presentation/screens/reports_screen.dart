@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import '../../../../core/theme/app_theme.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../providers/reports_provider.dart';
 
 
@@ -303,14 +304,36 @@ class ReportsScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 12),
                 OutlinedButton.icon(
-                  onPressed: () {
+                  onPressed: () async {
                     Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("Downloading ${report.title}.pdf..."),
-                        behavior: SnackBarBehavior.floating,
-                      ),
-                    );
+                    if (report.fileUrl.isNotEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Opening ${report.title} for download..."),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                      final uri = Uri.parse(report.fileUrl);
+                      if (await canLaunchUrl(uri)) {
+                        await launchUrl(uri, mode: LaunchMode.externalApplication);
+                      } else {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Could not open download link."),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("No download link available for this report."),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    }
                   },
                   icon: const Icon(Icons.download_rounded),
                   label: Text("Download Report PDF", style: GoogleFonts.inter(fontWeight: FontWeight.w700, color: AppTheme.primary)),
