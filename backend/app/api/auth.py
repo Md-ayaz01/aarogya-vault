@@ -45,41 +45,60 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
         if db_user:
             raise HTTPException(status_code=400, detail="Phone already registered")
             
-    # Create user
-    hashed_pwd = get_password_hash(user_in.password) if user_in.password else None
-    new_user = User(
-        email=user_in.email,
-        phone=user_in.phone,
-        hashed_password=hashed_pwd
-    )
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    
-    # Create profile skeleton
-    profile = Profile(
-        user_id=new_user.id,
-        full_name="New Patient",
-        dob="1990-01-01",
-        gender="Unknown",
-        blood_group="O+",
-        address="",
-        health_score=90
-    )
-    db.add(profile)
-    
-    # Create default consent settings
-    consent = ConsentSetting(user_id=new_user.id)
-    db.add(consent)
-    db.commit()
-    
-    # Log audit
-    audit = AuditLog(user_id=new_user.id, action="REGISTER", details=f"User registered with email: {user_in.email or 'N/A'}, phone: {user_in.phone or 'N/A'}")
-    db.add(audit)
-    db.commit()
-    
-    token = create_access_token(new_user.id)
-    return {"access_token": token, "token_type": "bearer", "user_id": new_user.id}
+    try:
+        # Create user
+        raw_password = (user_in.password or "")[:50]
+        hashed_pwd = get_password_hash(raw_password) if raw_password else None
+        new_user = User(
+            email=user_in.email,
+            phone=user_in.phone,
+            hashed_password=hashed_pwd,
+            role="patient"
+        )
+        db.add(new_user)
+        db.flush()
+        
+        # Create profile skeleton
+        profile = Profile(
+            user_id=new_user.id,
+            full_name="New Patient",
+            dob="1990-01-01",
+            gender="Unknown",
+            blood_group="O+",
+            address="",
+            health_score=90
+        )
+        db.add(profile)
+        
+        # Create default consent settings
+        consent = ConsentSetting(user_id=new_user.id)
+        db.add(consent)
+        db.commit()
+        
+        # Audit log
+        audit = AuditLog(
+            user_id=new_user.id,
+            action="REGISTER",
+            details=f"User registered with email: {user_in.email or 'N/A'}, phone: {user_in.phone or 'N/A'}"
+        )
+        db.add(audit)
+        db.commit()
+        db.refresh(new_user)
+        
+        access_token = create_access_token(new_user.id)
+        refresh_token = create_refresh_token(new_user.id, db)
+        return {
+            "access_token": access_token, 
+            "token_type": "bearer", 
+            "user_id": new_user.id,
+            "refresh_token": refresh_token,
+            "role": new_user.role
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Registration database error: {str(e)}")
 
 
 @router.post("/login", response_model=Token)
