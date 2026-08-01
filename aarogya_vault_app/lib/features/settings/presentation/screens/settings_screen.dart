@@ -250,21 +250,32 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
   }
 
   Future<void> _loadDoctorConsentData() async {
+    final client = ref.read(apiClientProvider);
     try {
-      final client = ref.read(apiClientProvider);
       final docResp = await client.get('/consent/doctors-list');
-      final grantsResp = await client.get('/consent/active-grants');
-      if (mounted) {
+      dynamic dData = docResp.data;
+      if (dData is Map && dData.containsKey('data')) dData = dData['data'];
+      if (dData is List && mounted) {
         setState(() {
-          if (docResp.data is List) {
-            _doctorsList = List<Map<String, dynamic>>.from(docResp.data);
-          }
-          if (grantsResp.data is List) {
-            _activeGrants = List<Map<String, dynamic>>.from(grantsResp.data);
-          }
+          _doctorsList = List<Map<String, dynamic>>.from(dData);
         });
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint("Error loading doctors list: $e");
+    }
+
+    try {
+      final grantsResp = await client.get('/consent/active-grants');
+      dynamic gData = grantsResp.data;
+      if (gData is Map && gData.containsKey('data')) gData = gData['data'];
+      if (gData is List && mounted) {
+        setState(() {
+          _activeGrants = List<Map<String, dynamic>>.from(gData);
+        });
+      }
+    } catch (e) {
+      debugPrint("Error loading active grants: $e");
+    }
   }
 
   Future<void> _grantDoctorConsent(int docId) async {
@@ -728,6 +739,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                         child: Text(
                           'No verified doctors available right now.',
                           style: GoogleFonts.inter(fontSize: 12, color: subtextColor),
+                        ),
+                      ),
+                      TextButton.icon(
+                        onPressed: _loadDoctorConsentData,
+                        icon: const Icon(Icons.refresh_rounded, size: 14),
+                        label: const Text('Refresh', style: TextStyle(fontSize: 12)),
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppTheme.primary,
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         ),
                       ),
                     ],
