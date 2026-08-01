@@ -16,6 +16,36 @@ class _SearchScreenState extends State<SearchScreen> {
   String? _errorMessage;
 
   @override
+  void initState() {
+    super.initState();
+    _loadAllPatients();
+  }
+
+  Future<void> _loadAllPatients() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+    try {
+      final apiClient = getIt<ApiClient>();
+      final response = await apiClient.get('/doctor/patients/search', queryParameters: {'query': ''});
+      if (mounted) {
+        setState(() {
+          _searchResults = response.data as List? ?? [];
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _errorMessage = "Failed to load patient registry.";
+        });
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();

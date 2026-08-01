@@ -442,6 +442,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           ),
         ),
       ]),
+      _SettingsSection(title: 'Doctor Access & Privacy', items: [
+        _SettingItem(
+          icon: Icons.medical_services_rounded,
+          iconColor: Colors.teal,
+          iconBg: Colors.teal.shade50,
+          title: 'Grant Doctor Access (24h)',
+          subtitle: 'Manage doctor permissions & active grants',
+          trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+          onTap: () => _tabController.animateTo(1),
+        ),
+      ]),
       _SettingsSection(title: 'Notifications', items: [
         _SettingItem(
           icon: Icons.notifications_rounded,
