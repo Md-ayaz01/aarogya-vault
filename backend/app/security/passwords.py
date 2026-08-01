@@ -6,7 +6,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 def _preprocess_password(password: str) -> str:
     if not password:
         return ""
-    return hashlib.sha256(password.encode('utf-8')).hexdigest()
+    return hashlib.sha256(password.encode('utf-8')).hexdigest()[:32]
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verifies plain password against hashed password."""
