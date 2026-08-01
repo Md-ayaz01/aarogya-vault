@@ -268,13 +268,14 @@ def test_register_ayaz123_and_validation():
     print("--- TESTING SPECIFIC PASSWORD AYAZ123 REGISTRATION AND VALIDATION ERRORS ---")
     # Clean test data
     db = SessionLocal()
-    existing = db.query(User).filter(User.email == "ayaz_test@aarogyavault.com").first()
-    if existing:
-        db.query(Profile).filter(Profile.user_id == existing.id).delete()
-        db.query(ConsentSetting).filter(ConsentSetting.user_id == existing.id).delete()
-        db.query(AuditLog).filter(AuditLog.user_id == existing.id).delete()
-        db.delete(existing)
-        db.commit()
+    for email in ["ayaz_test@aarogyavault.com", "ayaz_long_test@aarogyavault.com"]:
+        existing = db.query(User).filter(User.email == email).first()
+        if existing:
+            db.query(Profile).filter(Profile.user_id == existing.id).delete()
+            db.query(ConsentSetting).filter(ConsentSetting.user_id == existing.id).delete()
+            db.query(AuditLog).filter(AuditLog.user_id == existing.id).delete()
+            db.delete(existing)
+            db.commit()
     db.close()
 
     # 1. Register with password = "ayaz123"
@@ -308,13 +309,14 @@ def test_register_ayaz123_and_validation():
 
     # Cleanup
     db = SessionLocal()
-    user_to_del = db.query(User).filter(User.email == "ayaz_test@aarogyavault.com").first()
-    if user_to_del:
-        db.query(Profile).filter(Profile.user_id == user_to_del.id).delete()
-        db.query(ConsentSetting).filter(ConsentSetting.user_id == user_to_del.id).delete()
-        db.query(AuditLog).filter(AuditLog.user_id == user_to_del.id).delete()
-        db.delete(user_to_del)
-        db.commit()
+    for email in ["ayaz_test@aarogyavault.com", "ayaz_long_test@aarogyavault.com"]:
+        user_to_del = db.query(User).filter(User.email == email).first()
+        if user_to_del:
+            db.query(Profile).filter(Profile.user_id == user_to_del.id).delete()
+            db.query(ConsentSetting).filter(ConsentSetting.user_id == user_to_del.id).delete()
+            db.query(AuditLog).filter(AuditLog.user_id == user_to_del.id).delete()
+            db.delete(user_to_del)
+            db.commit()
     db.close()
 
 

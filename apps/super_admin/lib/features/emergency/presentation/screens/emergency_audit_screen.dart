@@ -28,14 +28,19 @@ class _EmergencyAuditScreenState extends State<EmergencyAuditScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _cases = [
-          {"id": 1, "patient_name": "Trauma Victim #482", "severity": "Level 1 Critical", "police_notified": true, "ambulance_unit": "AMB-702", "timestamp": "2026-07-30T09:45:00Z"},
-          {"id": 2, "patient_name": "Cardiac Arrest Male", "severity": "Level 2 Severe", "police_notified": false, "ambulance_unit": "AMB-104", "timestamp": "2026-07-30T08:12:00Z"},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _cases = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

@@ -28,16 +28,19 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _inventory = [
-          {"id": 1, "medicine_name": "Amoxicillin 500mg", "batch_number": "AMX-2023-004", "quantity": 45, "status": "CRITICAL", "unit_price": 12.5, "expiry_date": "Oct 2024"},
-          {"id": 2, "medicine_name": "Metformin HCL 1000mg", "batch_number": "MET-B42-99", "quantity": 120, "status": "WARNING", "unit_price": 8.0, "expiry_date": "Jan 2025"},
-          {"id": 3, "medicine_name": "Atorvastatin 20mg", "batch_number": "ATR-XX-112", "quantity": 2400, "status": "STABLE", "unit_price": 15.0, "expiry_date": "Mar 2026"},
-          {"id": 4, "medicine_name": "Paracetamol 650mg", "batch_number": "PCM-9910-12", "quantity": 5000, "status": "STABLE", "unit_price": 2.5, "expiry_date": "Dec 2026"},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _inventory = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

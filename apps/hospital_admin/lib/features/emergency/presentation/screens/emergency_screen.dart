@@ -29,39 +29,19 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _cases = [
-          {
-            "id": 1,
-            "patient_name": "Multiple Trauma - Vehicle Collision",
-            "severity": "LEVEL 1 - CRITICAL",
-            "triage_notes": "Junction 42-A, Downtown | En-route: 4 min",
-            "ambulance_unit": "AMB-702",
-            "police_notified": true,
-            "level": 1
-          },
-          {
-            "id": 2,
-            "patient_name": "Cardiac Arrest - Elderly Male",
-            "severity": "LEVEL 2 - SEVERE",
-            "triage_notes": "Westside Care Home | Patient Arrived",
-            "ambulance_unit": "AMB-104",
-            "police_notified": false,
-            "level": 2
-          },
-          {
-            "id": 3,
-            "patient_name": "Acute Respiratory Distress",
-            "severity": "LEVEL 3 - STABLE",
-            "triage_notes": "Eastview Plaza | Patient Loading",
-            "ambulance_unit": "AMB-331",
-            "police_notified": false,
-            "level": 3
-          },
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _cases = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

@@ -28,15 +28,19 @@ class _DepartmentManagementScreenState extends State<DepartmentManagementScreen>
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _departments = [
-          {"id": 1, "name": "Cardiology", "code": "CARD-01", "head_doctor_name": "Dr. Ramesh Verma", "description": "Heart & Cardiovascular Care"},
-          {"id": 2, "name": "Neurology", "code": "NEURO-01", "head_doctor_name": "Dr. Priya Sundaram", "description": "Brain & Nervous System"},
-          {"id": 3, "name": "Orthopedics", "code": "ORTHO-01", "head_doctor_name": "Dr. Sunita Rao", "description": "Bones & Joints Surgery"},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _departments = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

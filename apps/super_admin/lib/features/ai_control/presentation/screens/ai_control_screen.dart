@@ -28,14 +28,19 @@ class _AIControlScreenState extends State<AIControlScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _configs = [
-          {"id": 1, "model_name": "gemini-1.5-pro", "temperature": 0.7, "max_tokens": 2048, "system_prompt": "You are Aarogya Vault Clinical Copilot AI.", "is_active": true},
-          {"id": 2, "model_name": "gemini-1.5-flash", "temperature": 0.5, "max_tokens": 1024, "system_prompt": "Fast triage symptom checking.", "is_active": true},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _configs = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

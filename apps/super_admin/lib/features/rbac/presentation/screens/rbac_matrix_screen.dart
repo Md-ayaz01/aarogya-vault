@@ -28,16 +28,19 @@ class _RBACMatrixScreenState extends State<RBACMatrixScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _matrix = [
-          {"role_name": "super_admin", "permission_key": "super_admin.*"},
-          {"role_name": "hospital_admin", "permission_key": "hospital.*"},
-          {"role_name": "doctor", "permission_key": "doctor.*"},
-          {"role_name": "patient", "permission_key": "patient.*"},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _matrix = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

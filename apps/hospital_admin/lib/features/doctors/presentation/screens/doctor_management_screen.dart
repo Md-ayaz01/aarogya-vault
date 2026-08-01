@@ -29,16 +29,19 @@ class _DoctorManagementScreenState extends State<DoctorManagementScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _doctors = [
-          {"id": 1, "full_name": "Dr. Sarah Al-Fayed", "specialty": "Cardiology", "department": "Heart & Vascular", "registration_number": "DOC-9921", "is_available": true, "satisfaction": 98},
-          {"id": 2, "full_name": "Dr. Marcus Chen", "specialty": "Neurology", "department": "Neurosciences", "registration_number": "DOC-4412", "is_available": false, "satisfaction": 92},
-          {"id": 3, "full_name": "Dr. Priya Patel", "specialty": "Pediatrics", "department": "Child Health", "registration_number": "DOC-1029", "is_available": true, "satisfaction": 96},
-          {"id": 4, "full_name": "Dr. Vikram Seth", "specialty": "Orthopedics", "department": "Bone & Joint", "registration_number": "DOC-8831", "is_available": true, "satisfaction": 95},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _doctors = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

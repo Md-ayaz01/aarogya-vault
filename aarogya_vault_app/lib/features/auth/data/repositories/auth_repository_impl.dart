@@ -99,8 +99,21 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<bool> loginWithBiometrics(String token) async {
-    final response = await apiClient.post('/auth/login', data: {'biometric_token': token});
-    return response.statusCode == 200;
+    try {
+      final response = await apiClient.post('/auth/login', data: {'biometric_token': token});
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final tokenStr = response.data['access_token'];
+        final userId = response.data['user_id'];
+        if (tokenStr != null) {
+          await LocalDB.saveToken(tokenStr.toString());
+        }
+        if (userId != null) {
+          await LocalDB.save(LocalDB.keyUserId, userId);
+        }
+        return true;
+      }
+    } catch (_) {}
+    return false;
   }
 
   @override

@@ -28,15 +28,19 @@ class _HospitalApprovalScreenState extends State<HospitalApprovalScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _requests = [
-          {"id": 1, "hospital_name": "Apollo Care Multi-Specialty", "license_number": "LIC-AP-9901", "status": "Pending", "requested_at": "2026-07-29T10:00:00Z", "notes": "NABH Accredited"},
-          {"id": 2, "hospital_name": "Fortis Healthcare Center", "license_number": "LIC-FT-8812", "status": "Approved", "requested_at": "2026-07-28T09:30:00Z", "notes": "Verified PM-JAY Partner"},
-          {"id": 3, "hospital_name": "Max Super Specialty Hospital", "license_number": "LIC-MX-1029", "status": "Pending", "requested_at": "2026-07-30T08:15:00Z", "notes": "Pending license verification"},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _requests = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

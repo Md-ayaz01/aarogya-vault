@@ -29,16 +29,19 @@ class _RadiologyScreenState extends State<RadiologyScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _radiologyOrders = [
-          {"id": 1, "patient_name": "Elena Rodriguez", "modality": "MRI", "body_part": "Brain", "scan_code": "BRAIN_MRI_042", "status": "Critical", "findings": "Subacute infarction noted"},
-          {"id": 2, "patient_name": "Marcus Thorne", "modality": "X-Ray", "body_part": "Chest", "scan_code": "CHEST_XRAY_115", "status": "Stable", "findings": "Clear lung fields"},
-          {"id": 3, "patient_name": "Sarah Jenkins", "modality": "CT", "body_part": "Abdomen", "scan_code": "ABD_CT_672", "status": "Routine", "findings": "No acute abdominal abnormality"},
-          {"id": 4, "patient_name": "Rajesh Kumar", "modality": "Ultrasound", "body_part": "Abdomen", "scan_code": "US_ABD_099", "status": "Completed", "findings": "Normal gallbladder & liver"},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _radiologyOrders = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

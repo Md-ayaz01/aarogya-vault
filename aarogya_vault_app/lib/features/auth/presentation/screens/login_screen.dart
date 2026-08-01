@@ -79,13 +79,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with SingleTickerProv
         if (success && mounted) {
           _navigateToDashboard();
         } else {
-          // If no local biometric token is set up, fallback to the default seeded mock biometric token for Majid
-          final successFallback = await ref.read(authProvider.notifier).loginWithBiometrics("mock_bio_token_for_device_2026");
-          if (successFallback && mounted) {
-            _navigateToDashboard();
-          } else {
-            final error = ref.read(authProvider).errorMessage;
-            _showSnackBar(error ?? "Biometric authentication failed on server.");
+          if (mounted) {
+            _showSnackBar("Biometrics are not configured. Please log in with password/OTP and enable biometrics in settings.");
           }
         }
       }

@@ -54,7 +54,7 @@ class ApiClient {
         },
         onResponse: (response, handler) {
           if (response.data is Map && response.data.containsKey('success')) {
-            if (response.data['success'] == true) {
+            if (response.data['success'] == true && response.data.containsKey('data')) {
               response.data = response.data['data'];
             }
           }

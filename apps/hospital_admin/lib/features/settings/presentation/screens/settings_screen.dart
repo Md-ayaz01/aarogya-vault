@@ -28,16 +28,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _auditLogs = [
-          {"id": 1, "timestamp": "2026-07-28 12:40:10", "actor": "Dr. Aris Thorne", "action": "EXPORT_PATIENT_REGISTRY_CSV", "status": "SUCCESS"},
-          {"id": 2, "timestamp": "2026-07-28 11:22:05", "actor": "Dr. Sarah Chen", "action": "UPDATE_ICU_BED_RATE", "status": "SUCCESS"},
-          {"id": 3, "timestamp": "2026-07-28 09:15:30", "actor": "Nurse Administrator", "action": "REGISTER_IPD_ADMISSION", "status": "SUCCESS"},
-          {"id": 4, "timestamp": "2026-07-28 08:00:00", "actor": "System Automation", "action": "GEMINI_AI_SURGE_PREDICTION_RUN", "status": "COMPLETED"},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _auditLogs = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

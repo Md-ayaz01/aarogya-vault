@@ -29,16 +29,19 @@ class _LaboratoryScreenState extends State<LaboratoryScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _labOrders = [
-          {"id": 1, "test_name": "Complete Blood Count (CBC)", "patient_name": "Rajesh Kumar", "status": "Completed", "category": "Hematology", "stat_priority": false, "results": "Hemoglobin 14.2 g/dL (Normal)"},
-          {"id": 2, "test_name": "Lipid Panel & Cholesterol", "patient_name": "Anita Sharma", "status": "Pending", "category": "Pathology", "stat_priority": true, "results": "Processing sample..."},
-          {"id": 3, "test_name": "Liver Function Test (LFT)", "patient_name": "Suresh Patel", "status": "In-Progress", "category": "Pathology", "stat_priority": false, "results": "ALT/AST elevation noted"},
-          {"id": 4, "test_name": "Thyroid Stimulating Hormone", "patient_name": "Sunita Rao", "status": "Completed", "category": "Endocrinology", "stat_priority": false, "results": "TSH 2.4 mIU/L"},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _labOrders = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

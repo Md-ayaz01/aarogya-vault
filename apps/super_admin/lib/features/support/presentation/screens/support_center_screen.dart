@@ -28,14 +28,19 @@ class _SupportCenterScreenState extends State<SupportCenterScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _tickets = [
-          {"id": 1, "category": "ABHA Sync", "priority": "High", "status": "Open", "subject": "Delayed ABHA ID verification", "description": "Verification API response takes > 5s on peak load."},
-          {"id": 2, "category": "Billing Tier", "priority": "Medium", "status": "In-Progress", "subject": "Upgrade to Enterprise Plan", "description": "Fortis requests add-on module for 100 extra ICU beds."},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _tickets = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

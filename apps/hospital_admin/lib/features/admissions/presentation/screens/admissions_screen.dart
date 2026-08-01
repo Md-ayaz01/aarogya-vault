@@ -28,14 +28,19 @@ class _AdmissionsScreenState extends State<AdmissionsScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _admissions = [
-          {"id": 101, "patient_name": "Rajesh Kumar", "doctor_name": "Dr. Ramesh Verma", "department_name": "Cardiology", "bed_number": "ICU-04", "admission_type": "IPD", "status": "Admitted"},
-          {"id": 102, "patient_name": "Anita Sharma", "doctor_name": "Dr. Priya Sundaram", "department_name": "Neurology", "bed_number": "WARD-12", "admission_type": "IPD", "status": "Admitted"},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _admissions = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

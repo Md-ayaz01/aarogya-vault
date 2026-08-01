@@ -29,19 +29,19 @@ class _BedAllocationScreenState extends State<BedAllocationScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _beds = [
-          {"id": 1, "ward_name": "ICU Ward", "bed_number": "ICU-01", "is_occupied": true, "daily_rate": 5500, "patient": "Rajesh Kumar"},
-          {"id": 2, "ward_name": "ICU Ward", "bed_number": "ICU-02", "is_occupied": false, "daily_rate": 5500, "patient": null},
-          {"id": 3, "ward_name": "ICU Ward", "bed_number": "ICU-03", "is_occupied": true, "daily_rate": 5500, "patient": "Suresh Patel"},
-          {"id": 4, "ward_name": "General Ward A", "bed_number": "GEN-01", "is_occupied": true, "daily_rate": 1500, "patient": "Anita Sharma"},
-          {"id": 5, "ward_name": "General Ward A", "bed_number": "GEN-02", "is_occupied": false, "daily_rate": 1500, "patient": null},
-          {"id": 6, "ward_name": "Private Ward B", "bed_number": "PVT-101", "is_occupied": false, "daily_rate": 3500, "patient": null},
-          {"id": 7, "ward_name": "Emergency Ward", "bed_number": "EMG-01", "is_occupied": true, "daily_rate": 2500, "patient": "Trauma Patient #102"},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _beds = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

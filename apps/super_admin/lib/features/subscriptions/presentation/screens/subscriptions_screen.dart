@@ -28,14 +28,19 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _plans = [
-          {"id": 1, "hospital_name": "Apollo Care Hospital", "plan_name": "Enterprise Suite", "billing_status": "Active", "monthly_price": 4999.0, "renewal_date": "2026-08-31"},
-          {"id": 2, "hospital_name": "Fortis Healthcare Center", "plan_name": "Pro Tier", "billing_status": "Active", "monthly_price": 1999.0, "renewal_date": "2026-08-15"},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _plans = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

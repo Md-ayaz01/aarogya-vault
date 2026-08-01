@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.orm import Session
 from typing import List, Optional
 import os
@@ -74,9 +74,9 @@ def get_reports(current_user: User = Depends(get_current_user), db: Session = De
 
 @router.post("", response_model=LabReportResponse)
 def upload_report(
-    title: str,
-    date: str,
-    report_type: str,
+    title: str = Form(...),
+    date: str = Form(...),
+    report_type: str = Form(...),
     file: UploadFile = File(...),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)

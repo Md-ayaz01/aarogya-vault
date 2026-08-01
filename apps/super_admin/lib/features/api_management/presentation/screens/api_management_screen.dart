@@ -28,14 +28,19 @@ class _APIManagementScreenState extends State<APIManagementScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _apiKeys = [
-          {"id": 1, "client_name": "National Health Authority Gateway", "rate_limit": 5000, "is_active": true, "created_at": "2026-07-01T00:00:00Z"},
-          {"id": 2, "client_name": "Apollo Emergency Response Webhook", "rate_limit": 2000, "is_active": true, "created_at": "2026-07-15T00:00:00Z"},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _apiKeys = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

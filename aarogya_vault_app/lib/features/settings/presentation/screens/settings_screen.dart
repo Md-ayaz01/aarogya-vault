@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:local_auth/local_auth.dart';
+import 'dart:math';
+import 'dart:convert';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/providers/api_provider.dart';
@@ -74,7 +76,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
         );
 
         if (authenticated) {
-          final success = await ref.read(authProvider.notifier).enrollBiometrics("mock_bio_token_for_device_2026");
+          final random = Random.secure();
+          final values = List<int>.generate(32, (i) => random.nextInt(256));
+          final secureToken = base64Url.encode(values);
+          final success = await ref.read(authProvider.notifier).enrollBiometrics(secureToken);
           if (success) {
             setState(() {
               _biometrics = true;

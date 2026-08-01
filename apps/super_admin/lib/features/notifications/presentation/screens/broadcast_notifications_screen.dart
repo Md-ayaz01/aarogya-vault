@@ -30,14 +30,19 @@ class _BroadcastNotificationsScreenState extends State<BroadcastNotificationsScr
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _broadcasts = [
-          {"id": 1, "title": "Scheduled Maintenance Window", "message": "Backend upgrade scheduled for Sunday 02:00 AM IST.", "target_role": "all", "severity": "info", "created_at": "2026-07-29T12:00:00Z"},
-          {"id": 2, "title": "CRITICAL: NHA Gateway API Sync", "message": "ABHA verification service fully restored.", "target_role": "hospital_admin", "severity": "warning", "created_at": "2026-07-30T06:00:00Z"},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _broadcasts = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

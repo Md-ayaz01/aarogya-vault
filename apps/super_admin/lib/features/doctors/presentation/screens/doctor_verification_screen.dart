@@ -28,15 +28,19 @@ class _DoctorVerificationScreenState extends State<DoctorVerificationScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _doctors = [
-          {"id": 1, "full_name": "Dr. Sarah Al-Fayed", "license_number": "DOC-9921", "specialty": "Cardiology", "status": "Verified", "hospital": "Aarogya Central Hospital"},
-          {"id": 2, "full_name": "Dr. Marcus Chen", "license_number": "DOC-4412", "specialty": "Neurology", "status": "Verified", "hospital": "City Care Clinic"},
-          {"id": 3, "full_name": "Dr. Rajesh Sharma", "license_number": "DOC-1002", "specialty": "Pediatrics", "status": "Pending Verification", "hospital": "Apollo Center"},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _doctors = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

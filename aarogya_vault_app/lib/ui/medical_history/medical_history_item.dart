@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:aarogya_vault_app/theme/design_system.dart';
 import 'package:aarogya_vault_app/models/medical_history.dart';
 
+import 'package:url_launcher/url_launcher.dart';
+
 class MedicalHistoryItem extends StatelessWidget {
   final MedicalRecord record;
 
@@ -24,8 +26,13 @@ class MedicalHistoryItem extends StatelessWidget {
         trailing: record.documentUrl.isNotEmpty
             ? const Icon(Icons.insert_drive_file, color: AppColors.tertiary)
             : null,
-        onTap: () {
-          // TODO: navigate to detail view or open document
+        onTap: () async {
+          if (record.documentUrl.isNotEmpty) {
+            final uri = Uri.parse(record.documentUrl);
+            if (await canLaunchUrl(uri)) {
+              await launchUrl(uri, mode: LaunchMode.externalApplication);
+            }
+          }
         },
       ),
     );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -9,6 +8,7 @@ import 'core/network/api_client.dart' show navigatorKey;
 import 'core/di/locator.dart';
 import 'core/providers/theme_provider.dart';
 import 'routes.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,20 +35,9 @@ void main() async {
 
   // Initialize Firebase Core safely for phone authentication
   try {
-    if (kIsWeb) {
-      await Firebase.initializeApp(
-        options: const FirebaseOptions(
-          apiKey: String.fromEnvironment('FIREBASE_API_KEY', defaultValue: 'AIzaSyDemoKeyForAarogyaVaultWeb'),
-          appId: String.fromEnvironment('FIREBASE_APP_ID', defaultValue: '1:1234567890:web:aarogyavaultwebid'),
-          messagingSenderId: String.fromEnvironment('FIREBASE_MESSAGING_SENDER_ID', defaultValue: '1234567890'),
-          projectId: String.fromEnvironment('FIREBASE_PROJECT_ID', defaultValue: 'aarogya-vault'),
-          authDomain: String.fromEnvironment('FIREBASE_AUTH_DOMAIN', defaultValue: 'aarogya-vault.firebaseapp.com'),
-          storageBucket: String.fromEnvironment('FIREBASE_STORAGE_BUCKET', defaultValue: 'aarogya-vault.appspot.com'),
-        ),
-      );
-    } else {
-      await Firebase.initializeApp();
-    }
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
   } catch (e) {
     debugPrint("Firebase initialization warning: Firebase may be unavailable in local/test environments. OTP fallback is handled by backend.");
   }

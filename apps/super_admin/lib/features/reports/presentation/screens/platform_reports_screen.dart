@@ -28,15 +28,19 @@ class _PlatformReportsScreenState extends State<PlatformReportsScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _reports = [
-          {"id": 1, "name": "Ecosystem Platform Health Summary", "type": "PDF", "size": "12.4 MB", "generated_at": "2026-07-30T00:00:00Z"},
-          {"id": 2, "name": "ABHA & PM-JAY Compliance Audit", "type": "Excel", "size": "4.8 MB", "generated_at": "2026-07-29T18:00:00Z"},
-          {"id": 3, "name": "Gemini AI Clinical Usage & Token Report", "type": "PDF", "size": "8.2 MB", "generated_at": "2026-07-28T12:00:00Z"},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _reports = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

@@ -28,15 +28,19 @@ class _AuditTrailScreenState extends State<AuditTrailScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _logs = [
-          {"id": 1, "actor_email": "admin@aarogyavault.in", "role": "super_admin", "action": "HOSPITAL_LICENSE_APPROVE", "resource": "Hospital #12", "details": "Approved Apollo Care NABH accreditation", "timestamp": "2026-07-30T09:30:00Z"},
-          {"id": 2, "actor_email": "system.bot@aarogyavault.in", "role": "system", "action": "AI_MODEL_CONFIG_UPDATE", "resource": "gemini-1.5-pro", "details": "Temperature set to 0.7", "timestamp": "2026-07-30T08:00:00Z"},
-          {"id": 3, "actor_email": "dr.sarah@aarogyavault.in", "role": "doctor", "action": "EMERGENCY_RECORD_ACCESS", "resource": "Patient ABHA-482910", "details": "Accessed critical trauma allergy notes", "timestamp": "2026-07-30T07:15:00Z"},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _logs = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

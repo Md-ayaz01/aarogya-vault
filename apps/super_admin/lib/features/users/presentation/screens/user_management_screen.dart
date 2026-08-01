@@ -28,16 +28,19 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _users = [
-          {"id": 1, "email": "superadmin@aarogyavault.in", "role": "super_admin", "phone": "+919999900000", "status": "Active"},
-          {"id": 2, "email": "admin@apollo.in", "role": "hospital_admin", "phone": "+919876543210", "status": "Active"},
-          {"id": 3, "email": "dr.sarah@aarogyavault.in", "role": "doctor", "phone": "+919876543211", "status": "Active"},
-          {"id": 4, "email": "patient.rajesh@gmail.com", "role": "patient", "phone": "+919876543212", "status": "Active"},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _users = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

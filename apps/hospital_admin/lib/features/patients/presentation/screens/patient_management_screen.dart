@@ -30,16 +30,19 @@ class _PatientManagementScreenState extends State<PatientManagementScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _patients = [
-          {"id": 1, "full_name": "Rajesh Kumar", "phone": "+919876543210", "gender": "Male", "blood_group": "O+", "health_score": 94, "abha_id": "ABHA-482910", "status": "IPD"},
-          {"id": 2, "full_name": "Anita Sharma", "phone": "+919876543211", "gender": "Female", "blood_group": "A+", "health_score": 88, "abha_id": "ABHA-192831", "status": "OPD"},
-          {"id": 3, "full_name": "Suresh Patel", "phone": "+919876543212", "gender": "Male", "blood_group": "B+", "health_score": 79, "abha_id": "ABHA-994822", "status": "IPD"},
-          {"id": 4, "full_name": "Sunita Rao", "phone": "+919876543213", "gender": "Female", "blood_group": "AB+", "health_score": 91, "abha_id": "ABHA-104921", "status": "OPD"},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _patients = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override

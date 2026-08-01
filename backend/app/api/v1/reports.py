@@ -2,7 +2,7 @@ import os
 import hashlib
 import re
 import logging
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Query
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional
 
@@ -24,9 +24,9 @@ def get_reports(current_user: User = Depends(get_current_user), db: Session = De
 @router.post("", response_model=LabReportResponse)
 @router.post("/upload", response_model=LabReportResponse)
 def upload_report(
-    title: str,
-    date: str,
-    report_type: str,
+    title: str = Form(...),
+    date: str = Form(...),
+    report_type: str = Form(...),
     file: UploadFile = File(...),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)

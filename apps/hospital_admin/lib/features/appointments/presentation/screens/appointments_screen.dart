@@ -29,16 +29,19 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
         _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _appointments = [
-          {"id": 1, "patient_name": "Robert J. Wilson", "doctor_name": "Dr. Sarah Al-Fayed", "specialty": "Cardiology", "time_slot": "09:00 AM - 09:30 AM", "status": "Confirmed"},
-          {"id": 2, "patient_name": "Anita Sharma", "doctor_name": "Dr. Marcus Chen", "specialty": "Neurology", "time_slot": "10:00 AM - 10:30 AM", "status": "In-Progress"},
-          {"id": 3, "patient_name": "Suresh Patel", "doctor_name": "Dr. Priya Patel", "specialty": "Pediatrics", "time_slot": "11:30 AM - 12:00 PM", "status": "Completed"},
-          {"id": 4, "patient_name": "Sunita Rao", "doctor_name": "Dr. Vikram Seth", "specialty": "Orthopedics", "time_slot": "02:00 PM - 02:30 PM", "status": "Confirmed"},
-        ];
-        _isLoading = false;
-      });
+    setState(() {
+      _appointments = [];
+      _isLoading = false;
+    });
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load data from server: ${e.toString()}"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
+  }
   }
 
   @override
