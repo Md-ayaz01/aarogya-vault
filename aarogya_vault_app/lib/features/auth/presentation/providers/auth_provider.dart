@@ -74,13 +74,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final authRepo = GetIt.I<AuthRepository>();
       final success = await authRepo.verifyOtp(phone, code);
       if (success) {
-        // Assume token and userId are persisted inside repository or elsewhere
-        // For now, we fetch session check to update state
         await checkSession();
         return true;
       }
     } catch (e) {
-      state = state.copyWith(isLoading: false, errorMessage: 'Invalid OTP. Please try again.');
+      String msg = e.toString();
+      if (msg.startsWith('Exception: ')) msg = msg.replaceFirst('Exception: ', '');
+      state = state.copyWith(isLoading: false, errorMessage: msg);
     }
     return false;
   }
@@ -95,17 +95,25 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final client = ref.read(apiClientProvider);
       final response = await client.get('/auth/session-check');
       if (response.statusCode == 200) {
-        final userId = response.data['user_id'];
-        await LocalDB.save(LocalDB.keyUserId, userId);
+        final data = response.data;
+        int? userId;
+        if (data is Map) {
+          if (data['data'] is Map && data['data']['user_id'] != null) {
+            userId = data['data']['user_id'] as int?;
+          } else if (data['user_id'] != null) {
+            userId = data['user_id'] as int?;
+          }
+        }
+        if (userId != null) {
+          await LocalDB.save(LocalDB.keyUserId, userId);
+        } else {
+          userId = LocalDB.get(LocalDB.keyUserId) as int?;
+        }
         state = AuthState(isLoggedIn: true, userId: userId);
         return true;
       }
     } catch (e) {
-      // If session-check fails (endpoint missing, network error, etc.),
-      // keep the token — don't force logout. The token may still be valid
-      // for other endpoints. Only truly log out if we have no token at all.
       debugPrint('checkSession error (non-fatal): $e');
-      // Mark as logged in since we have a token
       final cachedUserId = LocalDB.get(LocalDB.keyUserId);
       state = AuthState(isLoggedIn: true, userId: cachedUserId as int?);
       return true;
@@ -123,7 +131,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
         return true;
       }
     } catch (e) {
-      state = state.copyWith(isLoading: false, errorMessage: 'Invalid credentials. Please try again.');
+      String msg = e.toString();
+      if (msg.startsWith('Exception: ')) msg = msg.replaceFirst('Exception: ', '');
+      state = state.copyWith(isLoading: false, errorMessage: msg);
     }
     return false;
   }
@@ -146,25 +156,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<bool> register({String? email, String? phone, required String password}) async {
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {
-      final client = ref.read(apiClientProvider);
-      final response = await client.post('/auth/register', data: {
-        'email': email,
-        'phone': phone,
-        'password': password,
-      });
-
-      if (response.statusCode == 200) {
-        final token = response.data['access_token'];
-        final userId = response.data['user_id'];
-        
-        await LocalDB.saveToken(token);
-        await LocalDB.save(LocalDB.keyUserId, userId);
-        
-        state = AuthState(isLoggedIn: true, isLoading: false, userId: userId);
+      final authRepo = GetIt.I<AuthRepository>();
+      final success = await authRepo.register(email: email, phone: phone, password: password);
+      if (success) {
+        await checkSession();
         return true;
       }
     } catch (e) {
-      state = state.copyWith(isLoading: false, errorMessage: 'Registration failed. Email or phone may exist.');
+      String msg = e.toString();
+      if (msg.startsWith('Exception: ')) msg = msg.replaceFirst('Exception: ', '');
+      state = state.copyWith(isLoading: false, errorMessage: msg);
     }
     return false;
   }

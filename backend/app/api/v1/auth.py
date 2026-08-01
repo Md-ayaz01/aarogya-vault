@@ -144,11 +144,6 @@ def exchange_supabase_session(req: SupabaseSessionRequest, db: Session = Depends
 @router.post("/register", response_model=Token)
 def register(user_in: UserCreate, db: Session = Depends(get_db)):
     """Registers a new user, generating default profile skeletons."""
-    if settings.ENVIRONMENT == "production":
-        raise HTTPException(
-            status_code=status.HTTP_410_GONE,
-            detail="Production registration is handled by Firebase Auth. Use /auth/verify-firebase-otp after client verification.",
-        )
     if not user_in.email and not user_in.phone:
         raise HTTPException(status_code=400, detail="Either email or phone must be provided")
     
@@ -212,11 +207,6 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
 @router.post("/login", response_model=Token)
 def login(login_in: UserLogin, db: Session = Depends(get_db)):
     """Logs in an existing user using email/phone and password or biometrics."""
-    if settings.ENVIRONMENT == "production":
-        raise HTTPException(
-            status_code=status.HTTP_410_GONE,
-            detail="Production login is handled by Firebase Auth. Use /auth/verify-firebase-otp after client verification.",
-        )
     user = None
     if login_in.email:
         user = db.query(User).filter(User.email == login_in.email).first()
@@ -296,11 +286,6 @@ class OTPVerifyRequest(BaseModel):
 @router.post("/send-otp")
 def send_otp(req: OTPSendRequest, db: Session = Depends(get_db)):
     """Legacy development OTP endpoint. Production uses Firebase Auth mobile OTP."""
-    if settings.ENVIRONMENT == "production":
-        raise HTTPException(
-            status_code=status.HTTP_410_GONE,
-            detail="Production mobile OTP is handled by Firebase Auth. Use /auth/verify-firebase-otp after client-side OTP verification.",
-        )
     phone = req.phone.strip()
     if not phone:
         raise HTTPException(status_code=400, detail="Phone number is required")
@@ -359,11 +344,6 @@ def send_otp(req: OTPSendRequest, db: Session = Depends(get_db)):
 @router.post("/verify-otp", response_model=Token)
 def verify_otp(req: OTPVerifyRequest, db: Session = Depends(get_db)):
     """Legacy development OTP verification. Production uses Firebase Auth mobile OTP."""
-    if settings.ENVIRONMENT == "production":
-        raise HTTPException(
-            status_code=status.HTTP_410_GONE,
-            detail="Production mobile OTP is handled by Firebase Auth. Use /auth/verify-firebase-otp after client-side OTP verification.",
-        )
     phone = req.phone.strip()
     code = req.code.strip()
     

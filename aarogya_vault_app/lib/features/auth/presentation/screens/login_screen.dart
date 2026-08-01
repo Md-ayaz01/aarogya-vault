@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/glass_container.dart';
 import '../../../dashboard/presentation/screens/dashboard_screen.dart';
+import '../../../dashboard/presentation/providers/dashboard_provider.dart';
 import '../providers/auth_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -201,6 +202,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with SingleTickerProv
     }
 
     if (success && mounted) {
+      ref.read(dashboardProvider.notifier).fetchDashboardData();
       _navigateToDashboard();
     } else {
       final error = ref.read(authProvider).errorMessage;
