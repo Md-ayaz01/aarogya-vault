@@ -39,9 +39,8 @@ void main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
   } catch (e) {
-    debugPrint("Firebase initialization warning: Firebase may be unavailable in local/test environments. OTP fallback is handled by backend.");
+    debugPrint("Firebase initialization warning: $e");
   }
-
   runApp(
     const ProviderScope(
       child: AarogyaVaultApp(),

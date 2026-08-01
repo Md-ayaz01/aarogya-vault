@@ -21,28 +21,28 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDemoKeyForAarogyaVaultWeb',
-    appId: '1:1234567890:web:aarogyavaultwebid',
-    messagingSenderId: '1234567890',
+    apiKey: 'AIzaSyDCLPmtLq6uhx226MxQNYPcBopm06lvK4A',
+    appId: '1:368409267229:web:4931c4be0e24fdbd9b4af4',
+    messagingSenderId: '368409267229',
     projectId: 'aarogya-vault',
     authDomain: 'aarogya-vault.firebaseapp.com',
-    storageBucket: 'aarogya-vault.appspot.com',
+    storageBucket: 'aarogya-vault.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDemoKeyForAarogyaVaultAndroid',
-    appId: '1:1234567890:android:aarogyavaultandroidid',
-    messagingSenderId: '1234567890',
+    apiKey: 'AIzaSyDCLPmtLq6uhx226MxQNYPcBopm06lvK4A',
+    appId: '1:368409267229:android:4931c4be0e24fdbd9b4af4',
+    messagingSenderId: '368409267229',
     projectId: 'aarogya-vault',
-    storageBucket: 'aarogya-vault.appspot.com',
+    storageBucket: 'aarogya-vault.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDemoKeyForAarogyaVaultIos',
-    appId: '1:1234567890:ios:aarogyavaultiosid',
-    messagingSenderId: '1234567890',
+    apiKey: 'AIzaSyB8NROFggDoapFUlAfIV1JCR_spNTenRAI',
+    appId: '1:368409267229:ios:c59a1705da6f77249b4af4',
+    messagingSenderId: '368409267229',
     projectId: 'aarogya-vault',
-    storageBucket: 'aarogya-vault.appspot.com',
-    iosBundleId: 'com.example.aarogyaVaultApp',
+    storageBucket: 'aarogya-vault.firebasestorage.app',
+    iosBundleId: 'com.aarogyavault.aarogyaVaultApp',
   );
 }
