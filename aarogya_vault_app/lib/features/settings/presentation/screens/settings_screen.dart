@@ -212,7 +212,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
   Future<void> _loadConsent() async {
     try {
       final client = ref.read(apiClientProvider);
+      print("🔍 [PRIVACY CONSENT] GET /consent ...");
       final resp = await client.get('/consent');
+      print("🔍 [PRIVACY CONSENT] /consent status: ${resp.statusCode}, data: ${resp.data}");
       if (resp.statusCode == 200 && mounted) {
         setState(() {
           _allowAiProfile = resp.data['allow_ai_profile_read'] ?? true;
@@ -221,7 +223,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           _allowEmergencyRecords = resp.data['allow_emergency_records_read'] ?? true;
         });
       }
-    } catch (_) {}
+    } catch (e) {
+      print("❌ [PRIVACY CONSENT] Exception loading /consent: $e");
+    }
   }
 
   Future<void> _saveConsent() async {
@@ -244,37 +248,49 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           ),
         );
       }
-    } catch (_) {} finally {
+    } catch (e) {
+      print("❌ [PRIVACY CONSENT] Exception saving /consent: $e");
+    } finally {
       if (mounted) setState(() => _consentLoading = false);
     }
   }
 
   Future<void> _loadDoctorConsentData() async {
     final client = ref.read(apiClientProvider);
+    print("👨‍⚕️ [DOCTOR CONSENT] Fetching /consent/doctors-list...");
     try {
       final docResp = await client.get('/consent/doctors-list');
+      print("👨‍⚕️ [DOCTOR CONSENT] doctors-list status: ${docResp.statusCode}, data: ${docResp.data}");
       dynamic dData = docResp.data;
       if (dData is Map && dData.containsKey('data')) dData = dData['data'];
       if (dData is List && mounted) {
         setState(() {
           _doctorsList = List<Map<String, dynamic>>.from(dData);
         });
+        print("👨‍⚕️ [DOCTOR CONSENT] Successfully loaded ${_doctorsList.length} doctors into state.");
+      } else {
+        print("⚠️ [DOCTOR CONSENT] dData payload is not a List: ${dData.runtimeType}");
       }
-    } catch (e) {
-      debugPrint("Error loading doctors list: $e");
+    } catch (e, st) {
+      print("❌ [DOCTOR CONSENT] Error fetching doctors-list: $e\n$st");
     }
 
+    print("👨‍⚕️ [DOCTOR CONSENT] Fetching /consent/active-grants...");
     try {
       final grantsResp = await client.get('/consent/active-grants');
+      print("👨‍⚕️ [DOCTOR CONSENT] active-grants status: ${grantsResp.statusCode}, data: ${grantsResp.data}");
       dynamic gData = grantsResp.data;
       if (gData is Map && gData.containsKey('data')) gData = gData['data'];
       if (gData is List && mounted) {
         setState(() {
           _activeGrants = List<Map<String, dynamic>>.from(gData);
         });
+        print("👨‍⚕️ [DOCTOR CONSENT] Successfully loaded ${_activeGrants.length} active grants into state.");
+      } else {
+        print("⚠️ [DOCTOR CONSENT] gData payload is not a List: ${gData.runtimeType}");
       }
-    } catch (e) {
-      debugPrint("Error loading active grants: $e");
+    } catch (e, st) {
+      print("❌ [DOCTOR CONSENT] Error fetching active-grants: $e\n$st");
     }
   }
 
