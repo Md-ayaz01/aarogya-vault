@@ -54,6 +54,14 @@ class Profile(Base):
     
     user = relationship("User", back_populates="profile")
 
+    @property
+    def phone(self):
+        return self.user.phone if self.user else None
+
+    @property
+    def email(self):
+        return self.user.email if self.user else None
+
 
 class MedicalHistory(Base):
     __tablename__ = "medical_records"

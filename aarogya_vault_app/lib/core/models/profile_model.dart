@@ -10,6 +10,8 @@ class ProfileModel {
   final String emergencyContactPhone;
   final String aadhaarNumber;
   final int healthScore;
+  final String phone;
+  final String email;
 
   ProfileModel({
     required this.id,
@@ -23,7 +25,25 @@ class ProfileModel {
     required this.emergencyContactPhone,
     required this.aadhaarNumber,
     required this.healthScore,
+    required this.phone,
+    required this.email,
   });
+
+  String get ageString {
+    if (dob.isEmpty) return "Unknown Age";
+    try {
+      final birthDate = DateTime.parse(dob);
+      final currentDate = DateTime.now();
+      int age = currentDate.year - birthDate.year;
+      if (currentDate.month < birthDate.month ||
+          (currentDate.month == birthDate.month && currentDate.day < birthDate.day)) {
+        age--;
+      }
+      return "$age Years";
+    } catch (_) {
+      return "Unknown Age";
+    }
+  }
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
     return ProfileModel(
@@ -38,6 +58,8 @@ class ProfileModel {
       emergencyContactPhone: json['emergency_contact_phone'] ?? '',
       aadhaarNumber: json['aadhaar_number'] ?? '',
       healthScore: json['health_score'] ?? 92,
+      phone: json['phone'] ?? '',
+      email: json['email'] ?? '',
     );
   }
 
@@ -54,6 +76,8 @@ class ProfileModel {
       'emergency_contact_phone': emergencyContactPhone,
       'aadhaar_number': aadhaarNumber,
       'health_score': healthScore,
+      'phone': phone,
+      'email': email,
     };
   }
 
@@ -70,6 +94,8 @@ class ProfileModel {
       emergencyContactPhone: "+91 91234 56789",
       aadhaarNumber: "XXXX XXXX 1234",
       healthScore: 92,
+      phone: "+91 98765 43210",
+      email: "majid@aarogyavault.com",
     );
   }
 }

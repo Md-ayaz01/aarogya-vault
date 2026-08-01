@@ -95,7 +95,7 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      "26 Years, ${profile.gender}",
+                      "${profile.ageString}, ${profile.gender}",
                       style: GoogleFonts.inter(
                         fontSize: 13,
                         color: AppTheme.onSurfaceVariant,
@@ -137,7 +137,7 @@ class ProfileScreen extends ConsumerWidget {
                     _buildProfileItem(
                       icon: Icons.phone_outlined,
                       label: "Mobile Number",
-                      value: "+91 98765 43210",
+                      value: profile.phone.isNotEmpty ? profile.phone : "Not Provided",
                       context: context,
                       trailing: const Icon(Icons.verified_rounded, color: AppTheme.secondary, size: 20),
                     ),

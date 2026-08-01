@@ -73,6 +73,8 @@ class ProfileResponse(BaseModel):
     emergency_contact_phone: Optional[str] = None
     aadhaar_number: Optional[str] = None
     health_score: int
+    phone: Optional[str] = None
+    email: Optional[str] = None
     
     class Config:
         from_attributes = True
