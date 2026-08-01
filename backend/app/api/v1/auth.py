@@ -157,18 +157,18 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
         if db_user:
             raise HTTPException(status_code=400, detail="Phone already registered")
             
-    # Create user
+    # Create user, profile, consent, and audit log in one single commit transaction
     hashed_pwd = get_password_hash(user_in.password) if user_in.password else None
     new_user = User(
         email=user_in.email,
         phone=user_in.phone,
-        hashed_password=hashed_pwd
+        hashed_password=hashed_pwd,
+        role="patient"
     )
     db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
+    db.flush()
     
-    # Create minimal profile skeleton for local development accounts.
+    # Create minimal profile skeleton for accounts.
     profile = Profile(
         user_id=new_user.id,
         full_name="New Patient",
@@ -183,7 +183,6 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
     # Create default consent settings
     consent = ConsentSetting(user_id=new_user.id)
     db.add(consent)
-    db.commit()
     
     # Audit log
     audit = AuditLog(
@@ -193,6 +192,7 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
     )
     db.add(audit)
     db.commit()
+    db.refresh(new_user)
     
     access_token = create_access_token(new_user.id)
     refresh_token = create_refresh_token(new_user.id, db)

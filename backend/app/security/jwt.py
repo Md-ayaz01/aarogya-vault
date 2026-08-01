@@ -41,7 +41,7 @@ def create_refresh_token(subject: Union[str, Any], db: Session) -> str:
     db.query(RefreshToken).filter(
         RefreshToken.user_id == user_id,
         RefreshToken.is_revoked == False
-    ).update({"is_revoked": True})
+    ).update({"is_revoked": True}, synchronize_session=False)
     db.commit()
 
     expire = get_utc_now() + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
