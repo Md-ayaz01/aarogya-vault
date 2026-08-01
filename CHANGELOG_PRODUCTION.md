@@ -9,7 +9,6 @@ All notable changes made during the Aarogya Vault v1.0.0-RC production readiness
 ### Added
 - **Platform-Specific Firebase Options**: Added `firebase_options.dart` to both `aarogya_vault_app` and `apps/doctor_app`, enabling safe default initialization across Web, Android, and iOS.
 - **Biometric Security Engine**: Implemented cryptographically secure 256-bit random token generation via `Random.secure()` in `settings_screen.dart` for biometric enrollments, replacing hardcoded strings.
-- **Twilio SMS Provider Integration**: Added `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, and `TWILIO_VERIFY_SERVICE_SID` configurations on the FastAPI backend settings, allowing Twilio Verify OTP delivery in production environments.
 - **Document Launching Support**: Added automatic medical report document launching in `medical_history_item.dart` via `url_launcher`.
 
 ### Fixed
@@ -23,3 +22,4 @@ All notable changes made during the Aarogya Vault v1.0.0-RC production readiness
 ### Removed
 - **Biometric Mock Key Bypasses**: Removed hardcoded `"mock_bio_token_for_device_2026"` bypasses.
 - **Developer Bypasses in Production**: Restrained the development `/send-otp` bypass from operating in production environments.
+- **Twilio Integration & Configuration**: Completely removed all Twilio dependencies, configuration settings, and SMS provider code to enforce pure Firebase Phone Authentication.

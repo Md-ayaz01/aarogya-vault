@@ -13,7 +13,6 @@ from app.schemas.schemas import UserCreate, UserLogin, Token, ProfileCreate, Ref
 from app.core.config import settings
 from app.security.supabase import verify_supabase_jwt, phone_from_supabase_claims, email_from_supabase_claims
 from fastapi.security import OAuth2PasswordBearer
-from app.notifications.sms import sms_provider
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
@@ -368,20 +367,12 @@ def send_otp(req: OTPSendRequest, db: Session = Depends(get_db)):
         db.commit()
         db.refresh(otp_session)
 
-    # Production flow: Twilio OTP Verify
+    # Production flow: OTP must be handled entirely through Firebase Authentication.
     if settings.ENVIRONMENT == "production":
-        if not sms_provider.client or not settings.TWILIO_VERIFY_SERVICE_SID:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST, 
-                detail="Firebase Phone Authentication is required in production. Dev bypass is disabled."
-            )
-        try:
-            sid = sms_provider.send_verification_otp(phone)
-            otp_session.verification_sid = sid
-            db.commit()
-            return {"success": True, "message": "OTP sent successfully."}
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=f"SMS OTP delivery failed: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, 
+            detail="Firebase Phone Authentication is required in production. Development OTP bypass is disabled."
+        )
 
     # Generate a local OTP for development/fallback environments.
     otp = str(random.randint(100000, 999999))
@@ -417,18 +408,12 @@ def verify_otp(req: OTPVerifyRequest, db: Session = Depends(get_db)):
         db.commit()
         raise HTTPException(status_code=400, detail="OTP retry limit exceeded (Maximum 3 attempts). Please request a new code.")
 
+    # Production flow: OTP must be handled entirely through Firebase Authentication.
     if settings.ENVIRONMENT == "production":
-        if not sms_provider.client or not settings.TWILIO_VERIFY_SERVICE_SID:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST, 
-                detail="Firebase Phone Authentication is required in production. Dev bypass is disabled."
-            )
-        try:
-            success = sms_provider.check_verification_otp(phone, code)
-            if not success:
-                raise HTTPException(status_code=400, detail="Invalid OTP code")
-        except Exception as e:
-            raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, 
+            detail="Firebase Phone Authentication is required in production. Development OTP bypass is disabled."
+        )
     else:
         # Verify OTP code against the stored local code for development/fallback environments.
         if user.otp_code != code:

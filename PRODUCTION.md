@@ -542,7 +542,7 @@ Authentication
 
 JWT
 
-Twilio OTP
+Firebase OTP
 
 Phase 2
 
@@ -594,7 +594,7 @@ Project is complete when
 
 ✓ Real PostgreSQL connected
 
-✓ Real Twilio OTP working
+✓ Real Firebase OTP working
 
 ✓ Real Gemini AI working
 

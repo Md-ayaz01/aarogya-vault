@@ -38,10 +38,8 @@ This report summarizes the comprehensive security and production hardening audit
 - **[v1/reports.py](file:///c:/Users/patha/Downloads/aarogya-vault/backend/app/api/v1/reports.py)** & **[reports.py](file:///c:/Users/patha/Downloads/aarogya-vault/backend/app/api/reports.py)**:
   - Annotated metadata parameters (`title`, `date`, `report_type`) with `Form(...)` to handle incoming multipart fields correctly.
 - **[auth.py](file:///c:/Users/patha/Downloads/aarogya-vault/backend/app/api/v1/auth.py)**:
-  - Secured the `/send-otp` and `/verify-otp` endpoints by restricting dev bypasses to non-production environments and requiring Twilio verification or Firebase Auth OTP in production.
+  - Secured the `/send-otp` and `/verify-otp` endpoints by disabling them completely in production, enforcing that Firebase Phone Auth is the sole verification path.
   - Re-added the 72-byte password validation check to prevent DoS attacks.
-- **[config.py](file:///c:/Users/patha/Downloads/aarogya-vault/backend/app/core/config.py)**:
-  - Added the Twilio configuration keys to prevent attribute errors on provider imports.
 
 ### Patient App (`aarogya_vault_app/`)
 - **[firebase_options.dart](file:///c:/Users/patha/Downloads/aarogya-vault/aarogya_vault_app/lib/firebase_options.dart)**:

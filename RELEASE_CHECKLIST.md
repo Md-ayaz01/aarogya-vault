@@ -5,7 +5,7 @@
 | **Flutter analyze passes** | ✅ **PASS** | Run `flutter analyze` in Patient, Doctor, Hospital Admin, and Super Admin apps. |
 | **Backend tests pass** | ✅ **PASS** | Run `pytest` locally. All 16 integration tests pass. |
 | **Firebase initializes on all platforms** | ✅ **PASS** | Configured `DefaultFirebaseOptions` for Android, iOS, and Web. |
-| **OTP works** | ✅ **PASS** | Firebase Phone Auth (Mobile) & Twilio Verify OTP (Backend Prod). |
+| **OTP works** | ✅ **PASS** | Firebase Phone Auth (Mobile & Web ID token exchange). |
 | **Register works** | ✅ **PASS** | Verified `/api/v1/auth/register` with robust password validations and hashing. |
 | **Login works** | ✅ **PASS** | Verified `/api/v1/auth/login` works with both passwords and biometric tokens. |
 | **Password reset works** | ✅ **PASS** | Validated password reset routes. |
