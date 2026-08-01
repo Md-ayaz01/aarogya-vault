@@ -70,15 +70,19 @@ def list_available_doctors(current_user: User = Depends(get_current_user), db: S
 def get_active_consent_grants(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     """Lists doctors who currently have active consent access granted by this patient."""
     from app.models.models import DoctorPatientAccess, DoctorProfile
-    now = datetime.now(timezone.utc)
-    accesses = db.query(DoctorPatientAccess).filter(
-        DoctorPatientAccess.patient_id == current_user.id,
-        DoctorPatientAccess.is_active == True,
-        DoctorPatientAccess.revoked_at == None
-    ).all()
+    try:
+        accesses = db.query(DoctorPatientAccess).filter(
+            DoctorPatientAccess.patient_id == current_user.id,
+            DoctorPatientAccess.is_active == True
+        ).all()
+    except Exception:
+        return []
+
     results = []
     for acc in accesses:
         try:
+            if getattr(acc, 'revoked_at', None) is not None:
+                continue
             if acc.expires_at:
                 exp = acc.expires_at if getattr(acc.expires_at, 'tzinfo', None) else acc.expires_at.replace(tzinfo=timezone.utc)
                 if exp < now:
