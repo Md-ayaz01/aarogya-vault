@@ -11,8 +11,8 @@ class SuperAdminLoginScreen extends StatefulWidget {
 
 class _SuperAdminLoginScreenState extends State<SuperAdminLoginScreen> {
   final ApiClient _apiClient = ApiClient();
-  final TextEditingController _phoneCtrl = TextEditingController(text: "+919999999999");
-  final TextEditingController _otpCtrl = TextEditingController(text: "123456");
+  final TextEditingController _phoneCtrl = TextEditingController();
+  final TextEditingController _otpCtrl = TextEditingController();
   bool _isLoading = false;
 
   Future<void> _handleLogin() async {

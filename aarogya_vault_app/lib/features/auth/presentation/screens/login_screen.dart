@@ -20,8 +20,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with SingleTickerProv
   late TabController _tabController;
   final _formKey = GlobalKey<FormState>();
   
-  final _emailPhoneController = TextEditingController(text: "+919876543210");
-  final _passwordController = TextEditingController(text: "Password123");
+  final _emailPhoneController = TextEditingController();
+  final _passwordController = TextEditingController();
   final _otpController = TextEditingController();
   
   bool _isObscure = true;

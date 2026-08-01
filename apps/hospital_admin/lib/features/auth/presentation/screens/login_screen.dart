@@ -11,8 +11,8 @@ class HospitalLoginScreen extends StatefulWidget {
 
 class _HospitalLoginScreenState extends State<HospitalLoginScreen> {
   final ApiClient _apiClient = ApiClient();
-  final TextEditingController _phoneCtrl = TextEditingController(text: '+919999988888');
-  final TextEditingController _otpCtrl = TextEditingController(text: '123456');
+  final TextEditingController _phoneCtrl = TextEditingController();
+  final TextEditingController _otpCtrl = TextEditingController();
   bool _isLoading = false;
 
   Future<void> _handleLogin() async {
