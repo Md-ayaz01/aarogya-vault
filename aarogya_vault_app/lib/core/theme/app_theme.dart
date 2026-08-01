@@ -14,6 +14,7 @@ class AppTheme {
   static const Color errorRed    = Color(0xFFBA1A1A); // = error
   static const Color darkBg      = Color(0xFF0B1C30);
   static const Color lightBg     = Color(0xFFF8F9FF); // = surface
+  static const Color neutralDark = Color(0xFF0B1C30);
 
   static const Color secondary            = Color(0xFF006C49);
   static const Color onSecondary          = Color(0xFFFFFFFF);

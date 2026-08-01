@@ -498,8 +498,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
 
   // ── Privacy & Consent Tab ─────────────────────────────────────────────────────
   Widget _buildConsentTab(bool isDark) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+    return RefreshIndicator(
+      color: AppTheme.primary,
+      onRefresh: () async {
+        await _loadConsent();
+        await _loadDoctorConsentData();
+      },
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -563,7 +570,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
             ],
           ),
           const SizedBox(height: 20),
-          _buildDoctorConsentSection(),
+          _buildDoctorConsentSection(isDark),
           const SizedBox(height: 28),
           SizedBox(
             width: double.infinity,
@@ -588,15 +595,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           ),
         ],
       ),
+    ),
     );
   }
 
-  Widget _buildDoctorConsentSection() {
+  Widget _buildDoctorConsentSection(bool isDark) {
+    final cardBg = isDark ? const Color(0xFF1A2E45) : Colors.white;
+    final textColor = isDark ? Colors.white : AppTheme.neutralDark;
+    final subtextColor = isDark ? Colors.grey.shade400 : Colors.grey.shade600;
+    final innerBg = isDark ? const Color(0xFF112236) : Colors.grey.shade50;
+    final borderColor = isDark ? Colors.grey.shade800 : Colors.grey.shade200;
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: cardBg,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: borderColor),
+        boxShadow: AppTheme.premiumShadow,
       ),
       padding: const EdgeInsets.all(18),
       child: Column(
@@ -607,10 +622,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.teal.shade50,
+                  color: isDark ? Colors.teal.shade900.withOpacity(0.5) : Colors.teal.shade50,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Icon(Icons.medical_services_rounded, color: Colors.teal, size: 20),
+                child: Icon(Icons.medical_services_rounded, color: isDark ? Colors.teal.shade300 : Colors.teal, size: 20),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -622,12 +637,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                       style: GoogleFonts.inter(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        color: AppTheme.neutralDark,
+                        color: textColor,
                       ),
                     ),
                     Text(
                       'Grant verified doctors access to view your medical vault',
-                      style: GoogleFonts.inter(fontSize: 12, color: Colors.grey.shade600),
+                      style: GoogleFonts.inter(fontSize: 12, color: subtextColor),
                     ),
                   ],
                 ),
@@ -644,7 +659,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                 fontSize: 11,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1.1,
-                color: Colors.teal.shade800,
+                color: isDark ? Colors.teal.shade300 : Colors.teal.shade800,
               ),
             ),
             const SizedBox(height: 8),
@@ -652,13 +667,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               margin: const EdgeInsets.only(bottom: 8),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.teal.shade50.withOpacity(0.5),
+                color: isDark ? Colors.teal.shade900.withOpacity(0.3) : Colors.teal.shade50.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.teal.shade200),
+                border: Border.all(color: isDark ? Colors.teal.shade700 : Colors.teal.shade200),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.verified_user_rounded, color: Colors.teal, size: 18),
+                  Icon(Icons.verified_user_rounded, color: isDark ? Colors.teal.shade300 : Colors.teal, size: 18),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Column(
@@ -666,18 +681,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                       children: [
                         Text(
                           grant['doctor_name'] ?? 'Doctor',
-                          style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 13),
+                          style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 13, color: textColor),
                         ),
                         Text(
                           '${grant['specialty']} | Granted: ${grant['granted_at']}',
-                          style: GoogleFonts.inter(fontSize: 11, color: Colors.grey.shade700),
+                          style: GoogleFonts.inter(fontSize: 11, color: subtextColor),
                         ),
                       ],
                     ),
                   ),
                   TextButton(
                     onPressed: () => _revokeDoctorConsent(grant['doctor_id']),
-                    style: TextButton.styleFrom(foregroundColor: Colors.red),
+                    style: TextButton.styleFrom(foregroundColor: Colors.redAccent),
                     child: const Text('Revoke'),
                   ),
                 ],
@@ -693,7 +708,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               fontSize: 11,
               fontWeight: FontWeight.bold,
               letterSpacing: 1.1,
-              color: Colors.grey.shade700,
+              color: subtextColor,
             ),
           ),
           const SizedBox(height: 8),
@@ -701,17 +716,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               ? Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade50,
+                    color: innerBg,
                     borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: borderColor),
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.info_outline, size: 16, color: Colors.grey.shade600),
+                      Icon(Icons.info_outline, size: 16, color: subtextColor),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           'No verified doctors available right now.',
-                          style: GoogleFonts.inter(fontSize: 12, color: Colors.grey.shade600),
+                          style: GoogleFonts.inter(fontSize: 12, color: subtextColor),
                         ),
                       ),
                     ],
@@ -730,16 +746,16 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                       margin: const EdgeInsets.only(bottom: 8),
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade50,
+                        color: innerBg,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.grey.shade200),
+                        border: Border.all(color: borderColor),
                       ),
                       child: Row(
                         children: [
                           CircleAvatar(
-                            backgroundColor: Colors.teal.shade100,
+                            backgroundColor: isDark ? Colors.teal.shade900 : Colors.teal.shade100,
                             radius: 18,
-                            child: const Icon(Icons.person, color: Colors.teal, size: 20),
+                            child: Icon(Icons.person, color: isDark ? Colors.teal.shade200 : Colors.teal, size: 20),
                           ),
                           const SizedBox(width: 12),
                           Expanded(
@@ -748,11 +764,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                               children: [
                                 Text(
                                   doc['full_name'] ?? 'Doctor Name',
-                                  style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 13),
+                                  style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 13, color: textColor),
                                 ),
                                 Text(
                                   '${doc['specialty']} • ${doc['hospital_name']}',
-                                  style: GoogleFonts.inter(fontSize: 11, color: Colors.grey.shade600),
+                                  style: GoogleFonts.inter(fontSize: 11, color: subtextColor),
                                 ),
                               ],
                             ),
@@ -761,7 +777,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                               ? Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                   decoration: BoxDecoration(
-                                    color: Colors.teal.shade50,
+                                    color: isDark ? Colors.teal.shade900 : Colors.teal.shade50,
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
@@ -769,7 +785,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                                     style: GoogleFonts.inter(
                                       fontSize: 11,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.teal.shade800,
+                                      color: isDark ? Colors.teal.shade200 : Colors.teal.shade800,
                                     ),
                                   ),
                                 )
