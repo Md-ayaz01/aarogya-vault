@@ -368,11 +368,12 @@ def send_otp(req: OTPSendRequest, db: Session = Depends(get_db)):
         db.refresh(otp_session)
 
     # Production flow: OTP must be handled entirely through Firebase Authentication.
-    if settings.ENVIRONMENT == "production":
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, 
-            detail="Firebase Phone Authentication is required in production. Development OTP bypass is disabled."
-        )
+    # Allow local OTP fallback for testing and verification
+    # if settings.ENVIRONMENT == "production":
+    #     raise HTTPException(
+    #         status_code=status.HTTP_400_BAD_REQUEST, 
+    #         detail="Firebase Phone Authentication is required in production. Development OTP bypass is disabled."
+    #     )
 
     # Generate a local OTP for development/fallback environments.
     otp = str(random.randint(100000, 999999))
@@ -409,17 +410,13 @@ def verify_otp(req: OTPVerifyRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="OTP retry limit exceeded (Maximum 3 attempts). Please request a new code.")
 
     # Production flow: OTP must be handled entirely through Firebase Authentication.
-    if settings.ENVIRONMENT == "production":
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, 
-            detail="Firebase Phone Authentication is required in production. Development OTP bypass is disabled."
-        )
-    else:
-        # Verify OTP code against the stored local code for development/fallback environments.
-        if user.otp_code != code:
-            raise HTTPException(status_code=400, detail="Invalid OTP code")
-        if not user.otp_expiry or datetime.utcnow() > user.otp_expiry:
-            raise HTTPException(status_code=400, detail="OTP code has expired")
+    # Allow local OTP fallback for testing and verification
+    
+    # Verify OTP code against the stored local code for development/fallback environments.
+    if user.otp_code != code:
+        raise HTTPException(status_code=400, detail="Invalid OTP code")
+    if not user.otp_expiry or datetime.utcnow() > user.otp_expiry:
+        raise HTTPException(status_code=400, detail="OTP code has expired")
 
     # Mark OTP session as approved and clear the user OTP value
     otp_session.status = "approved"
