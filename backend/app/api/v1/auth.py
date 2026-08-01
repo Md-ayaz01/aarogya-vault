@@ -159,7 +159,8 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
             
     try:
         # Create user, profile, consent, and audit log in one single commit transaction
-        hashed_pwd = get_password_hash(user_in.password[:50]) if user_in.password else None
+        raw_password = (user_in.password or "")[:50]
+        hashed_pwd = get_password_hash(raw_password) if raw_password else None
         new_user = User(
             email=user_in.email,
             phone=user_in.phone,
