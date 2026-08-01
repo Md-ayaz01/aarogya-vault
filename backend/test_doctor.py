@@ -184,8 +184,15 @@ def test_doctor_app_workflows():
     patient_match = next((r for r in results if r["patient_id"] == patient_id), None)
     assert patient_match is not None, "Test Patient not found in search results"
     assert patient_match["full_name"] == "Test Patient"
-    assert patient_match["has_access"] is False, "Doctor should not have full access yet"
-    print("   [PASS] Search returned basic info without full access.")
+    assert patient_match["has_access"] is True, "Doctor with active appointment must have authorized access"
+
+    unauth_search_res = client.get("/api/v1/doctor/patients/search?query=+919999900001", headers=unauth_doctor_headers)
+    assert unauth_search_res.status_code == 200
+    unauth_results = unauth_search_res.json()
+    unauth_patient_match = next((r for r in unauth_results if r["patient_id"] == patient_id), None)
+    assert unauth_patient_match is not None
+    assert unauth_patient_match["has_access"] is False, "Unauthorized doctor without appointment must not have access"
+    print("   [PASS] Search returned correct patient access status according to security criteria.")
 
 
     # 8. Grant access to doctor (consent type)
@@ -218,6 +225,7 @@ def test_doctor_app_workflows():
     # 11. Test Expired access -> 403
     print("11. Testing expired DoctorPatientAccess rejection...")
     db = SessionLocal()
+    db.query(Appointment).filter(Appointment.doctor_id == doctor_id, Appointment.user_id == patient_id).delete()
     db.query(DoctorPatientAccess).filter(
         DoctorPatientAccess.doctor_id == doctor_id,
         DoctorPatientAccess.patient_id == patient_id
@@ -310,6 +318,19 @@ def test_doctor_app_workflows():
 
     # 16. Testing Doctor appointments retrieval
     print("16. Testing Doctor appointments endpoint...")
+    db = SessionLocal()
+    appointment = Appointment(
+        user_id=patient_id,
+        doctor_id=doctor_id,
+        doctor_name="Test Doctor",
+        specialty="Cardiology",
+        date_time="2026-07-20 10:30 AM",
+        status="Upcoming"
+    )
+    db.add(appointment)
+    db.commit()
+    db.close()
+
     appointments_res = client.get("/api/v1/doctor/appointments", headers=doctor_headers)
     assert appointments_res.status_code == 200
     appts = appointments_res.json()["data"]

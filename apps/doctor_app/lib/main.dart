@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'core/database/local_db.dart';
 import 'core/theme/app_theme.dart';
 import 'core/network/api_client.dart' show navigatorKey;
 import 'core/di/locator.dart';
 import 'routes.dart';
-import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,15 +14,6 @@ void main() async {
   
   // Initialize local caching database
   await LocalDB.init();
-
-  // Initialize Firebase Core safely for phone authentication
-  try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  } catch (e) {
-    debugPrint("Firebase initialization warning: Firebase may be unavailable in local/test environments.");
-  }
 
   // Initialize Supabase Safely
   const supabaseUrl = String.fromEnvironment('SUPABASE_URL');

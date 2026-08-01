@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import '../../../../core/di/locator.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../search/presentation/screens/search_screen.dart';
@@ -41,7 +42,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       });
     } catch (e) {
       setState(() {
-        _errorMessage = "Failed to load dashboard data. Please pull down to retry.";
+        if (e is DioException) {
+          _errorMessage = e.response?.data['detail'] ?? "Failed to load dashboard data. Please pull down to retry.";
+        } else {
+          _errorMessage = e.toString();
+        }
       });
     } finally {
       setState(() => _isLoading = false);

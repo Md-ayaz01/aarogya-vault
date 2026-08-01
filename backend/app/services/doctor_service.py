@@ -7,18 +7,17 @@ from fastapi import HTTPException, status
 from app.models.models import (
     User, Profile, DoctorProfile, DoctorPatientAccess,
     Appointment, Prescription, PrescriptionItem, MedicalHistory,
-    LabReport, AuditLog, QRToken, EmergencyContact, MedicineReminder
+    LabReport, AuditLog, QRToken, EmergencyContact, MedicineReminder, Admission
 )
 from app.services.ai import ai_service
 
 logger = logging.getLogger("aarogya_vault_doctor")
 
 class DoctorService:
-    def check_patient_access(self, db: Session, doctor_id: int, patient_id: int) -> DoctorPatientAccess:
+    def has_patient_access(self, db: Session, doctor_id: int, patient_id: int) -> bool:
         """
-        Verifies if a doctor has authorized access to a patient's medical records.
-        Access is authorized if there is an active DoctorPatientAccess record
-        that has not expired and has not been revoked.
+        Returns True if doctor has active access via Consent, Emergency QR,
+        Appointment, or Hospital Admission Assignment.
         """
         now = datetime.now(timezone.utc)
         access = db.query(DoctorPatientAccess).filter(
@@ -33,12 +32,88 @@ class DoctorService:
             )
         ).first()
 
-        if not access:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Access forbidden: Doctor does not have active access consent to this patient."
+        if access:
+            return True
+
+        # Check Appointment rule
+        appt = db.query(Appointment).filter(
+            Appointment.user_id == patient_id,
+            Appointment.doctor_id == doctor_id
+        ).first()
+        if appt:
+            return True
+
+        # Check Hospital Admission Assignment rule
+        admission = db.query(Admission).filter(
+            Admission.patient_id == patient_id,
+            Admission.doctor_id == doctor_id,
+            Admission.status == "Admitted"
+        ).first()
+        if admission:
+            return True
+
+        return False
+
+    def check_patient_access(self, db: Session, doctor_id: int, patient_id: int) -> DoctorPatientAccess:
+        """
+        Verifies if a doctor has authorized access to a patient's medical records.
+        If access exists via appointment or hospital admission, auto-grants/caches access record.
+        """
+        now = datetime.now(timezone.utc)
+        access = db.query(DoctorPatientAccess).filter(
+            DoctorPatientAccess.doctor_id == doctor_id,
+            DoctorPatientAccess.patient_id == patient_id,
+            DoctorPatientAccess.is_active == True,
+            DoctorPatientAccess.revoked_at == None
+        ).filter(
+            or_(
+                DoctorPatientAccess.expires_at == None,
+                DoctorPatientAccess.expires_at > now
             )
-        return access
+        ).first()
+
+        if access:
+            return access
+
+        # Auto-grant access if patient has an active appointment with this doctor
+        appt = db.query(Appointment).filter(
+            Appointment.user_id == patient_id,
+            Appointment.doctor_id == doctor_id
+        ).first()
+        if appt:
+            access = DoctorPatientAccess(
+                doctor_id=doctor_id,
+                patient_id=patient_id,
+                access_type="appointment",
+                is_active=True
+            )
+            db.add(access)
+            db.commit()
+            db.refresh(access)
+            return access
+
+        # Auto-grant access if patient is admitted under this doctor
+        admission = db.query(Admission).filter(
+            Admission.patient_id == patient_id,
+            Admission.doctor_id == doctor_id,
+            Admission.status == "Admitted"
+        ).first()
+        if admission:
+            access = DoctorPatientAccess(
+                doctor_id=doctor_id,
+                patient_id=patient_id,
+                access_type="hospital_assignment",
+                is_active=True
+            )
+            db.add(access)
+            db.commit()
+            db.refresh(access)
+            return access
+
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access forbidden: Doctor does not have active access authorization for this patient."
+        )
 
     def get_dashboard(self, db: Session, doctor_user: User) -> dict:
         """
@@ -194,22 +269,8 @@ class DoctorService:
         users = patient_query.offset(offset).limit(limit).all()
 
         results = []
-        now = datetime.now(timezone.utc)
         for u in users:
-            # Check if doctor has active access
-            access = db.query(DoctorPatientAccess).filter(
-                DoctorPatientAccess.doctor_id == doctor_id,
-                DoctorPatientAccess.patient_id == u.id,
-                DoctorPatientAccess.is_active == True,
-                DoctorPatientAccess.revoked_at == None
-            ).filter(
-                or_(
-                    DoctorPatientAccess.expires_at == None,
-                    DoctorPatientAccess.expires_at > now
-                )
-            ).first()
-
-            # Retrieve profile explicitly to avoid relationship loading issues
+            has_access = self.has_patient_access(db, doctor_id, u.id)
             profile = db.query(Profile).filter(Profile.user_id == u.id).first()
             results.append({
                 "patient_id": u.id,
@@ -217,7 +278,7 @@ class DoctorService:
                 "dob": profile.dob if profile else None,
                 "gender": profile.gender if profile else None,
                 "phone": u.phone,
-                "has_access": access is not None
+                "has_access": has_access
             })
 
         return results

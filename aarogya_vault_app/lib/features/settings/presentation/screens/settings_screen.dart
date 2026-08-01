@@ -29,6 +29,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
   bool _allowEmergencyRecords = true;
   bool _consentLoading = false;
 
+  // Doctor Access Consent state
+  List<Map<String, dynamic>> _doctorsList = [];
+  List<Map<String, dynamic>> _activeGrants = [];
+  bool _grantingAccess = false;
+
   // Audit logs
   List<Map<String, dynamic>> _auditLogs = [];
   bool _auditLoading = true;
@@ -45,6 +50,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     _loadConsent();
+    _loadDoctorConsentData();
     _loadAuditLogs();
     _loadPreferences();
   }
@@ -241,6 +247,76 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
     } catch (_) {} finally {
       if (mounted) setState(() => _consentLoading = false);
     }
+  }
+
+  Future<void> _loadDoctorConsentData() async {
+    try {
+      final client = ref.read(apiClientProvider);
+      final docResp = await client.get('/consent/doctors-list');
+      final grantsResp = await client.get('/consent/active-grants');
+      if (mounted) {
+        setState(() {
+          if (docResp.data is List) {
+            _doctorsList = List<Map<String, dynamic>>.from(docResp.data);
+          }
+          if (grantsResp.data is List) {
+            _activeGrants = List<Map<String, dynamic>>.from(grantsResp.data);
+          }
+        });
+      }
+    } catch (_) {}
+  }
+
+  Future<void> _grantDoctorConsent(int docId) async {
+    setState(() => _grantingAccess = true);
+    try {
+      final client = ref.read(apiClientProvider);
+      await client.post('/consent/grant-doctor-access', data: {
+        'doctor_id': docId,
+        'expires_in_hours': 24
+      });
+      await _loadDoctorConsentData();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Doctor access consent granted for 24 hours.', style: GoogleFonts.inter()),
+            backgroundColor: Colors.teal.shade700,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to grant doctor access consent.', style: GoogleFonts.inter()),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _grantingAccess = false);
+    }
+  }
+
+  Future<void> _revokeDoctorConsent(int docId) async {
+    try {
+      final client = ref.read(apiClientProvider);
+      await client.post('/consent/revoke-doctor-access', queryParameters: {
+        'doctor_id': docId
+      });
+      await _loadDoctorConsentData();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Doctor access consent revoked.', style: GoogleFonts.inter()),
+            backgroundColor: Colors.orange.shade800,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } catch (_) {}
   }
 
   Future<void> _loadAuditLogs() async {
@@ -486,6 +562,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
               ),
             ],
           ),
+          const SizedBox(height: 20),
+          _buildDoctorConsentSection(),
           const SizedBox(height: 28),
           SizedBox(
             width: double.infinity,
@@ -508,6 +586,208 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                           fontWeight: FontWeight.w700, fontSize: 15)),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDoctorConsentSection() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      padding: const EdgeInsets.all(18),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.teal.shade50,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(Icons.medical_services_rounded, color: Colors.teal, size: 20),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Doctor Access Consent',
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.neutralDark,
+                      ),
+                    ),
+                    Text(
+                      'Grant verified doctors access to view your medical vault',
+                      style: GoogleFonts.inter(fontSize: 12, color: Colors.grey.shade600),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+
+          // Active Grants List
+          if (_activeGrants.isNotEmpty) ...[
+            Text(
+              'ACTIVE CONSENT GRANTS',
+              style: GoogleFonts.inter(
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.1,
+                color: Colors.teal.shade800,
+              ),
+            ),
+            const SizedBox(height: 8),
+            ..._activeGrants.map((grant) => Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.teal.shade50.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.teal.shade200),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.verified_user_rounded, color: Colors.teal, size: 18),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          grant['doctor_name'] ?? 'Doctor',
+                          style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 13),
+                        ),
+                        Text(
+                          '${grant['specialty']} | Granted: ${grant['granted_at']}',
+                          style: GoogleFonts.inter(fontSize: 11, color: Colors.grey.shade700),
+                        ),
+                      ],
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => _revokeDoctorConsent(grant['doctor_id']),
+                    style: TextButton.styleFrom(foregroundColor: Colors.red),
+                    child: const Text('Revoke'),
+                  ),
+                ],
+              ),
+            )),
+            const SizedBox(height: 12),
+          ],
+
+          // Grant Access Dropdown & Action
+          Text(
+            'SELECT DOCTOR TO GRANT ACCESS (24 HOURS)',
+            style: GoogleFonts.inter(
+              fontSize: 11,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.1,
+              color: Colors.grey.shade700,
+            ),
+          ),
+          const SizedBox(height: 8),
+          _doctorsList.isEmpty
+              ? Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade50,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.info_outline, size: 16, color: Colors.grey.shade600),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'No verified doctors available right now.',
+                          style: GoogleFonts.inter(fontSize: 12, color: Colors.grey.shade600),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: _doctorsList.length,
+                  itemBuilder: (context, index) {
+                    final doc = _doctorsList[index];
+                    final docId = doc['doctor_id'] as int;
+                    final isAlreadyGranted = _activeGrants.any((g) => g['doctor_id'] == docId);
+
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 8),
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade50,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey.shade200),
+                      ),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.teal.shade100,
+                            radius: 18,
+                            child: const Icon(Icons.person, color: Colors.teal, size: 20),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  doc['full_name'] ?? 'Doctor Name',
+                                  style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 13),
+                                ),
+                                Text(
+                                  '${doc['specialty']} • ${doc['hospital_name']}',
+                                  style: GoogleFonts.inter(fontSize: 11, color: Colors.grey.shade600),
+                                ),
+                              ],
+                            ),
+                          ),
+                          isAlreadyGranted
+                              ? Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.teal.shade50,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    'Access Granted',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.teal.shade800,
+                                    ),
+                                  ),
+                                )
+                              : ElevatedButton(
+                                  onPressed: _grantingAccess ? null : () => _grantDoctorConsent(docId),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppTheme.primary,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                  ),
+                                  child: const Text('Grant Access', style: TextStyle(fontSize: 12)),
+                                ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
         ],
       ),
     );
