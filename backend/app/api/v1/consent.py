@@ -84,12 +84,14 @@ def get_active_consent_grants(current_user: User = Depends(get_current_user), db
                 if exp < now:
                     continue
             dp = db.query(DoctorProfile).filter(DoctorProfile.user_id == acc.doctor_id).first()
+            g_at = getattr(acc, 'granted_at', None) or getattr(acc, 'created_at', None)
+            granted_str = g_at.strftime("%Y-%m-%d %H:%M:%S") if g_at else ""
             results.append({
                 "doctor_id": acc.doctor_id,
                 "doctor_name": dp.full_name if dp else f"Doctor {acc.doctor_id}",
                 "specialty": dp.specialty if (dp and dp.specialty) else "General Practice",
                 "access_type": acc.access_type or "consent",
-                "granted_at": acc.created_at.strftime("%Y-%m-%d %H:%M:%S") if getattr(acc, 'created_at', None) else ""
+                "granted_at": granted_str
             })
         except Exception:
             continue
