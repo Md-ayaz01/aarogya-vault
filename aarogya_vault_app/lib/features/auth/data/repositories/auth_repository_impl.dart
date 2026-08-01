@@ -14,7 +14,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final response = await apiClient.post('/auth/send-otp', data: {'phone': phone});
       if (response.statusCode == 200) {
-        return response.data['demo_otp']?.toString() ?? '123456';
+        return response.data['demo_otp']?.toString() ?? '';
       }
     } on DioException catch (e) {
       final detail = e.response?.data is Map ? e.response?.data['detail'] : null;
@@ -105,19 +105,30 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<bool> verifyFirebaseOtp(String idToken) async {
-    final response = await apiClient.post('/auth/verify-firebase-otp', data: {'id_token': idToken});
-    if (response.statusCode == 200) {
-      final token = response.data['access_token'];
-      final userId = response.data['user_id'];
-      if (token != null) {
-        await LocalDB.saveToken(token.toString());
+    try {
+      final response = await apiClient.post('/auth/verify-firebase-otp', data: {'id_token': idToken});
+      if (response.statusCode == 200) {
+        final token = response.data['access_token'];
+        final userId = response.data['user_id'];
+        if (token != null) {
+          await LocalDB.saveToken(token.toString());
+        }
+        if (userId != null) {
+          await LocalDB.save(LocalDB.keyUserId, userId);
+        }
+        return true;
       }
-      if (userId != null) {
-        await LocalDB.save(LocalDB.keyUserId, userId);
-      }
-      return true;
+
+      final errorDetail = response.data is Map
+          ? (response.data['detail'] ?? response.data['message'] ?? response.data['error'])
+          : null;
+      throw Exception(errorDetail?.toString() ?? 'Firebase OTP verification failed.');
+    } on DioException catch (e) {
+      final detail = e.response?.data is Map
+          ? (e.response?.data['detail'] ?? e.response?.data['message'] ?? e.response?.data['error'])
+          : null;
+      throw Exception(detail?.toString() ?? 'Firebase OTP verification failed.');
     }
-    return false;
   }
 
   @override

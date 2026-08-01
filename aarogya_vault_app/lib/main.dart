@@ -50,7 +50,7 @@ void main() async {
       await Firebase.initializeApp();
     }
   } catch (e) {
-    debugPrint("Firebase initialization warning (safe to ignore if using Twilio fallback): $e");
+    debugPrint("Firebase initialization warning: Firebase may be unavailable in local/test environments. OTP fallback is handled by backend.");
   }
 
   runApp(

@@ -16,9 +16,6 @@ Set the following variables in the Render Dashboard settings:
 - `DATABASE_URL`: *Neon connection string*
 - `API_BASE_URL`: *Web service public URL (e.g. https://aarogya-vault.onrender.com/api/v1)*
 - `GEMINI_API_KEY`: *Google Generative AI key*
-- `TWILIO_ACCOUNT_SID`: *Twilio SID*
-- `TWILIO_AUTH_TOKEN`: *Twilio Auth Token*
-- `TWILIO_VERIFY_SERVICE_SID`: *Twilio Service SID*
 - `FIREBASE_PROJECT_ID`: *Firebase Project ID*
 - `FIREBASE_STORAGE_BUCKET`: *Firebase Bucket name*
 - `FIREBASE_CREDENTIALS_PATH`: *Path to uploaded Firebase JSON credentials*

@@ -19,7 +19,7 @@ This report presents a detailed audit of the Aarogya Vault backend codebase. All
 - **JWT Access Tokens**: ✅ **Fully Implemented**. Signed via HS256 algorithm with a default expiration time of 60 minutes * 24 * 7 (7 days).
 - **Refresh Token Rotation (RTR)**: ✅ **Fully Implemented**. When refreshing tokens, all active refresh tokens for the user in the database are updated to `is_revoked = True` before a new refresh token is issued.
 - **Token Revocation**: ✅ **Fully Implemented**. The `/api/v1/auth/logout` endpoint revokes the specific refresh token in the database to prevent session replays.
-- **Twilio Verify integration**: 🟡 **Implemented but awaiting credentials/configuration**. Uses Twilio Verify API to delegate OTP generation, SMS delivery, and code checks. Falls back to a local sandbox console logger (Simulated code `123456`) if credentials are unset.
+- **Firebase Auth / local OTP fallback**: 🟡 **Implemented but awaiting production Firebase setup**. Uses Firebase Auth for mobile OTP verification. Legacy local OTP fallback is available for development and testing environments.
 
 ---
 
@@ -84,7 +84,7 @@ This report presents a detailed audit of the Aarogya Vault backend codebase. All
 - **Docker**: ✅ **Fully Implemented**. Uses `python:3.12-slim` and executes migrations automatically upon start.
 - **Docker Compose**: ✅ **Fully Implemented**. Hot-reload volume mounts configured.
 - **Environment configuration**: ✅ **Fully Implemented**. All secrets are environment-driven.
-- **Health endpoints**: ✅ **Fully Implemented**. `/health` (checks DB connection, Firebase, Twilio, Gemini setup), `/ready` (readiness probe), and `/live` (liveness probe).
+- **Health endpoints**: ✅ **Fully Implemented**. `/health` (checks DB connection, Firebase, Gemini setup), `/ready` (readiness probe), and `/live` (liveness probe).
 
 ---
 
@@ -104,9 +104,9 @@ This report presents a detailed audit of the Aarogya Vault backend codebase. All
 | `DATABASE_URL` | Core | **Configured** (in `.env`) | Falls back to SQLite database |
 | `API_BASE_URL` | Core | **Configured** (in `.env`) | Defaults to `http://127.0.0.1:8000/api/v1` |
 | `GEMINI_API_KEY` | Service | **Missing** | Falls back to simulated clinical analysis |
-| `TWILIO_ACCOUNT_SID` | Service | **Missing** | Falls back to local sandbox simulator |
-| `TWILIO_AUTH_TOKEN` | Service | **Missing** | Falls back to local sandbox simulator |
-| `TWILIO_VERIFY_SERVICE_SID` | Service | **Missing** | Falls back to local sandbox simulator |
+| `FIREBASE_PROJECT_ID` | Service | **Missing** | Required for Firebase Auth and Storage integration |
+| `FIREBASE_STORAGE_BUCKET` | Service | **Missing** | Required for Firebase Cloud Storage uploads |
+| `FIREBASE_CREDENTIALS_PATH` | Service | **Missing** | Required for Firebase credentials |
 | `FIREBASE_PROJECT_ID` | Service | **Missing** | Falls back to local directory uploads |
 | `FIREBASE_STORAGE_BUCKET` | Service | **Missing** | Falls back to local directory uploads |
 | `FIREBASE_CREDENTIALS_PATH` | Service | **Missing** | Falls back to local directory uploads |
@@ -141,7 +141,7 @@ All tests run and assert successfully:
 - **Flutter Response Interceptor & URL Mappings**: ✅ Fully Implemented
 - **Dockerization (Dockerfile / Compose)**: ✅ Fully Implemented
 - **Pluggable Government Module**: ✅ Fully Implemented
-- **Twilio Verify OTP Integration**: 🟡 Implemented but awaiting credentials/configuration
+- **Firebase OTP Integration**: 🟡 Implemented but awaiting credentials/configuration
 - **Firebase Cloud Storage Integration**: 🟡 Implemented but awaiting credentials/configuration
 - **Google Gemini LLM Integration**: 🟡 Implemented but awaiting credentials/configuration
 
@@ -153,7 +153,7 @@ All tests run and assert successfully:
 2. [ ] Provision a Neon PostgreSQL database and copy the connection string.
 3. [ ] Set `DATABASE_URL` in the Render environment variables settings.
 4. [ ] Set `SECRET_KEY` with a secure random 32-character key.
-5. [ ] Create a Twilio Verify Service SID and copy account credentials to Render settings (`TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_VERIFY_SERVICE_SID`).
+5. [ ] Ensure Firebase project credentials and Storage config are available in Render settings (`FIREBASE_PROJECT_ID`, `FIREBASE_STORAGE_BUCKET`, `FIREBASE_CREDENTIALS_PATH`).
 6. [ ] Set Google Gemini API key (`GEMINI_API_KEY`).
 7. [ ] Set Firebase storage configurations and upload the Service Account Credentials JSON file.
 8. [ ] Set `API_BASE_URL` pointing to the public URL of the Render web service (e.g. `https://aarogya-vault.onrender.com/api/v1`).

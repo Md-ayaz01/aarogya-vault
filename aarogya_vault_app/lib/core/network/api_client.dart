@@ -10,13 +10,19 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 class ApiClient {
   late final Dio _dio;
 
-  static const _configuredBaseUrl = String.fromEnvironment('API_BASE_URL');
+  static const _configuredBaseUrl = String.fromEnvironment('API_BASE_URL', defaultValue: '');
 
   static String get baseUrl {
     if (_configuredBaseUrl.isNotEmpty) {
       return _configuredBaseUrl;
     }
     if (kReleaseMode) {
+      if (kIsWeb) {
+        // Fall back to the published Render API for web release builds when the
+        // Dart define was not provided. This ensures the deployed web app can
+        // still reach the live backend for OTP delivery.
+        return 'https://aarogya-vault.onrender.com/api/v1';
+      }
       throw StateError('API_BASE_URL must be supplied for release builds.');
     }
     return kIsWeb

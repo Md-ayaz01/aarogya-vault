@@ -7,10 +7,10 @@ This report reflects the actual repository state after the production-hardening 
 | Area | Status | Evidence |
 |------|--------|----------|
 | Patient App | FAIL | No `apps/patient_app/` exists. The patient app appears to be `aarogya_vault_app/`. Its API client now requires `--dart-define=API_BASE_URL=...` in release builds, but Supabase Flutter OTP integration is not implemented. |
-| Doctor App | FAIL | `apps/doctor_app/` exists with dashboard, appointments, notifications, patient search/profile, QR, prescription, and copilot screens. Login still uses legacy password/Twilio endpoints in UI rather than Supabase Auth. |
+| Doctor App | FAIL | `apps/doctor_app/` exists with dashboard, appointments, notifications, patient search/profile, QR, prescription, and copilot screens. Login still uses legacy password/OTP endpoints in UI rather than Supabase Auth. |
 | Stitch Parity | FAIL | Stitch HTML files exist under `stitch_designs/`, but no automated or visual parity verification was completed in this pass. |
 | Authentication | FAIL | Backend now requires Supabase JWTs in production via `POST /api/v1/auth/supabase/session` and `get_current_user`, mapping identities to Neon users. Flutter apps are not yet wired to Supabase Auth. |
-| Mobile OTP | FAIL | Production legacy password/register/Twilio/Firebase auth endpoints are blocked with HTTP 410. Supabase client-side mobile OTP still must be implemented in Flutter. |
+| Mobile OTP | FAIL | Production legacy password/register/Firebase OTP endpoints are blocked with HTTP 410. Supabase client-side mobile OTP still must be implemented in Flutter. |
 | Supabase Auth | FAIL | Backend HS256 Supabase JWT verification is implemented in `backend/app/security/supabase.py`. JWKS/asymmetric verification is documented by config but not implemented. |
 | Neon PostgreSQL | FAIL | Production startup now rejects SQLite. Existing repo still contains `backend/aarogya_vault.db` and local `.env`; migrations were not verified because Python tooling is broken. |
 | FastAPI | FAIL | Production guardrails added in `backend/app/main.py` and `backend/app/core/config.py`. Backend tests could not run due `.venv` Python launcher access failure. |
@@ -37,7 +37,7 @@ This report reflects the actual repository state after the production-hardening 
 - Added `/health`, `/live`, and `/ready` endpoints.
 - Added Supabase JWT verification and local Neon user mapping via `POST /api/v1/auth/supabase/session`.
 - Updated `get_current_user` to require verified Supabase access tokens in production while retaining legacy local JWT support only for development compatibility.
-- Blocked legacy register/login/Twilio/Firebase auth endpoints in production with HTTP 410.
+- Blocked legacy register/login/Firebase OTP endpoints in production with HTTP 410.
 - Enforced verified doctor profile checks for doctor API access.
 - Removed fake doctor dashboard counts/patients/alerts.
 - Removed fake notification seeding.

@@ -1,6 +1,6 @@
 # Aarogya Vault - Production Migration Plan (Final Enterprise Architecture)
 
-Migrate Aarogya Vault backend to a robust, production-ready system utilizing FastAPI, Neon PostgreSQL, Alembic, Firebase Storage, Google Gemini, and Twilio Verify, without changing the Flutter UI design.
+Migrate Aarogya Vault backend to a robust, production-ready system utilizing FastAPI, Neon PostgreSQL, Alembic, Firebase Storage, Google Gemini, and Firebase Auth, without changing the Flutter UI design.
 
 ## User Review Required
 
@@ -60,7 +60,7 @@ docs/             # Enterprise Documentation
 ```
 
 #### [MODIFY] `requirements.txt`
-- Add missing dependencies: `SQLAlchemy==2.0.28`, `alembic==1.13.1`, `python-dotenv==1.0.1`, `twilio==9.0.4`, `firebase-admin==6.5.0`, `slowapi==0.1.9`.
+- Add missing dependencies: `SQLAlchemy==2.0.28`, `alembic==1.13.1`, `python-dotenv==1.0.1`, `firebase-admin==6.5.0`, `slowapi==0.1.9`.
 
 ---
 
@@ -90,7 +90,7 @@ Restructure tables to support token lifecycle, enhanced logs, and secure QR feat
 Implement the versioned APIs under `/api/v1` with production-grade security logic.
 
 #### [NEW] `auth.py`
-- Connect Twilio Verify API client with Account SID, Auth Token, and Verify Service SID.
+- Connect Firebase Auth client with the configured Firebase project and verify ID tokens on the backend.
 - Enforce maximum 3 verification attempts per OTP session (brute-force protection).
 - Implement Refresh Token Rotation (RTR) and revocation.
 
@@ -159,7 +159,7 @@ python test_api.py
 ### Manual Verification
 1. Run backend locally (`python run.py`) and inspect `/docs` Swagger API documentation page.
 2. Verify endpoints in Swagger:
-   - Request Twilio Verify SMS code via `/auth/send-otp`.
+   - Request Firebase Phone Auth code via `/auth/send-otp` or use backend OTP fallback in development.
    - Validate code with `/auth/verify-otp`.
    - Verify JWT refresh token reissue via `/auth/refresh`.
    - Upload file to `/reports/upload` and confirm upload to Firebase Storage.

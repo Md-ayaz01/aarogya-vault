@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from typing import Optional
+import os
 import random
 from pydantic import BaseModel
 
@@ -15,6 +16,34 @@ from fastapi.security import OAuth2PasswordBearer
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
+
+
+def _ensure_firebase_admin_initialized() -> None:
+    import firebase_admin
+    from firebase_admin import credentials
+
+    try:
+        firebase_admin.get_app()
+        return
+    except ValueError:
+        pass
+
+    cred_path = None
+    if settings.FIREBASE_CREDENTIALS_PATH:
+        cred_path = settings.FIREBASE_CREDENTIALS_PATH
+    else:
+        repo_service_account = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), '..', '..', 'firebase-service-account.json')
+        )
+        if os.path.exists(repo_service_account):
+            cred_path = repo_service_account
+
+    if cred_path and os.path.exists(cred_path):
+        cred = credentials.Certificate(cred_path)
+        firebase_admin.initialize_app(cred)
+    else:
+        firebase_admin.initialize_app()
+
 
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> User:
     credentials_exception = HTTPException(
@@ -226,24 +255,10 @@ def send_otp(req: OTPSendRequest, db: Session = Depends(get_db)):
     user.otp_code = otp
     user.otp_expiry = datetime.utcnow() + timedelta(minutes=5)
     db.commit()
-    
-    # Send via Twilio if credentials are provided in settings
-    if settings.TWILIO_ACCOUNT_SID and settings.TWILIO_AUTH_TOKEN:
-        try:
-            from twilio.rest import Client
-            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
-            client.messages.create(
-                body=f"Your Aarogya Vault secure verification OTP code is: {otp}. It expires in 5 minutes.",
-                from_=settings.TWILIO_PHONE_NUMBER,
-                to=phone
-            )
-            print(f"[OTP SERVICE] Real SMS sent to {phone} via Twilio.")
-        except Exception as e:
-            print(f"[OTP SERVICE] Twilio send failed: {e}")
-            
+
     # Print it to the backend log/stdout
     print(f"\n[OTP SERVICE] Sent OTP {otp} to {phone}\n")
-    
+
     return {"status": "success", "message": "OTP sent successfully", "demo_otp": otp}
 
 
@@ -291,9 +306,9 @@ def verify_firebase_otp(req: FirebaseVerifyRequest, db: Session = Depends(get_db
             
             # Initialize firebase_admin if not already initialized
             try:
-                firebase_admin.get_app()
-            except ValueError:
-                firebase_admin.initialize_app()
+                _ensure_firebase_admin_initialized()
+            except Exception:
+                pass
                 
             decoded_token = firebase_auth_admin.verify_id_token(req.id_token)
             phone = decoded_token.get("phone_number")

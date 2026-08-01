@@ -104,7 +104,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with SingleTickerProv
       if (!_otpSent) {
         // Run phone OTP setup
         final phone = val;
-        // Verify via Firebase, if that fails fallback to standard FastAPI / Twilio flow
+        // Verify via Firebase Phone Auth; if Firebase is unavailable, fall back to the backend OTP endpoint.
         try {
           setState(() {
             _isFirebaseFlow = true;
@@ -118,12 +118,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with SingleTickerProv
                 final success = await ref.read(authProvider.notifier).verifyFirebaseOtp(idToken);
                 if (success && mounted) {
                   _navigateToDashboard();
+                } else {
+                  _showSnackBar("Firebase login failed. Please try again or request a new OTP.");
                 }
+              } else {
+                _showSnackBar("Unable to obtain Firebase ID token.");
               }
             },
             verificationFailed: (FirebaseAuthException e) {
-              debugPrint("Firebase verification failed: ${e.message}. Falling back to FastAPI.");
-              _fallbackToFastAPISendOTP(phone);
+              debugPrint("Firebase verification failed: ${e.message}. Falling back to backend OTP.");
+              _fallbackToBackendOtpSend(phone);
             },
             codeSent: (String verificationId, int? resendToken) {
               setState(() {
@@ -143,8 +147,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with SingleTickerProv
             },
           );
         } catch (e) {
-          debugPrint("Firebase exception: $e. Falling back to FastAPI.");
-          await _fallbackToFastAPISendOTP(phone);
+          debugPrint("Firebase exception: $e. Falling back to backend OTP.");
+          await _fallbackToBackendOtpSend(phone);
         }
       } else {
         final code = _otpController.text.trim();
@@ -168,7 +172,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with SingleTickerProv
           }
         }
         
-        // Fallback to FastAPI verify OTP
+        // Fallback to backend OTP verify endpoint
         final success = await ref.read(authProvider.notifier).verifyOtp(val, code);
         if (success && mounted) {
           _navigateToDashboard();
@@ -212,7 +216,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with SingleTickerProv
     }
   }
 
-  Future<void> _fallbackToFastAPISendOTP(String phone) async {
+  Future<void> _fallbackToBackendOtpSend(String phone) async {
     setState(() {
       _isFirebaseFlow = false;
     });
@@ -222,9 +226,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with SingleTickerProv
         _otpSent = true;
         _demoOtp = demo;
       });
+
+      final message = demo.isNotEmpty
+          ? "OTP sent via backend fallback. Demo OTP code is: $demo"
+          : "OTP sent via backend SMS. Please check your phone.";
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("OTP sent via Twilio Fallback. Demo OTP code is: $demo"),
+          content: Text(message),
           backgroundColor: AppTheme.primaryTeal,
           duration: const Duration(seconds: 8),
         ),

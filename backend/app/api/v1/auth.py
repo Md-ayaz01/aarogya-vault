@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 from pydantic import BaseModel
+import os
 import random
 
 from app.core.database import get_db
@@ -15,6 +16,34 @@ from fastapi.security import OAuth2PasswordBearer
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
+
+
+def _ensure_firebase_admin_initialized() -> None:
+    import firebase_admin
+    from firebase_admin import credentials
+
+    try:
+        firebase_admin.get_app()
+        return
+    except ValueError:
+        pass
+
+    cred_path = None
+    if settings.FIREBASE_CREDENTIALS_PATH:
+        cred_path = settings.FIREBASE_CREDENTIALS_PATH
+    else:
+        repo_service_account = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), '..', '..', '..', 'firebase-service-account.json')
+        )
+        if os.path.exists(repo_service_account):
+            cred_path = repo_service_account
+
+    if cred_path and os.path.exists(cred_path):
+        cred = credentials.Certificate(cred_path)
+        firebase_admin.initialize_app(cred)
+    else:
+        firebase_admin.initialize_app()
+
 
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> User:
     """Dependency helper to extract and verify the current logged-in user."""
@@ -31,9 +60,9 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         from firebase_admin import auth as firebase_auth_admin
         
         try:
-            firebase_admin.get_app()
-        except ValueError:
-            firebase_admin.initialize_app()
+            _ensure_firebase_admin_initialized()
+        except Exception:
+            pass
             
         decoded_token = firebase_auth_admin.verify_id_token(token)
         uid = decoded_token.get("uid") or decoded_token.get("sub")
@@ -332,7 +361,6 @@ def send_otp(req: OTPSendRequest, db: Session = Depends(get_db)):
         db.refresh(otp_session)
 
     # Generate a local OTP for development/fallback environments.
-    # Production should use Firebase Phone Auth on the client side.
     otp = str(random.randint(100000, 999999))
     user.otp_code = otp
     user.otp_expiry = datetime.utcnow() + timedelta(minutes=5)
@@ -413,10 +441,9 @@ def verify_firebase_otp(req: FirebaseVerifyRequest, db: Session = Depends(get_db
             from firebase_admin import auth as firebase_auth_admin
             
             try:
-                firebase_admin.get_app()
-            except ValueError:
-                firebase_admin.initialize_app()
-                
+                _ensure_firebase_admin_initialized()
+            except Exception:
+                pass
             decoded_token = firebase_auth_admin.verify_id_token(req.id_token)
             uid = decoded_token.get("uid") or decoded_token.get("sub")
             phone = decoded_token.get("phone_number")

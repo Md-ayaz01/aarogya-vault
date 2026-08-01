@@ -23,7 +23,7 @@ We have successfully completed all migration phases to transition the Aarogya Va
 
 ## 3. Services & Government Registries
 - Implemented Firebase Cloud Storage in `app/storage/firebase.py` with size constraints and 7-day signed URLs.
-- Implemented Twilio Verify SMS client in `app/notifications/sms.py` with max 3-attempts tracking.
+- Implemented Firebase Cloud Storage and Firebase Auth verification support.
 - Configured Google Gemini 1.5 Flash client with safety clinical guidelines in `app/services/ai.py`.
 - Created pluggable government provider module under `app/government/` returning structured unconfigured states.
 

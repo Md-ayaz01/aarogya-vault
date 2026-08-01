@@ -77,7 +77,7 @@ Authentication
 - Token Revocation
 
 OTP
-- Twilio Verify API
+- Firebase Phone Auth / local fallback
 
 AI
 - Google Gemini API
@@ -132,11 +132,11 @@ DATABASE_URL=
 
 GEMINI_API_KEY=
 
-TWILIO_ACCOUNT_SID=
+FIREBASE_PROJECT_ID=
 
-TWILIO_AUTH_TOKEN=
+FIREBASE_STORAGE_BUCKET=
 
-TWILIO_PHONE_NUMBER=
+FIREBASE_CREDENTIALS_PATH=
 
 STORAGE_PROVIDER=s3
 
@@ -226,9 +226,7 @@ Admin
 
 # OTP
 
-Use Twilio Verify API.
-
-Remove mock OTP completely.
+Use Firebase Phone Auth as the production OTP provider. Legacy backend OTP endpoints may still be used only for local development and test fallback.
 
 ---
 

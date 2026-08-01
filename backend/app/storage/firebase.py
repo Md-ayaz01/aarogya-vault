@@ -29,9 +29,17 @@ class FirebaseStorageProvider:
                 self.initialized = True
             except ValueError:
                 # App not initialized, proceed to initialize
-                if self.credentials_path and os.path.exists(self.credentials_path):
+                cred_path = self.credentials_path
+                if not cred_path:
+                    repo_service_account = os.path.abspath(
+                        os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '..', 'firebase-service-account.json')
+                    )
+                    if os.path.exists(repo_service_account):
+                        cred_path = repo_service_account
+
+                if cred_path and os.path.exists(cred_path):
                     try:
-                        cred = credentials.Certificate(self.credentials_path)
+                        cred = credentials.Certificate(cred_path)
                         firebase_admin.initialize_app(cred, {
                             'storageBucket': f"{self.bucket_name}"
                         })

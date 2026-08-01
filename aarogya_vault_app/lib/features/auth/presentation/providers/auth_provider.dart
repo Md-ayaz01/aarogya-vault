@@ -195,7 +195,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
         return true;
       }
     } catch (e) {
-      state = state.copyWith(isLoading: false, errorMessage: 'Firebase OTP verification failed.');
+      var msg = e.toString();
+      if (msg.startsWith('Exception: ')) {
+        msg = msg.replaceFirst('Exception: ', '');
+      }
+      if (msg.isEmpty) {
+        msg = 'Firebase OTP verification failed.';
+      }
+      state = state.copyWith(isLoading: false, errorMessage: msg);
     }
     return false;
   }

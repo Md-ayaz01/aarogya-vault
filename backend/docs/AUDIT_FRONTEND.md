@@ -9,7 +9,7 @@ This report presents a detailed audit of the Aarogya Vault Flutter client codeba
 - **Login Screen connected to backend?**: ✅ **Yes**. It uses `authProvider` which triggers login queries via `auth_repository_impl.dart` to `POST /auth/login`.
 - **OTP Screen implemented?**: ✅ **Yes**. Implemented inline inside `login_screen.dart` via state toggles (`_isOtpMode` and `_otpSent`) instead of a separate page route.
 - **OTP Screen reachable?**: ✅ **Yes**. Easily accessible via the "Login with OTP" switch button on the login screen.
-- **Twilio OTP Flow connected?**: ✅ **Yes**. Triggers `sendOtp` (`POST /auth/send-otp`) and `verifyOtp` (`POST /auth/verify-otp`) REST queries to the FastAPI backend.
+- **Firebase OTP Flow connected?**: ✅ **Yes**. Triggers `sendOtp` (`POST /auth/send-otp`) and `verifyOtp` (`POST /auth/verify-otp`) REST queries to the FastAPI backend as a legacy local fallback.
 - **Mock login still present?**: 🟡 **No active mock auth**. The auth repositories and providers call the real backend, but the app implements local offline fallback mock data (via `LocalDB`) if the API server is unreachable.
 - **Which screen opens after login?**: The `/dashboard` screen is opened once authentication completes successfully.
 
@@ -76,15 +76,15 @@ Every route defined in `routes.dart` maps to a real functional screen:
 sequenceDiagram
   participant Client as Flutter Client
   participant Server as FastAPI Backend
-  participant Twilio as Twilio Verify SMS
+  participant Firebase as Firebase Phone Auth
 
   Client->>Server: POST /auth/send-otp {"phone": "+9199..."}
-  Server->>Twilio: Send OTP SMS to Phone
-  Twilio-->>Server: Verification SID
+  Server->>Firebase: Request SMS code via Firebase Phone Auth
+  Firebase-->>Server: Verification session established
   Server-->>Client: Success envelope (demo_otp in Dev)
   Client->>Server: POST /auth/verify-otp {"phone": "+91...", "code": "123456"}
-  Server->>Twilio: Check Verification SID and code
-  Twilio-->>Server: Approved
+  Server->>Firebase: Verify OTP code
+  Firebase-->>Server: Approved
   Server-->>Client: Success {"access_token": "...", "refresh_token": "...", "user_id": 99}
   Note over Client: Save token in FlutterSecureStorage
   Client->>Server: GET /auth/session-check

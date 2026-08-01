@@ -15,11 +15,6 @@ This document lists and explains all configuration variables required by the Aar
 #### Google Gemini API
 - `GEMINI_API_KEY`: API key for accessing Google's Gemini LLMs. Uses model `gemini-1.5-flash` with strict clinical guidelines.
 
-#### Twilio SMS Verify
-- `TWILIO_ACCOUNT_SID`: Account identifier from Twilio Console.
-- `TWILIO_AUTH_TOKEN`: Secret Auth Token from Twilio Console.
-- `TWILIO_VERIFY_SERVICE_SID`: Pre-configured Twilio Verify Service SID. Must be created manually; the backend will *not* automatically generate a service.
-
 #### Firebase Cloud Storage
 - `FIREBASE_PROJECT_ID`: ID of the Firebase Project.
 - `FIREBASE_STORAGE_BUCKET`: Storage bucket hostname (e.g. `aarogya-vault.appspot.com`).
