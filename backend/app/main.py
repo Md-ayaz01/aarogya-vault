@@ -83,7 +83,7 @@ def read_root():
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "build": "v1.0.5-sha256-pw"}
+    return {"status": "ok", "build": "v1.0.6-diag"}
 
 @app.get("/live")
 def live():
@@ -92,3 +92,25 @@ def live():
 @app.get("/ready")
 def ready():
     return {"status": "ready"}
+
+@app.get("/debug/hash-test")
+def debug_hash_test():
+    """Temporary endpoint to diagnose password hashing on Render. Remove after fixing."""
+    import hashlib
+    import bcrypt as bcrypt_lib
+    from app.security.passwords import get_password_hash, _preprocess_password
+    test_pw = "ayaz123"
+    preprocessed = _preprocess_password(test_pw)
+    result = {"test_password_len": len(test_pw), "preprocessed": preprocessed, "preprocessed_len": len(preprocessed), "preprocessed_bytes": len(preprocessed.encode('utf-8'))}
+    try:
+        hashed = get_password_hash(test_pw)
+        result["hash_success"] = True
+        result["hash_preview"] = hashed[:20] + "..."
+    except Exception as e:
+        result["hash_success"] = False
+        result["hash_error"] = str(e)
+    try:
+        result["bcrypt_version"] = bcrypt_lib.__version__
+    except Exception:
+        result["bcrypt_version"] = "unknown"
+    return result
