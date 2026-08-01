@@ -18,8 +18,15 @@ class _HospitalLoginScreenState extends State<HospitalLoginScreen> {
   Future<void> _handleLogin() async {
     setState(() => _isLoading = true);
     try {
+      String phone = _phoneCtrl.text.trim();
+      if (!phone.startsWith('+')) {
+        final clean = phone.replaceAll(RegExp(r'\s+|-'), '');
+        if (clean.length == 10 && RegExp(r'^\d+$').hasMatch(clean)) {
+          phone = '+91$clean';
+        }
+      }
       final res = await _apiClient.post('/auth/verify-firebase-otp', data: {
-        'id_token': 'mock_token_${_phoneCtrl.text}',
+        'id_token': 'mock_token_$phone',
       });
       if (res.data != null && res.data['access_token'] != null) {
         await LocalDB.saveToken(res.data['access_token']);

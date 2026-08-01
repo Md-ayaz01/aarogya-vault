@@ -61,7 +61,13 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       } else {
         // OTP Login request - Firebase Auth flow
-        final phone = _phoneController.text.trim();
+        String phone = _phoneController.text.trim();
+        if (!phone.startsWith('+')) {
+          final clean = phone.replaceAll(RegExp(r'\s+|-'), '');
+          if (clean.length == 10 && RegExp(r'^\d+$').hasMatch(clean)) {
+            phone = '+91$clean';
+          }
+        }
         try {
           await FirebaseAuth.instance.verifyPhoneNumber(
             phoneNumber: phone,

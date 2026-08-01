@@ -92,7 +92,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with SingleTickerProv
   Future<void> _handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
     
-    final val = _emailPhoneController.text.trim();
+    String val = _emailPhoneController.text.trim();
+    if (!val.contains('@') && !val.startsWith('+')) {
+      final clean = val.replaceAll(RegExp(r'\s+|-'), '');
+      if (clean.length == 10 && RegExp(r'^\d+$').hasMatch(clean)) {
+        val = '+91$clean';
+      }
+    }
     
     if (_isOtpMode) {
 
