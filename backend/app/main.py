@@ -83,7 +83,7 @@ def read_root():
 
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    return {"status": "ok", "build": "v1.0.5-sha256-pw"}
 
 @app.get("/live")
 def live():

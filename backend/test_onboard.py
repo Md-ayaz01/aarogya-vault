@@ -264,9 +264,64 @@ def test_doctor_onboarding():
     print("   [PASS] Doctor login and dashboard access verified.")
 
 
+def test_register_ayaz123_and_validation():
+    print("--- TESTING SPECIFIC PASSWORD AYAZ123 REGISTRATION AND VALIDATION ERRORS ---")
+    # Clean test data
+    db = SessionLocal()
+    existing = db.query(User).filter(User.email == "ayaz_test@aarogyavault.com").first()
+    if existing:
+        db.query(Profile).filter(Profile.user_id == existing.id).delete()
+        db.query(ConsentSetting).filter(ConsentSetting.user_id == existing.id).delete()
+        db.query(AuditLog).filter(AuditLog.user_id == existing.id).delete()
+        db.delete(existing)
+        db.commit()
+    db.close()
+
+    # 1. Register with password = "ayaz123"
+    reg_res = client.post("/api/v1/auth/register", json={
+        "email": "ayaz_test@aarogyavault.com",
+        "password": "ayaz123"
+    })
+    assert reg_res.status_code == 200, f"Expected 200, got {reg_res.status_code}: {reg_res.text}"
+    reg_data = reg_res.json()
+    assert "access_token" in reg_data
+    assert reg_data["user_id"] > 0
+    print("   [PASS] Registration succeeded with password = 'ayaz123'.")
+
+    # 2. Login with password = "ayaz123"
+    login_res = client.post("/api/v1/auth/login", json={
+        "email": "ayaz_test@aarogyavault.com",
+        "password": "ayaz123"
+    })
+    assert login_res.status_code == 200
+    print("   [PASS] Login succeeded with password = 'ayaz123'.")
+
+    # 3. Test HTTP 400 validation error (instead of 500) for > 72 bytes password
+    long_pass = "x" * 100
+    invalid_res = client.post("/api/v1/auth/register", json={
+        "email": "ayaz_long_test@aarogyavault.com",
+        "password": long_pass
+    })
+    assert invalid_res.status_code == 400, f"Expected 400, got {invalid_res.status_code}: {invalid_res.text}"
+    assert "72 bytes" in invalid_res.json()["detail"]
+    print("   [PASS] Long password returned HTTP 400 Validation Error instead of HTTP 500.")
+
+    # Cleanup
+    db = SessionLocal()
+    user_to_del = db.query(User).filter(User.email == "ayaz_test@aarogyavault.com").first()
+    if user_to_del:
+        db.query(Profile).filter(Profile.user_id == user_to_del.id).delete()
+        db.query(ConsentSetting).filter(ConsentSetting.user_id == user_to_del.id).delete()
+        db.query(AuditLog).filter(AuditLog.user_id == user_to_del.id).delete()
+        db.delete(user_to_del)
+        db.commit()
+    db.close()
+
+
 if __name__ == "__main__":
     test_patient_registration()
     test_doctor_onboarding()
+    test_register_ayaz123_and_validation()
     # Clean up test accounts after completion
     setup_test_data()
     print("\n--- ALL SIGN-UP AND DOCTOR ONBOARDING TESTS PASSED ---")

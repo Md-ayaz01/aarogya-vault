@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -34,7 +35,20 @@ void main() async {
 
   // Initialize Firebase Core safely for phone authentication
   try {
-    await Firebase.initializeApp();
+    if (kIsWeb) {
+      await Firebase.initializeApp(
+        options: const FirebaseOptions(
+          apiKey: String.fromEnvironment('FIREBASE_API_KEY', defaultValue: 'AIzaSyDemoKeyForAarogyaVaultWeb'),
+          appId: String.fromEnvironment('FIREBASE_APP_ID', defaultValue: '1:1234567890:web:aarogyavaultwebid'),
+          messagingSenderId: String.fromEnvironment('FIREBASE_MESSAGING_SENDER_ID', defaultValue: '1234567890'),
+          projectId: String.fromEnvironment('FIREBASE_PROJECT_ID', defaultValue: 'aarogya-vault'),
+          authDomain: String.fromEnvironment('FIREBASE_AUTH_DOMAIN', defaultValue: 'aarogya-vault.firebaseapp.com'),
+          storageBucket: String.fromEnvironment('FIREBASE_STORAGE_BUCKET', defaultValue: 'aarogya-vault.appspot.com'),
+        ),
+      );
+    } else {
+      await Firebase.initializeApp();
+    }
   } catch (e) {
     debugPrint("Firebase initialization warning (safe to ignore if using Twilio fallback): $e");
   }

@@ -33,21 +33,30 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 @router.post("/register", response_model=Token)
 def register(user_in: UserCreate, db: Session = Depends(get_db)):
     if not user_in.email and not user_in.phone:
-        raise HTTPException(status_code=400, detail="Either email or phone must be provided")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Either email or phone must be provided")
     
     # Check duplicate
     if user_in.email:
         db_user = db.query(User).filter(User.email == user_in.email).first()
         if db_user:
-            raise HTTPException(status_code=400, detail="Email already registered")
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
     if user_in.phone:
         db_user = db.query(User).filter(User.phone == user_in.phone).first()
         if db_user:
-            raise HTTPException(status_code=400, detail="Phone already registered")
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Phone already registered")
             
+    raw_password = user_in.password
+    if raw_password is not None:
+        if not isinstance(raw_password, str):
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Password must be a valid string")
+        if len(raw_password.encode('utf-8')) > 72:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="password cannot be longer than 72 bytes, truncate manually if necessary"
+            )
+
     try:
         # Create user
-        raw_password = (user_in.password or "")[:50]
         hashed_pwd = get_password_hash(raw_password) if raw_password else None
         new_user = User(
             email=user_in.email,
@@ -96,9 +105,12 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
         }
     except HTTPException:
         raise
+    except (ValueError, TypeError) as ve:
+        db.rollback()
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(ve))
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=500, detail=f"Registration database error: {str(e)}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Registration database error: {str(e)}")
 
 
 @router.post("/login", response_model=Token)

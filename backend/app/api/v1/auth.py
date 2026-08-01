@@ -145,21 +145,21 @@ def exchange_supabase_session(req: SupabaseSessionRequest, db: Session = Depends
 def register(user_in: UserCreate, db: Session = Depends(get_db)):
     """Registers a new user, generating default profile skeletons."""
     if not user_in.email and not user_in.phone:
-        raise HTTPException(status_code=400, detail="Either email or phone must be provided")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Either email or phone must be provided")
     
     # Check duplicates
     if user_in.email:
         db_user = db.query(User).filter(User.email == user_in.email).first()
         if db_user:
-            raise HTTPException(status_code=400, detail="Email already registered")
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
     if user_in.phone:
         db_user = db.query(User).filter(User.phone == user_in.phone).first()
         if db_user:
-            raise HTTPException(status_code=400, detail="Phone already registered")
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Phone already registered")
             
     try:
         # Create user, profile, consent, and audit log in one single commit transaction
-        raw_password = (user_in.password or "")[:50]
+        raw_password = user_in.password
         hashed_pwd = get_password_hash(raw_password) if raw_password else None
         new_user = User(
             email=user_in.email,
@@ -207,9 +207,12 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
         }
     except HTTPException:
         raise
+    except (ValueError, TypeError) as ve:
+        db.rollback()
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(ve))
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=500, detail=f"Registration database error: {str(e)}")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Registration database error: {str(e)}")
 
 @router.post("/login", response_model=Token)
 def login(login_in: UserLogin, db: Session = Depends(get_db)):
