@@ -25,9 +25,7 @@ class ApiClient {
       }
       throw StateError('API_BASE_URL must be supplied for release builds.');
     }
-    return kIsWeb
-        ? 'http://127.0.0.1:8000/api/v1'
-        : (Platform.isAndroid ? 'http://10.0.2.2:8000/api/v1' : 'http://127.0.0.1:8000/api/v1');
+    return 'https://aarogya-vault.onrender.com/api/v1';
   }
 
   ApiClient() {
