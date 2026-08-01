@@ -30,6 +30,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with SingleTickerProv
   String _demoOtp = '';
   String? _verificationId;
   bool _isFirebaseFlow = false;
+  ConfirmationResult? _confirmationResult;
   
   final LocalAuthentication _localAuth = LocalAuthentication();
 
@@ -42,6 +43,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with SingleTickerProv
         _isOtpMode = false;
         _otpSent = false;
         _demoOtp = '';
+        _confirmationResult = null;
       });
     });
   }
@@ -110,66 +112,98 @@ class _LoginScreenState extends ConsumerState<LoginScreen> with SingleTickerProv
           setState(() {
             _isFirebaseFlow = true;
           });
-          await FirebaseAuth.instance.verifyPhoneNumber(
-            phoneNumber: phone,
-            verificationCompleted: (PhoneAuthCredential credential) async {
-              final userCred = await FirebaseAuth.instance.signInWithCredential(credential);
-              final idToken = await userCred.user?.getIdToken();
-              if (idToken != null) {
-                final success = await ref.read(authProvider.notifier).verifyFirebaseOtp(idToken);
-                if (success && mounted) {
-                  _navigateToDashboard();
-                } else {
-                  _showSnackBar("Firebase login failed. Please try again or request a new OTP.");
-                }
-              } else {
-                _showSnackBar("Unable to obtain Firebase ID token.");
-              }
-            },
-            verificationFailed: (FirebaseAuthException e) {
-              debugPrint("Firebase verification failed: ${e.message}. Falling back to backend OTP.");
-              _fallbackToBackendOtpSend(phone);
-            },
-            codeSent: (String verificationId, int? resendToken) {
-              setState(() {
-                _verificationId = verificationId;
-                _otpSent = true;
-                _isFirebaseFlow = true;
-              });
+          if (kIsWeb) {
+            final confirmationResult = await FirebaseAuth.instance.signInWithPhoneNumber(phone);
+            setState(() {
+              _confirmationResult = confirmationResult;
+              _otpSent = true;
+            });
+            if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text("OTP sent via Firebase Phone Auth."),
+                  content: Text("OTP sent via Firebase Phone Auth Web."),
                   backgroundColor: AppTheme.primaryTeal,
                 ),
               );
-            },
-            codeAutoRetrievalTimeout: (String verificationId) {
-              _verificationId = verificationId;
-            },
-          );
+            }
+          } else {
+            await FirebaseAuth.instance.verifyPhoneNumber(
+              phoneNumber: phone,
+              verificationCompleted: (PhoneAuthCredential credential) async {
+                final userCred = await FirebaseAuth.instance.signInWithCredential(credential);
+                final idToken = await userCred.user?.getIdToken();
+                if (idToken != null) {
+                  final success = await ref.read(authProvider.notifier).verifyFirebaseOtp(idToken);
+                  if (success && mounted) {
+                    _navigateToDashboard();
+                  } else {
+                    _showSnackBar("Firebase login failed. Please try again or request a new OTP.");
+                  }
+                } else {
+                  _showSnackBar("Unable to obtain Firebase ID token.");
+                }
+              },
+              verificationFailed: (FirebaseAuthException e) {
+                debugPrint("Firebase verification failed: ${e.message}. Falling back to backend OTP.");
+                _fallbackToBackendOtpSend(phone);
+              },
+              codeSent: (String verificationId, int? resendToken) {
+                setState(() {
+                  _verificationId = verificationId;
+                  _otpSent = true;
+                  _isFirebaseFlow = true;
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("OTP sent via Firebase Phone Auth."),
+                    backgroundColor: AppTheme.primaryTeal,
+                  ),
+                );
+              },
+              codeAutoRetrievalTimeout: (String verificationId) {
+                _verificationId = verificationId;
+              },
+            );
+          }
         } catch (e) {
           debugPrint("Firebase exception: $e. Falling back to backend OTP.");
           await _fallbackToBackendOtpSend(phone);
         }
       } else {
         final code = _otpController.text.trim();
-        if (_isFirebaseFlow && _verificationId != null) {
-          try {
-            final credential = PhoneAuthProvider.credential(
-              verificationId: _verificationId!,
-              smsCode: code,
-            );
-            final userCred = await FirebaseAuth.instance.signInWithCredential(credential);
-            final idToken = await userCred.user?.getIdToken();
-            if (idToken != null) {
-              final success = await ref.read(authProvider.notifier).verifyFirebaseOtp(idToken);
-              if (success && mounted) {
-                _navigateToDashboard();
-                return;
+        if (_isFirebaseFlow) {
+          if (kIsWeb && _confirmationResult != null) {
+            try {
+              final userCred = await _confirmationResult!.confirm(code);
+              final idToken = await userCred.user?.getIdToken();
+              if (idToken != null) {
+                final success = await ref.read(authProvider.notifier).verifyFirebaseOtp(idToken);
+                if (success && mounted) {
+                  _navigateToDashboard();
+                  return;
+                }
               }
+            } catch (e) {
+              debugPrint("Firebase Web verification failed: $e. Attempting local database fallback.");
             }
-          } catch (e) {
-            debugPrint("Firebase OTP verification failed: $e. Attempting local database fallback.");
+          } else if (!kIsWeb && _verificationId != null) {
+            try {
+              final credential = PhoneAuthProvider.credential(
+                verificationId: _verificationId!,
+                smsCode: code,
+              );
+              final userCred = await FirebaseAuth.instance.signInWithCredential(credential);
+              final idToken = await userCred.user?.getIdToken();
+              if (idToken != null) {
+                final success = await ref.read(authProvider.notifier).verifyFirebaseOtp(idToken);
+                if (success && mounted) {
+                  _navigateToDashboard();
+                  return;
+                }
+              }
+            } catch (e) {
+              debugPrint("Firebase Mobile verification failed: $e. Attempting local database fallback.");
+            }
           }
         }
         
