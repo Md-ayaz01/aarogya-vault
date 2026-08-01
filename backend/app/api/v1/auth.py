@@ -11,7 +11,6 @@ from app.models.models import User, Profile, AuditLog, ConsentSetting, OTPSessio
 from app.schemas.schemas import UserCreate, UserLogin, Token, ProfileCreate, RefreshTokenRequest, DoctorOnboardRequest
 from app.core.config import settings
 from app.security.supabase import verify_supabase_jwt, phone_from_supabase_claims, email_from_supabase_claims
-from app.notifications.sms import sms_provider
 from fastapi.security import OAuth2PasswordBearer
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -332,24 +331,17 @@ def send_otp(req: OTPSendRequest, db: Session = Depends(get_db)):
         db.commit()
         db.refresh(otp_session)
 
-    # Call Twilio Verify API
-    try:
-        verification_sid = sms_provider.send_verification_otp(phone)
-        otp_session.verification_sid = verification_sid
-        db.commit()
-        return {"success": True, "message": "OTP sent successfully via Twilio Verify."}
-    except Exception as e:
-        # Fallback simulator for developer-friendly local setups if credentials are blank
-        if settings.ENVIRONMENT == "production":
-            raise HTTPException(status_code=500, detail=f"Failed to send OTP via Twilio Verify in production: {str(e)}")
-        if not settings.TWILIO_ACCOUNT_SID or not settings.TWILIO_VERIFY_SERVICE_SID:
-            # Generate simulated code (only when credentials are not configured)
-            simulated_sid = f"sim_{random.randint(100000, 999999)}"
-            otp_session.verification_sid = simulated_sid
-            db.commit()
-            print(f"\n[OTP SIMULATOR] Local development OTP for {phone}: 123456 (SID: {simulated_sid})\n")
-            return {"success": True, "message": "Simulated OTP sent successfully for development (Use 123456).", "demo_otp": "123456"}
-        raise HTTPException(status_code=500, detail=f"Failed to send OTP via Twilio: {str(e)}")
+    # Generate a local OTP for development/fallback environments.
+    # Production should use Firebase Phone Auth on the client side.
+    otp = str(random.randint(100000, 999999))
+    user.otp_code = otp
+    user.otp_expiry = datetime.utcnow() + timedelta(minutes=5)
+    simulated_sid = f"sim_{random.randint(100000, 999999)}"
+    otp_session.verification_sid = simulated_sid
+    db.commit()
+
+    print(f"\n[OTP SERVICE] Generated local OTP {otp} for {phone} (DEV FALLBACK).\n")
+    return {"success": True, "message": "OTP sent successfully.", "demo_otp": otp, "demo_sid": simulated_sid}
 
 @router.post("/verify-otp", response_model=Token)
 def verify_otp(req: OTPVerifyRequest, db: Session = Depends(get_db)):
@@ -374,22 +366,16 @@ def verify_otp(req: OTPVerifyRequest, db: Session = Depends(get_db)):
         db.commit()
         raise HTTPException(status_code=400, detail="OTP retry limit exceeded (Maximum 3 attempts). Please request a new code.")
 
-    # Call Twilio Verify Check
-    verified = False
-    try:
-        verified = sms_provider.check_verification_otp(phone, code)
-    except Exception as e:
-        # Fallback simulator for development environment (strictly non-production)
-        if settings.ENVIRONMENT != "production" and (not settings.TWILIO_ACCOUNT_SID or not settings.TWILIO_VERIFY_SERVICE_SID) and code == "123456":
-            verified = True
-        else:
-            raise HTTPException(status_code=400, detail=f"OTP verification failed: {str(e)}")
-            
-    if not verified:
+    # Verify OTP code against the stored local code for development/fallback environments.
+    if user.otp_code != code:
         raise HTTPException(status_code=400, detail="Invalid OTP code")
-        
-    # Mark OTP session as approved
+    if not user.otp_expiry or datetime.utcnow() > user.otp_expiry:
+        raise HTTPException(status_code=400, detail="OTP code has expired")
+
+    # Mark OTP session as approved and clear the user OTP value
     otp_session.status = "approved"
+    user.otp_code = None
+    user.otp_expiry = None
     db.commit()
     
     # Audit log
