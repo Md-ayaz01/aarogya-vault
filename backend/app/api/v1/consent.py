@@ -78,18 +78,21 @@ def get_active_consent_grants(current_user: User = Depends(get_current_user), db
     ).all()
     results = []
     for acc in accesses:
-        if acc.expires_at:
-            exp = acc.expires_at if acc.expires_at.tzinfo else acc.expires_at.replace(tzinfo=timezone.utc)
-            if exp < now:
-                continue
-        dp = db.query(DoctorProfile).filter(DoctorProfile.user_id == acc.doctor_id).first()
-        results.append({
-            "doctor_id": acc.doctor_id,
-            "doctor_name": dp.full_name if dp else f"Doctor {acc.doctor_id}",
-            "specialty": dp.specialty if dp else "General Practice",
-            "access_type": acc.access_type,
-            "granted_at": acc.created_at.strftime("%Y-%m-%d %H:%M:%S") if acc.created_at else ""
-        })
+        try:
+            if acc.expires_at:
+                exp = acc.expires_at if getattr(acc.expires_at, 'tzinfo', None) else acc.expires_at.replace(tzinfo=timezone.utc)
+                if exp < now:
+                    continue
+            dp = db.query(DoctorProfile).filter(DoctorProfile.user_id == acc.doctor_id).first()
+            results.append({
+                "doctor_id": acc.doctor_id,
+                "doctor_name": dp.full_name if dp else f"Doctor {acc.doctor_id}",
+                "specialty": dp.specialty if (dp and dp.specialty) else "General Practice",
+                "access_type": acc.access_type or "consent",
+                "granted_at": acc.created_at.strftime("%Y-%m-%d %H:%M:%S") if getattr(acc, 'created_at', None) else ""
+            })
+        except Exception:
+            continue
     return results
 
 @router.post("/grant-doctor-access")
