@@ -8,7 +8,7 @@ from pydantic import BaseModel
 
 from app.core.database import get_db
 from app.core.security import get_password_hash, verify_password, create_access_token, verify_token
-from app.models import User, Profile, AuditLog, ConsentSetting
+from app.models import User, Profile, AuditLog, ConsentSetting, OTPSession
 from app.schemas import UserCreate, UserLogin, Token, ProfileCreate
 from app.core.config import settings
 from fastapi.security import OAuth2PasswordBearer
@@ -250,10 +250,17 @@ def send_otp(req: OTPSendRequest, db: Session = Depends(get_db)):
             db.add(consent)
             db.commit()
 
+    # Find or create OTPSession
+    otp_session = db.query(OTPSession).filter(OTPSession.phone == phone, OTPSession.status == "pending").first()
+    if not otp_session:
+        otp_session = OTPSession(phone=phone, status="pending", attempts_count=0)
+        db.add(otp_session)
+        db.commit()
+        db.refresh(otp_session)
+
     # Generate a random 6 digit code
     otp = str(random.randint(100000, 999999))
-    user.otp_code = otp
-    user.otp_expiry = datetime.utcnow() + timedelta(minutes=5)
+    otp_session.verification_sid = otp
     db.commit()
 
     # Print it to the backend log/stdout
@@ -271,15 +278,18 @@ def verify_otp(req: OTPVerifyRequest, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=400, detail="User not found")
         
-    if not user.otp_code or user.otp_code != code:
+    otp_session = db.query(OTPSession).filter(OTPSession.phone == phone, OTPSession.status == "pending").order_by(OTPSession.created_at.desc()).first()
+    if not otp_session:
+        raise HTTPException(status_code=400, detail="No active OTP session found")
+        
+    if not otp_session.verification_sid or otp_session.verification_sid != code:
         raise HTTPException(status_code=400, detail="Invalid OTP code")
         
-    if datetime.utcnow() > user.otp_expiry:
+    if datetime.utcnow() > (otp_session.updated_at + timedelta(minutes=5)):
         raise HTTPException(status_code=400, detail="OTP code has expired")
         
     # Clear OTP
-    user.otp_code = None
-    user.otp_expiry = None
+    otp_session.status = "approved"
     
     # Log audit
     audit = AuditLog(user_id=user.id, action="LOGIN_OTP", details="Logged in via OTP")

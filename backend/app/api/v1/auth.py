@@ -377,14 +377,11 @@ def send_otp(req: OTPSendRequest, db: Session = Depends(get_db)):
 
     # Generate a local OTP for development/fallback environments.
     otp = str(random.randint(100000, 999999))
-    user.otp_code = otp
-    user.otp_expiry = datetime.utcnow() + timedelta(minutes=5)
-    simulated_sid = f"sim_{random.randint(100000, 999999)}"
-    otp_session.verification_sid = simulated_sid
+    otp_session.verification_sid = otp
     db.commit()
 
     print(f"\n[OTP SERVICE] Generated local OTP {otp} for {phone} (DEV FALLBACK).\n")
-    return {"success": True, "message": "OTP sent successfully.", "demo_otp": otp, "demo_sid": simulated_sid}
+    return {"success": True, "message": "OTP sent successfully.", "demo_otp": otp, "demo_sid": otp}
 
 @router.post("/verify-otp", response_model=Token)
 def verify_otp(req: OTPVerifyRequest, db: Session = Depends(get_db)):
@@ -413,15 +410,13 @@ def verify_otp(req: OTPVerifyRequest, db: Session = Depends(get_db)):
     # Allow local OTP fallback for testing and verification
     
     # Verify OTP code against the stored local code for development/fallback environments.
-    if user.otp_code != code:
+    if otp_session.verification_sid != code:
         raise HTTPException(status_code=400, detail="Invalid OTP code")
-    if not user.otp_expiry or datetime.utcnow() > user.otp_expiry:
+    if datetime.utcnow() > (otp_session.updated_at + timedelta(minutes=5)):
         raise HTTPException(status_code=400, detail="OTP code has expired")
 
-    # Mark OTP session as approved and clear the user OTP value
+    # Mark OTP session as approved
     otp_session.status = "approved"
-    user.otp_code = None
-    user.otp_expiry = None
     db.commit()
     
     # Audit log
