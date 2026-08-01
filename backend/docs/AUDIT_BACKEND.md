@@ -72,7 +72,7 @@ This report presents a detailed audit of the Aarogya Vault backend codebase. All
 - **Secure headers**: ✅ **Fully Implemented**. Appends `X-Content-Type-Options`, `X-Frame-Options`, `X-XSS-Protection`, `Referrer-Policy`, and HSTS (in production).
 - **Logging**: ✅ **Fully Implemented**. Structured JSON format logs are outputted to stdout.
 - **Request IDs**: ✅ **Fully Implemented**. Custom middleware automatically appends/correlates a unique `X-Request-ID` to all logs and response headers.
-- **Password hashing**: ✅ **Fully Implemented**. Uses `passlib` with `bcrypt`.
+- **Password hashing**: ✅ **Fully Implemented**. Uses direct `bcrypt` hashing wrapper (no `passlib` in active code).
 - **AES encryption**: ✅ **Fully Implemented**. AES-256-CBC matching key and IV:
   - **Key**: `aarogya_vault_super_secure_secur`
   - **IV**: `aarogya_vault_iv`
