@@ -24,8 +24,15 @@ class _RadiologyScreenState extends State<RadiologyScreen> {
   Future<void> _fetchRadiologyOrders() async {
     try {
       final res = await _apiClient.get('/hospital/radiology');
+      final raw = res.data;
+      List<dynamic> list = [];
+      if (raw is List) {
+        list = raw;
+      } else if (raw is Map && raw['data'] is List) {
+        list = List<dynamic>.from(raw['data']);
+      }
       setState(() {
-        _radiologyOrders = res.data is List ? res.data : [];
+        _radiologyOrders = list;
         _isLoading = false;
       });
     } catch (e) {
@@ -219,24 +226,58 @@ class _RadiologyScreenState extends State<RadiologyScreen> {
   }
 
   void _showUploadImagingDialog(BuildContext context) {
+    final modCtrl = TextEditingController(text: 'MRI');
+    final partCtrl = TextEditingController(text: 'Brain');
+    final patientCtrl = TextEditingController();
+
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Upload DICOM / Radiology Scan'),
-        content: const Column(
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.cloud_upload_rounded, size: 60, color: Color(0xFF006B53)),
-            SizedBox(height: 12),
-            Text('Select DICOM medical image or MRI/CT scan zip archive.'),
+            const Icon(Icons.cloud_upload_rounded, size: 48, color: Color(0xFF006B53)),
+            const SizedBox(height: 8),
+            TextField(controller: modCtrl, decoration: const InputDecoration(labelText: 'Modality (MRI, CT, X-RAY, ULTRASOUND)')),
+            const SizedBox(height: 8),
+            TextField(controller: partCtrl, decoration: const InputDecoration(labelText: 'Body Part')),
+            const SizedBox(height: 8),
+            TextField(controller: patientCtrl, decoration: const InputDecoration(labelText: 'Patient Name')),
           ],
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('CANCEL')),
           ElevatedButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Radiology DICOM Scan uploaded successfully!')));
+            onPressed: () async {
+              if (patientCtrl.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enter patient name')));
+                return;
+              }
+              try {
+                final res = await _apiClient.post('/hospital/radiology', data: {
+                  'modality': modCtrl.text,
+                  'body_part': partCtrl.text,
+                  'patient_name': patientCtrl.text,
+                  'scan_code': 'RAD-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}',
+                  'findings': 'Clear / Unremarkable',
+                  'status': 'Routine'
+                });
+                if (mounted) {
+                  Navigator.pop(ctx);
+                  if (res.data != null && res.data['success'] == true) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Radiology scan uploaded successfully!')));
+                    _fetchRadiologyOrders();
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Failed to upload scan')));
+                  }
+                }
+              } catch (e) {
+                if (mounted) {
+                  Navigator.pop(ctx);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error uploading scan: ${e.toString()}'), backgroundColor: Colors.redAccent));
+                }
+              }
             },
             child: const Text('UPLOAD DICOM'),
           )

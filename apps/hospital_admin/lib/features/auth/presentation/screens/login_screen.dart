@@ -26,7 +26,8 @@ class _HospitalLoginScreenState extends State<HospitalLoginScreen> {
         }
       }
       final res = await _apiClient.post('/auth/verify-firebase-otp', data: {
-        'id_token': 'mock_token_$phone',
+        'id_token': phone,
+        'role': 'hospital_admin',
       });
       if (res.data != null && res.data['access_token'] != null) {
         await LocalDB.saveToken(res.data['access_token']);

@@ -753,6 +753,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
           _doctorsList.isEmpty
               ? Container(
                   padding: const EdgeInsets.all(12),
+                    width: double.infinity,
                   decoration: BoxDecoration(
                     color: innerBg,
                     borderRadius: BorderRadius.circular(12),
@@ -768,15 +769,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
                           style: GoogleFonts.inter(fontSize: 12, color: subtextColor),
                         ),
                       ),
-                      SizedBox(
-                        height: 32,
-                        child: TextButton.icon(
-                          onPressed: _loadDoctorConsentData,
-                          icon: const Icon(Icons.refresh_rounded, size: 14),
-                          label: const Text('Refresh', style: TextStyle(fontSize: 12)),
-                          style: TextButton.styleFrom(
-                            foregroundColor: AppTheme.primary,
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      Flexible(
+                        child: SizedBox(
+                          height: 32,
+                          child: TextButton.icon(
+                            onPressed: _loadDoctorConsentData,
+                            icon: const Icon(Icons.refresh_rounded, size: 14),
+                            label: const Text('Refresh', style: TextStyle(fontSize: 12)),
+                            style: TextButton.styleFrom(
+                              foregroundColor: AppTheme.primary,
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            ),
                           ),
                         ),
                       ),

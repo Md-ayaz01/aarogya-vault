@@ -23,8 +23,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _fetchAuditLogs() async {
     try {
       final res = await _apiClient.get('/hospital/settings/audit-logs');
+      final raw = res.data;
+      List<dynamic> list = [];
+      if (raw is List) {
+        list = raw;
+      } else if (raw is Map && raw['data'] is List) {
+        list = List<dynamic>.from(raw['data']);
+      }
       setState(() {
-        _auditLogs = res.data is List ? res.data : [];
+        _auditLogs = list;
         _isLoading = false;
       });
     } catch (e) {

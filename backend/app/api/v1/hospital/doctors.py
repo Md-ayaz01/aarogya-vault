@@ -33,3 +33,33 @@ def list_hospital_doctors(
             "schedule": "09:00 AM - 05:00 PM"
         })
     return {"success": True, "data": res}
+
+from pydantic import BaseModel
+from typing import Optional
+
+class DoctorCreateRequest(BaseModel):
+    full_name: str
+    specialty: str
+    registration_number: str
+    department_name: Optional[str] = "General Medicine"
+
+@router.post("")
+def add_hospital_doctor(
+    payload: DoctorCreateRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    service = HospitalService(db)
+    if not service.check_permission(current_user.role, "hospital.doctor.manage"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access Denied: Required permission 'hospital.doctor.manage'"
+        )
+    doc = service.repo.create_doctor_profile(
+        full_name=payload.full_name,
+        specialty=payload.specialty,
+        registration_number=payload.registration_number,
+        department_name=payload.department_name or "General Medicine"
+    )
+    return {"success": True, "data": {"id": doc.id, "full_name": doc.full_name}}
+

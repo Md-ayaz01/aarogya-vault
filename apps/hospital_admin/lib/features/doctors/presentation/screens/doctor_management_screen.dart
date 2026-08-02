@@ -24,8 +24,15 @@ class _DoctorManagementScreenState extends State<DoctorManagementScreen> {
   Future<void> _fetchDoctors() async {
     try {
       final res = await _apiClient.get('/hospital/doctors');
+      final raw = res.data;
+      List<dynamic> list = [];
+      if (raw is List) {
+        list = raw;
+      } else if (raw is Map && raw['data'] is List) {
+        list = List<dynamic>.from(raw['data']);
+      }
       setState(() {
-        _doctors = res.data is List ? res.data : [];
+        _doctors = list;
         _isLoading = false;
       });
     } catch (e) {
@@ -149,7 +156,9 @@ class _DoctorManagementScreenState extends State<DoctorManagementScreen> {
                                 radius: 24,
                                 backgroundColor: primaryTeal.withValues(alpha: 0.2),
                                 child: Text(
-                                  doc['full_name']?[4] ?? 'D',
+                                  (doc['full_name'] != null && doc['full_name'].toString().isNotEmpty)
+                                      ? doc['full_name'].toString()[0].toUpperCase()
+                                      : 'D',
                                   style: const TextStyle(color: primaryTeal, fontWeight: FontWeight.bold, fontSize: 18),
                                 ),
                               ),
@@ -160,7 +169,7 @@ class _DoctorManagementScreenState extends State<DoctorManagementScreen> {
                                   children: [
                                     Text(doc['full_name'] ?? 'Dr. Physician', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                                     const SizedBox(height: 2),
-                                    Text('${doc['specialty']} (${doc['department']})', style: const TextStyle(color: Colors.grey, fontSize: 13)),
+                                    Text('${doc['specialty']} (${doc['department'] ?? "General Medicine"})', style: const TextStyle(color: Colors.grey, fontSize: 13)),
                                     Text('License ID: ${doc['registration_number']}', style: const TextStyle(color: Colors.grey, fontSize: 11)),
                                   ],
                                 ),
@@ -179,8 +188,7 @@ class _DoctorManagementScreenState extends State<DoctorManagementScreen> {
                                       style: TextStyle(color: statusColor, fontWeight: FontWeight.bold, fontSize: 10),
                                     ),
                                   ),
-                                  const SizedBox(height: 6),
-                                  Text('${doc['satisfaction'] ?? 95}% Sat.', style: const TextStyle(color: primaryTeal, fontWeight: FontWeight.bold, fontSize: 12)),
+                                  Text(doc['is_verified'] == true ? 'VERIFIED' : 'PENDING', style: const TextStyle(color: primaryTeal, fontWeight: FontWeight.bold, fontSize: 11)),
                                 ],
                               )
                             ],
@@ -196,26 +204,54 @@ class _DoctorManagementScreenState extends State<DoctorManagementScreen> {
   }
 
   void _showAddDoctorDialog(BuildContext context) {
+    final nameCtrl = TextEditingController();
+    final specCtrl = TextEditingController();
+    final licCtrl = TextEditingController();
+
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Add New Physician'),
-        content: const Column(
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(decoration: InputDecoration(labelText: 'Full Name (e.g. Dr. John Doe)')),
-            SizedBox(height: 8),
-            TextField(decoration: InputDecoration(labelText: 'Specialization (e.g. Cardiology)')),
-            SizedBox(height: 8),
-            TextField(decoration: InputDecoration(labelText: 'Medical License Registration ID')),
+            TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Full Name (e.g. Dr. John Doe)')),
+            const SizedBox(height: 8),
+            TextField(controller: specCtrl, decoration: const InputDecoration(labelText: 'Specialization (e.g. Cardiology)')),
+            const SizedBox(height: 8),
+            TextField(controller: licCtrl, decoration: const InputDecoration(labelText: 'Medical License Registration ID')),
           ],
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('CANCEL')),
           ElevatedButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Physician added to roster!')));
+            onPressed: () async {
+              if (nameCtrl.text.isEmpty || specCtrl.text.isEmpty || licCtrl.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please fill in all fields')));
+                return;
+              }
+              try {
+                final res = await _apiClient.post('/hospital/doctors', data: {
+                  'full_name': nameCtrl.text,
+                  'specialty': specCtrl.text,
+                  'registration_number': licCtrl.text,
+                  'department_name': 'General Medicine'
+                });
+                if (mounted) {
+                  Navigator.pop(ctx);
+                  if (res.data != null && res.data['success'] == true) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Physician added to roster!')));
+                    _fetchDoctors();
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Failed to add doctor')));
+                  }
+                }
+              } catch (e) {
+                if (mounted) {
+                  Navigator.pop(ctx);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error adding doctor: ${e.toString()}'), backgroundColor: Colors.redAccent));
+                }
+              }
             },
             child: const Text('ADD'),
           )

@@ -23,22 +23,29 @@ class _ReportsScreenState extends State<ReportsScreen> {
   Future<void> _fetchReports() async {
     try {
       final res = await _apiClient.get('/hospital/reports/patients');
+      final raw = res.data;
+      Map<String, dynamic> reports = {};
+      if (raw is Map) {
+        if (raw.containsKey('data') && raw['data'] is Map) {
+          reports = Map<String, dynamic>.from(raw['data']);
+        } else {
+          reports = Map<String, dynamic>.from(raw);
+        }
+      }
       setState(() {
-        _reports = res.data is Map<String, dynamic> ? res.data : {};
+        _reports = reports;
         _isLoading = false;
       });
     } catch (e) {
       setState(() {
-        _reports = {
-          "hospital_performance": 92.4,
-          "patient_satisfaction": 4.8,
-          "revenue": "₹1.24 Cr",
-          "margin": "32%",
-          "opex": "₹84 Lakhs",
-          "total_reports": 142
-        };
+        _reports = {};
         _isLoading = false;
       });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to load Reports: ${e.toString()}"), backgroundColor: Colors.redAccent),
+        );
+      }
     }
   }
 
@@ -122,7 +129,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                 ],
                               ),
                               const Text('HOSPITAL PERFORMANCE', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey)),
-                              Text('${_reports['hospital_performance'] ?? 92.4}%', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                              Text('${_reports['hospital_performance'] ?? 0}%', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                               const Text('Bed occupancy rate across all departments', style: TextStyle(fontSize: 11, color: Colors.grey)),
                             ],
                           ),
@@ -149,8 +156,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                 ],
                               ),
                               const Text('PATIENT SATISFACTION', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey)),
-                              Text('${_reports['patient_satisfaction'] ?? 4.8} / 5.0', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: primaryContainer)),
-                              const Text('Average NPS score from 1,240 responses', style: TextStyle(fontSize: 11, color: Colors.grey)),
+                              Text('${_reports['patient_satisfaction'] ?? 0.0} / 5.0', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: primaryContainer)),
+                              const Text('Average NPS score from responses', style: TextStyle(fontSize: 11, color: Colors.grey)),
                             ],
                           ),
                         ),
@@ -171,13 +178,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                     decoration: BoxDecoration(color: Colors.purple.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(8)),
-                                    child: Text('Margin: ${_reports['margin'] ?? '32%'}', style: const TextStyle(color: Colors.purple, fontWeight: FontWeight.bold, fontSize: 10)),
+                                    child: Text('Margin: ${_reports['margin'] ?? 'N/A'}', style: const TextStyle(color: Colors.purple, fontWeight: FontWeight.bold, fontSize: 10)),
                                   )
                                 ],
                               ),
                               const Text('FINANCIAL REVENUE', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey)),
-                              Text('${_reports['revenue'] ?? '₹1.24 Cr'}', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.purple)),
-                              Text('OpEx: ${_reports['opex'] ?? '₹84 Lakhs'}', style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                              Text('${_reports['revenue'] ?? '₹0'}', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.purple)),
+                              Text('OpEx: ${_reports['opex'] ?? 'N/A'}', style: const TextStyle(fontSize: 11, color: Colors.grey)),
                             ],
                           ),
                         ),

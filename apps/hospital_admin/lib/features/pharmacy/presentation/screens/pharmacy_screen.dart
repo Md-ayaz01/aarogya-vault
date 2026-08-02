@@ -23,8 +23,15 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
   Future<void> _fetchPharmacyInventory() async {
     try {
       final res = await _apiClient.get('/hospital/pharmacy/inventory');
+      final raw = res.data;
+      List<dynamic> list = [];
+      if (raw is List) {
+        list = raw;
+      } else if (raw is Map && raw['data'] is List) {
+        list = List<dynamic>.from(raw['data']);
+      }
       setState(() {
-        _inventory = res.data is List ? res.data : [];
+        _inventory = list;
         _isLoading = false;
       });
     } catch (e) {
@@ -101,10 +108,10 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
                     mainAxisSpacing: 12,
                     childAspectRatio: 1.5,
                     children: [
-                      _bentoCard('TOTAL SKU', '1,248 SKUs', '+12 New SKUs', primaryTeal, Icons.inventory_2_rounded),
-                      _bentoCard('CRITICAL LOW STOCK', '24 SKUs', 'Reorder Immediately', Colors.red, Icons.warning_rounded),
+                      _bentoCard('TOTAL SKU', '${_inventory.length} SKUs', 'Inventory SKUs', primaryTeal, Icons.inventory_2_rounded),
+                      _bentoCard('CRITICAL LOW STOCK', '${_inventory.where((i) => i['is_low_stock'] == true).length} SKUs', 'Reorder Required', Colors.red, Icons.warning_rounded),
                       _bentoCard('FULFILMENT RATE', '98.4%', 'Target: 99%', primaryContainer, Icons.task_alt_rounded),
-                      _bentoCard('ACTIVE SUPPLIERS', '42 Vendors', '2 Pending Deliveries', Colors.blue, Icons.local_shipping_rounded),
+                      _bentoCard('ACTIVE SUPPLIERS', 'Active Vendors', 'Operational', Colors.blue, Icons.local_shipping_rounded),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -186,26 +193,57 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
   }
 
   void _showAddStockDialog(BuildContext context) {
+    final medCtrl = TextEditingController();
+    final batchCtrl = TextEditingController();
+    final qtyCtrl = TextEditingController();
+
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Add Pharmacy Stock'),
-        content: const Column(
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(decoration: InputDecoration(labelText: 'Medicine Name')),
-            SizedBox(height: 8),
-            TextField(decoration: InputDecoration(labelText: 'Batch Number')),
-            SizedBox(height: 8),
-            TextField(decoration: InputDecoration(labelText: 'Quantity Units')),
+            TextField(controller: medCtrl, decoration: const InputDecoration(labelText: 'Medicine Name')),
+            const SizedBox(height: 8),
+            TextField(controller: batchCtrl, decoration: const InputDecoration(labelText: 'Batch Number')),
+            const SizedBox(height: 8),
+            TextField(controller: qtyCtrl, decoration: const InputDecoration(labelText: 'Quantity Units'), keyboardType: TextInputType.number),
           ],
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('CANCEL')),
           ElevatedButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pharmacy stock added successfully!')));
+            onPressed: () async {
+              if (medCtrl.text.isEmpty || qtyCtrl.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enter medicine name and quantity')));
+                return;
+              }
+              try {
+                final res = await _apiClient.post('/hospital/pharmacy/inventory', data: {
+                  'medicine_name': medCtrl.text,
+                  'category': 'General',
+                  'batch_number': batchCtrl.text.isNotEmpty ? batchCtrl.text : 'BATCH-${DateTime.now().millisecondsSinceEpoch.toString().substring(8)}',
+                  'stock_quantity': int.tryParse(qtyCtrl.text) ?? 50,
+                  'unit_price': 45,
+                  'expiry_date': '2027-12-31',
+                  'reorder_level': 20
+                });
+                if (mounted) {
+                  Navigator.pop(ctx);
+                  if (res.data != null && res.data['success'] == true) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Pharmacy stock added successfully!')));
+                    _fetchPharmacyInventory();
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Failed to add stock')));
+                  }
+                }
+              } catch (e) {
+                if (mounted) {
+                  Navigator.pop(ctx);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error adding stock: ${e.toString()}'), backgroundColor: Colors.redAccent));
+                }
+              }
             },
             child: const Text('ADD STOCK'),
           )

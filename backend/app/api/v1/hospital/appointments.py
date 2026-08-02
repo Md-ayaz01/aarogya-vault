@@ -32,3 +32,33 @@ def list_hospital_appointments(
             "status": a.status
         })
     return {"success": True, "data": res}
+
+from pydantic import BaseModel
+from typing import Optional
+
+class AppointmentCreateRequest(BaseModel):
+    patient_name: str
+    doctor_name: str
+    specialty: Optional[str] = "General"
+    time_slot: Optional[str] = "10:30 AM"
+
+@router.post("")
+def book_hospital_appointment(
+    payload: AppointmentCreateRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    service = HospitalService(db)
+    if not service.check_permission(current_user.role, "hospital.dashboard.view"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access Denied: Required permission 'hospital.dashboard.view'"
+        )
+    appt = service.repo.create_appointment(
+        patient_name=payload.patient_name,
+        doctor_name=payload.doctor_name,
+        specialty=payload.specialty or "General",
+        time_slot=payload.time_slot or "10:30 AM"
+    )
+    return {"success": True, "data": {"id": appt.id, "status": appt.status}}
+

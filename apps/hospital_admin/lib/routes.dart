@@ -19,7 +19,6 @@ import 'features/auth/presentation/screens/login_screen.dart';
 class AppRoutes {
   static Map<String, WidgetBuilder> get routes {
     return {
-      '/': (context) => const HospitalDashboardScreen(),
       '/dashboard': (context) => const HospitalDashboardScreen(),
       '/patients': (context) => const PatientManagementScreen(),
       '/doctors': (context) => const DoctorManagementScreen(),

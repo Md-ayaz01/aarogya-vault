@@ -24,8 +24,15 @@ class _LaboratoryScreenState extends State<LaboratoryScreen> {
   Future<void> _fetchLabOrders() async {
     try {
       final res = await _apiClient.get('/hospital/laboratory');
+      final raw = res.data;
+      List<dynamic> list = [];
+      if (raw is List) {
+        list = raw;
+      } else if (raw is Map && raw['data'] is List) {
+        list = List<dynamic>.from(raw['data']);
+      }
       setState(() {
-        _labOrders = res.data is List ? res.data : [];
+        _labOrders = list;
         _isLoading = false;
       });
     } catch (e) {
@@ -106,10 +113,10 @@ class _LaboratoryScreenState extends State<LaboratoryScreen> {
                     mainAxisSpacing: 12,
                     childAspectRatio: 1.5,
                     children: [
-                      _bentoCard('PENDING TESTS', '42 Tests', '12 STAT Priority', Colors.orange, Icons.pending_actions_rounded),
-                      _bentoCard('COMPLETED TODAY', '186 Done', '+14% vs Yesterday', primaryContainer, Icons.check_circle_rounded),
-                      _bentoCard('AVG. TURNAROUND', '2.4 Hours', 'In-house Diagnostics', Colors.blue, Icons.timer_rounded),
-                      _bentoCard('EQUIPMENT STATUS', 'Optimal', '9/9 Units Active', primaryTeal, Icons.settings_input_component_rounded),
+                      _bentoCard('PENDING TESTS', '${_labOrders.where((l) => l['status'] == "Pending").length} Tests', '${_labOrders.where((l) => l['stat_priority'] == true).length} STAT Priority', Colors.orange, Icons.pending_actions_rounded),
+                      _bentoCard('COMPLETED TODAY', '${_labOrders.where((l) => l['status'] == "Completed" || l['status'] == "Uploaded & Verified").length} Done', 'In-house Diagnostics', primaryContainer, Icons.check_circle_rounded),
+                      _bentoCard('TOTAL ORDERS', '${_labOrders.length} Orders', 'Registered Tests', Colors.blue, Icons.timer_rounded),
+                      _bentoCard('EQUIPMENT STATUS', 'Optimal', 'Operational', primaryTeal, Icons.settings_input_component_rounded),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -225,26 +232,56 @@ class _LaboratoryScreenState extends State<LaboratoryScreen> {
   }
 
   void _showUploadDialog(BuildContext context) {
+    final testCtrl = TextEditingController();
+    final patientCtrl = TextEditingController();
+
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Upload Digital Diagnostic Report'),
-        content: const Column(
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.upload_file_rounded, size: 60, color: Color(0xFF006B53)),
-            SizedBox(height: 12),
-            Text('Attach PDF/Image lab report to integrate with Gemini AI Summarizer.'),
+            const Icon(Icons.upload_file_rounded, size: 48, color: Color(0xFF006B53)),
+            const SizedBox(height: 8),
+            TextField(controller: testCtrl, decoration: const InputDecoration(labelText: 'Test Name (e.g. CBC / Lipid Profile)')),
+            const SizedBox(height: 8),
+            TextField(controller: patientCtrl, decoration: const InputDecoration(labelText: 'Patient Name')),
           ],
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('CANCEL')),
           ElevatedButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Digital Report uploaded and parsed!')));
+            onPressed: () async {
+              if (testCtrl.text.isEmpty || patientCtrl.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enter test and patient name')));
+                return;
+              }
+              try {
+                final res = await _apiClient.post('/hospital/laboratory', data: {
+                  'test_name': testCtrl.text,
+                  'patient_name': patientCtrl.text,
+                  'category': 'PATHOLOGY',
+                  'results': 'Uploaded & Verified',
+                  'stat_priority': false
+                });
+                if (mounted) {
+                  Navigator.pop(ctx);
+                  if (res.data != null && res.data['success'] == true) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Diagnostic report uploaded successfully!')));
+                    _fetchLabOrders();
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Failed to upload report')));
+                  }
+                }
+              } catch (e) {
+                if (mounted) {
+                  Navigator.pop(ctx);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error uploading report: ${e.toString()}'), backgroundColor: Colors.redAccent));
+                }
+              }
             },
-            child: const Text('SELECT FILE'),
+            child: const Text('UPLOAD'),
           )
         ],
       ),

@@ -23,29 +23,30 @@ class _HospitalDashboardScreenState extends State<HospitalDashboardScreen> {
   Future<void> _fetchOverview() async {
     try {
       final res = await _apiClient.get('/hospital/dashboard/overview');
+      final raw = res.data;
+      Map<String, dynamic> metrics = {};
+      if (raw is Map) {
+        if (raw.containsKey('data') && raw['data'] is Map) {
+          metrics = Map<String, dynamic>.from(raw['data']);
+        } else {
+          metrics = Map<String, dynamic>.from(raw);
+        }
+      }
       setState(() {
-        _metrics = res.data ?? {};
+        _metrics = metrics;
         _isLoading = false;
       });
     } catch (e) {
       setState(() {
-        _metrics = {
-          "total_patients": 1420,
-          "total_doctors": 48,
-          "active_admissions": 112,
-          "total_beds": 150,
-          "occupied_beds": 112,
-          "available_beds": 38,
-          "emergency_cases": 6,
-          "today_appointments": 34,
-          "low_stock_medicines": 3,
-          "bed_occupancy_rate": 74.6
-        };
+        _metrics = {};
         _isLoading = false;
       });
-    }
+      // Show an error notification
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to load dashboard data. Please try again.')),
+      );
   }
-
+}
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -81,7 +82,7 @@ class _HospitalDashboardScreenState extends State<HospitalDashboardScreen> {
                     physics: const NeverScrollableScrollPhysics(),
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
-                    childAspectRatio: 1.3,
+                    childAspectRatio: MediaQuery.of(context).size.width > 600 ? 1.5 : 1.15,
                     children: [
                       _kpiCard('Active Patients', '${_metrics['total_patients'] ?? 0}', Icons.people_alt_rounded, const Color(0xFF0EA5E9)),
                       _kpiCard('Doctors On Duty', '${_metrics['total_doctors'] ?? 0}', Icons.medical_services_rounded, const Color(0xFF10B981)),

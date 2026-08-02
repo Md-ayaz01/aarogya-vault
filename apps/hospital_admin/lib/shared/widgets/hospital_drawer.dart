@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/database/local_db.dart';
 
 class HospitalDrawer extends StatelessWidget {
   final String currentRoute;
@@ -98,7 +99,12 @@ class HospitalDrawer extends StatelessWidget {
                 ),
                 IconButton(
                   icon: const Icon(Icons.logout_rounded, color: Colors.red),
-                  onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
+                  onPressed: () async {
+                    await LocalDB.deleteToken();
+                    if (context.mounted) {
+                      Navigator.pushReplacementNamed(context, '/login');
+                    }
+                  },
                 )
               ],
             ),

@@ -149,9 +149,63 @@ class HospitalRepository:
     def list_lab_orders(self) -> List[LabOrder]:
         return self.db.query(LabOrder).order_by(desc(LabOrder.created_at)).all()
 
+    def create_lab_order(self, test_name: str, patient_name: str, category: str = "General", results: str = "Pending", stat_priority: bool = False) -> LabOrder:
+        order = LabOrder(test_name=test_name, patient_name=patient_name, category=category, results=results, stat_priority=stat_priority, status="Pending")
+        self.db.add(order)
+        self.db.commit()
+        self.db.refresh(order)
+        return order
+
     def list_radiology_orders(self) -> List[RadiologyOrder]:
         return self.db.query(RadiologyOrder).order_by(desc(RadiologyOrder.created_at)).all()
+
+    def create_radiology_order(self, modality: str, body_part: str, patient_name: str, scan_code: str = "RAD-SCAN", findings: str = "Pending Analysis", status: str = "Routine") -> RadiologyOrder:
+        order = RadiologyOrder(modality=modality, body_part=body_part, patient_name=patient_name, scan_code=scan_code, findings=findings, status=status)
+        self.db.add(order)
+        self.db.commit()
+        self.db.refresh(order)
+        return order
+
+    # --- NOTIFICATIONS ---
+    def list_notifications(self) -> List[HospitalNotification]:
+        return self.db.query(HospitalNotification).order_by(desc(HospitalNotification.created_at)).all()
+
+    def create_notification(self, title: str, body: str, notification_type: str = "info") -> HospitalNotification:
+        notif = HospitalNotification(title=title, body=body, type=notification_type)
+        self.db.add(notif)
+        self.db.commit()
+        self.db.refresh(notif)
+        return notif
+
+    # --- CREATION HELPERS ---
+    def create_patient_user(self, full_name: str, phone: str, abha_id: Optional[str] = None) -> User:
+        user = User(phone=phone, role="patient", is_active=True)
+        self.db.add(user)
+        self.db.flush()
+        prof = Profile(user_id=user.id, full_name=full_name, abha_id=abha_id or f"91-{phone[:10]}", blood_group="O+", health_score=92)
+        self.db.add(prof)
+        self.db.commit()
+        self.db.refresh(user)
+        return user
+
+    def create_doctor_profile(self, full_name: str, specialty: str, registration_number: str, department_name: str = "General Medicine") -> DoctorProfile:
+        user = User(phone=f"999{registration_number[-6:] if len(registration_number)>=6 else '123456'}", role="doctor", is_active=True)
+        self.db.add(user)
+        self.db.flush()
+        doc = DoctorProfile(user_id=user.id, full_name=full_name, specialty=specialty, registration_number=registration_number, is_verified=True)
+        self.db.add(doc)
+        self.db.commit()
+        self.db.refresh(doc)
+        return doc
+
+    def create_appointment(self, patient_name: str, doctor_name: str, specialty: str = "General", time_slot: str = "10:00 AM") -> Appointment:
+        appt = Appointment(user_id=1, doctor_id=1, doctor_name=doctor_name, specialty=specialty, date_time=get_utc_now(), status="Scheduled")
+        self.db.add(appt)
+        self.db.commit()
+        self.db.refresh(appt)
+        return appt
 
     # --- AUDIT LOGS ---
     def list_audit_logs(self, limit: int = 100) -> List[AuditLog]:
         return self.db.query(AuditLog).order_by(desc(AuditLog.created_at)).limit(limit).all()
+

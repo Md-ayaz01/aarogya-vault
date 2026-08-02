@@ -25,7 +25,7 @@ class HospitalAdminApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.dark,
-      initialRoute: '/dashboard',
+      initialRoute: '/login',
       routes: AppRoutes.routes,
     );
   }

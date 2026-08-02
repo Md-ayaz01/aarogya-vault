@@ -23,8 +23,15 @@ class _DepartmentManagementScreenState extends State<DepartmentManagementScreen>
   Future<void> _fetchDepartments() async {
     try {
       final res = await _apiClient.get('/hospital/departments');
+      final raw = res.data;
+      List<dynamic> list = [];
+      if (raw is List) {
+        list = raw;
+      } else if (raw is Map && raw['data'] is List) {
+        list = List<dynamic>.from(raw['data']);
+      }
       setState(() {
-        _departments = res.data is List ? res.data : [];
+        _departments = list;
         _isLoading = false;
       });
     } catch (e) {

@@ -24,8 +24,15 @@ class _BedAllocationScreenState extends State<BedAllocationScreen> {
   Future<void> _fetchBeds() async {
     try {
       final res = await _apiClient.get('/hospital/beds');
+      final raw = res.data;
+      List<dynamic> list = [];
+      if (raw is List) {
+        list = raw;
+      } else if (raw is Map && raw['data'] is List) {
+        list = List<dynamic>.from(raw['data']);
+      }
       setState(() {
-        _beds = res.data is List ? res.data : [];
+        _beds = list;
         _isLoading = false;
       });
     } catch (e) {
@@ -114,7 +121,7 @@ class _BedAllocationScreenState extends State<BedAllocationScreen> {
                       _bentoCard('TOTAL CAPACITY', '$totalBeds Beds', '100% Operational', primaryTeal, Icons.business_rounded),
                       _bentoCard('CURRENT OCCUPANCY', '$occupiedBeds ($occupancyPct%)', 'Active Patients', Colors.purple, Icons.pie_chart_rounded),
                       _bentoCard('AVAILABLE BEDS', '$vacantBeds Vacant', 'Ready for Admission', primaryContainer, Icons.single_bed_rounded),
-                      _bentoCard('PENDING DISCHARGES', '12 Discharges', 'Process Today', Colors.red, Icons.exit_to_app_rounded),
+                      _bentoCard('OCCUPIED BEDS', '$occupiedBeds Occupied', 'Active Patients', Colors.red, Icons.exit_to_app_rounded),
                     ],
                   ),
                   const SizedBox(height: 24),

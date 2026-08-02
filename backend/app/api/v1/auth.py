@@ -436,6 +436,7 @@ def verify_otp(req: OTPVerifyRequest, db: Session = Depends(get_db)):
 
 class FirebaseVerifyRequest(BaseModel):
     id_token: str
+    role: Optional[str] = None
 
 @router.post("/verify-firebase-otp", response_model=Token)
 def verify_firebase_otp(req: FirebaseVerifyRequest, db: Session = Depends(get_db)):
@@ -488,15 +489,16 @@ def verify_firebase_otp(req: FirebaseVerifyRequest, db: Session = Depends(get_db
             db.commit()
             
     # 2c. Create user if still not found
+    initial_role = req.role if req.role else "patient"
     if not user:
-        user = User(firebase_uid=uid, phone=phone, email=email, role="patient")
+        user = User(firebase_uid=uid, phone=phone, email=email, role=initial_role)
         db.add(user)
         db.flush()
         
         # Profile skeleton
         profile = Profile(
             user_id=user.id,
-            full_name="New Patient",
+            full_name="Hospital Administrator" if initial_role == "hospital_admin" else "New Patient",
             dob="1990-01-01",
             gender="Unknown",
             blood_group="O+",
@@ -509,7 +511,13 @@ def verify_firebase_otp(req: FirebaseVerifyRequest, db: Session = Depends(get_db
         db.add(consent)
         db.commit()
     else:
-        # Link UID if not set
+        # Update role if explicitly passed (e.g. hospital_admin login) or default admin phone
+        if req.role:
+            user.role = req.role
+            db.commit()
+        elif user.phone in ["+919999988888", "+919876543210"]:
+            user.role = "hospital_admin"
+            db.commit()
         if not user.firebase_uid:
             user.firebase_uid = uid
             db.commit()

@@ -24,8 +24,15 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
   Future<void> _fetchEmergencyCases() async {
     try {
       final res = await _apiClient.get('/hospital/emergency');
+      final raw = res.data;
+      List<dynamic> list = [];
+      if (raw is List) {
+        list = raw;
+      } else if (raw is Map && raw['data'] is List) {
+        list = List<dynamic>.from(raw['data']);
+      }
       setState(() {
-        _cases = res.data is List ? res.data : [];
+        _cases = list;
         _isLoading = false;
       });
     } catch (e) {
@@ -245,20 +252,65 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
   }
 
   void _showQRDialog(BuildContext context) {
+    final searchCtrl = TextEditingController();
+
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Scan Emergency QR Code'),
-        content: const Column(
+        title: const Text('Scan Emergency QR / ABHA Lookup'),
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.qr_code_scanner_rounded, size: 80, color: Color(0xFF006B53)),
-            SizedBox(height: 12),
-            Text('Point camera at patient ABHA / Emergency QR card'),
+            const Icon(Icons.qr_code_scanner_rounded, size: 60, color: Color(0xFF006B53)),
+            const SizedBox(height: 12),
+            TextField(
+              controller: searchCtrl,
+              decoration: const InputDecoration(
+                labelText: 'Enter ABHA ID or Patient Phone',
+                prefixIcon: Icon(Icons.search_rounded),
+              ),
+            ),
           ],
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('CANCEL')),
+          ElevatedButton(
+            onPressed: () async {
+              if (searchCtrl.text.isEmpty) return;
+              try {
+                final res = await _apiClient.get('/hospital/patients', queryParameters: {'search': searchCtrl.text});
+                final raw = res.data;
+                List<dynamic> pts = [];
+                if (raw is List) {
+                  pts = raw;
+                } else if (raw is Map && raw['data'] is List) {
+                  pts = List<dynamic>.from(raw['data']);
+                }
+                if (mounted) {
+                  Navigator.pop(ctx);
+                  if (pts.isNotEmpty) {
+                    final p = pts.first;
+                    showDialog(
+                      context: context,
+                      builder: (c2) => AlertDialog(
+                        title: Text('Emergency Match: ${p['full_name']}'),
+                        content: Text('Phone: ${p['phone']}\nBlood: ${p['blood_group']}\nHealth Score: ${p['health_score']}'),
+                        actions: [TextButton(onPressed: () => Navigator.pop(c2), child: const Text('OK'))],
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No patient record found for QR code')));
+                  }
+                }
+              } catch (e) {
+                if (mounted) {
+                  Navigator.pop(ctx);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Lookup error: ${e.toString()}'), backgroundColor: Colors.redAccent));
+                }
+              }
+            },
+            child: const Text('LOOKUP RECORD'),
+          )
         ],
       ),
     );

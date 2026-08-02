@@ -32,3 +32,37 @@ def list_radiology_orders(
             "created_at": o.created_at.strftime("%Y-%m-%d %H:%M") if o.created_at else ""
         })
     return {"success": True, "data": res}
+
+from pydantic import BaseModel
+from typing import Optional
+
+class RadiologyOrderCreateRequest(BaseModel):
+    modality: str
+    body_part: str
+    patient_name: str
+    scan_code: Optional[str] = "RAD-SCAN"
+    findings: Optional[str] = "Pending Analysis"
+    status: Optional[str] = "Routine"
+
+@router.post("")
+def create_radiology_order(
+    payload: RadiologyOrderCreateRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    service = HospitalService(db)
+    if not service.check_permission(current_user.role, "hospital.patient.read"):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access Denied: Required permission 'hospital.patient.read'"
+        )
+    order = service.repo.create_radiology_order(
+        modality=payload.modality,
+        body_part=payload.body_part,
+        patient_name=payload.patient_name,
+        scan_code=payload.scan_code or "RAD-SCAN",
+        findings=payload.findings or "Pending Analysis",
+        status=payload.status or "Routine"
+    )
+    return {"success": True, "data": {"id": order.id, "status": order.status}}
+

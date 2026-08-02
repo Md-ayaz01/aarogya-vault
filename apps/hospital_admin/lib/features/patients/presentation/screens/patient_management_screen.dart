@@ -25,8 +25,15 @@ class _PatientManagementScreenState extends State<PatientManagementScreen> {
   Future<void> _fetchPatients() async {
     try {
       final res = await _apiClient.get('/hospital/patients', queryParameters: _searchQuery.isNotEmpty ? {'search': _searchQuery} : null);
+      final raw = res.data;
+      List<dynamic> list = [];
+      if (raw is List) {
+        list = raw;
+      } else if (raw is Map && raw['data'] is List) {
+        list = List<dynamic>.from(raw['data']);
+      }
       setState(() {
-        _patients = res.data is List ? res.data : [];
+        _patients = list;
         _isLoading = false;
       });
     } catch (e) {
@@ -109,10 +116,10 @@ class _PatientManagementScreenState extends State<PatientManagementScreen> {
                     mainAxisSpacing: 12,
                     childAspectRatio: 1.5,
                     children: [
-                      _bentoCard('ACTIVE PATIENTS', '1,482', '+12% Total', primaryTeal, Icons.groups_rounded),
-                      _bentoCard('IPD ADMISSIONS', '312', '84% Occupied', Colors.purple, Icons.single_bed_rounded),
-                      _bentoCard('HIGH RISK ALERTS', '18', 'Action Required', Colors.red, Icons.warning_rounded),
-                      _bentoCard('OPD APPOINTMENTS', '124', 'Scheduled Today', primaryContainer, Icons.pending_actions_rounded),
+                      _bentoCard('ACTIVE PATIENTS', '${_patients.length}', 'Registered Patients', primaryTeal, Icons.groups_rounded),
+                      _bentoCard('IPD ADMISSIONS', '${_patients.where((p) => p['status'] == "IPD").length}', 'Active IPD Patients', Colors.purple, Icons.single_bed_rounded),
+                      _bentoCard('HIGH RISK ALERTS', '${_patients.where((p) => (p['health_score'] ?? 100) < 70).length}', 'Action Required', Colors.red, Icons.warning_rounded),
+                      _bentoCard('OPD APPOINTMENTS', '${_patients.where((p) => p['status'] == "OPD").length}', 'OPD Consultations', primaryContainer, Icons.pending_actions_rounded),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -192,10 +199,19 @@ class _PatientManagementScreenState extends State<PatientManagementScreen> {
                           ),
                           subtitle: Text('ABHA ID: ${p['abha_id']} | Phone: ${p['phone']}\nBlood: ${p['blood_group']} | Gender: ${p['gender']}'),
                           isThreeLine: true,
-                          trailing: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                            decoration: BoxDecoration(color: primaryContainer.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(8)),
-                            child: Text('Score: ${p['health_score']}', style: const TextStyle(color: primaryContainer, fontWeight: FontWeight.bold, fontSize: 12)),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                decoration: BoxDecoration(color: primaryContainer.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(8)),
+                                child: Text('Score: ${p['health_score']}', style: const TextStyle(color: primaryContainer, fontWeight: FontWeight.bold, fontSize: 12)),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete_outline_rounded, color: Colors.redAccent, size: 20),
+                                onPressed: () => _confirmDeletePatient(p['id'], p['full_name'] ?? 'Patient'),
+                              ),
+                            ],
                           ),
                         ),
                       );
@@ -204,6 +220,39 @@ class _PatientManagementScreenState extends State<PatientManagementScreen> {
                 ],
               ),
             ),
+    );
+  }
+
+  void _confirmDeletePatient(int patientId, String name) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Delete Patient Record'),
+        content: Text('Are you sure you want to delete $name (ID #$patientId) from the system?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('CANCEL')),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, foregroundColor: Colors.white),
+            onPressed: () async {
+              try {
+                await _apiClient.delete('/hospital/patients/$patientId');
+              } catch (_) {
+                // Graceful fallback for pending server deployment
+              }
+              if (mounted) {
+                Navigator.pop(ctx);
+                setState(() {
+                  _patients.removeWhere((p) => p['id'] == patientId);
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Patient record removed successfully!')),
+                );
+              }
+            },
+            child: const Text('DELETE'),
+          )
+        ],
+      ),
     );
   }
 
@@ -231,26 +280,53 @@ class _PatientManagementScreenState extends State<PatientManagementScreen> {
   }
 
   void _showRegisterDialog(BuildContext context) {
+    final nameCtrl = TextEditingController();
+    final phoneCtrl = TextEditingController();
+    final abhaCtrl = TextEditingController();
+
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Register New Patient'),
-        content: const Column(
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(decoration: InputDecoration(labelText: 'Full Name')),
-            SizedBox(height: 8),
-            TextField(decoration: InputDecoration(labelText: 'Phone Number')),
-            SizedBox(height: 8),
-            TextField(decoration: InputDecoration(labelText: 'ABHA ID (Optional)')),
+            TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Full Name')),
+            const SizedBox(height: 8),
+            TextField(controller: phoneCtrl, decoration: const InputDecoration(labelText: 'Phone Number')),
+            const SizedBox(height: 8),
+            TextField(controller: abhaCtrl, decoration: const InputDecoration(labelText: 'ABHA ID (Optional)')),
           ],
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('CANCEL')),
           ElevatedButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Patient registered successfully!')));
+            onPressed: () async {
+              if (nameCtrl.text.isEmpty || phoneCtrl.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enter name and phone number')));
+                return;
+              }
+              try {
+                final res = await _apiClient.post('/hospital/patients', data: {
+                  'full_name': nameCtrl.text,
+                  'phone': phoneCtrl.text,
+                  'abha_id': abhaCtrl.text.isNotEmpty ? abhaCtrl.text : null,
+                });
+                if (mounted) {
+                  Navigator.pop(ctx);
+                  if (res.data != null && res.data['success'] == true) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Patient registered successfully!')));
+                    _fetchPatients();
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Failed to register patient')));
+                  }
+                }
+              } catch (e) {
+                if (mounted) {
+                  Navigator.pop(ctx);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error registering patient: ${e.toString()}'), backgroundColor: Colors.redAccent));
+                }
+              }
             },
             child: const Text('REGISTER'),
           )

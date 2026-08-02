@@ -23,21 +23,29 @@ class _AIAnalyticsScreenState extends State<AIAnalyticsScreen> {
   Future<void> _fetchAIInsights() async {
     try {
       final res = await _apiClient.get('/hospital/analytics/ai-insights');
+      final raw = res.data;
+      Map<String, dynamic> insights = {};
+      if (raw is Map) {
+        if (raw.containsKey('data') && raw['data'] is Map) {
+          insights = Map<String, dynamic>.from(raw['data']);
+        } else {
+          insights = Map<String, dynamic>.from(raw);
+        }
+      }
       setState(() {
-        _insights = res.data is Map<String, dynamic> ? res.data : {};
+        _insights = insights;
         _isLoading = false;
       });
     } catch (e) {
       setState(() {
-        _insights = {
-          "readmission_rate": 11.4,
-          "mortality_index": 0.92,
-          "bed_turnover_days": 4.2,
-          "ai_efficiency_score": 94.8,
-          "recommendation": "Analyzing current discharge velocity vs. admission queues in Cardiology. Recommend diverting 3 non-emergency surgical slots to Thursday to prevent bed saturation."
-        };
+        _insights = {};
         _isLoading = false;
       });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to load AI Insights: ${e.toString()}"), backgroundColor: Colors.redAccent),
+        );
+      }
     }
   }
 
@@ -102,10 +110,10 @@ class _AIAnalyticsScreenState extends State<AIAnalyticsScreen> {
                     mainAxisSpacing: 12,
                     childAspectRatio: 1.5,
                     children: [
-                      _bentoCard('AVG READMISSION', '${_insights['readmission_rate'] ?? 11.4}%', '-4.2% vs target', primaryTeal, Icons.replay_rounded),
-                      _bentoCard('MORTALITY INDEX', '${_insights['mortality_index'] ?? 0.92}', 'Risk Adjusted', Colors.purple, Icons.analytics_rounded),
-                      _bentoCard('BED TURNOVER', '${_insights['bed_turnover_days'] ?? 4.2} Days', 'Per Patient', Colors.blue, Icons.bed_rounded),
-                      _bentoCard('AI EFFICIENCY', '${_insights['ai_efficiency_score'] ?? 94.8}%', 'Optimal State', primaryContainer, Icons.auto_awesome_rounded),
+                      _bentoCard('AVG READMISSION', '${_insights['readmission_rate'] ?? 0}%', 'Risk Adjusted', primaryTeal, Icons.replay_rounded),
+                      _bentoCard('MORTALITY INDEX', '${_insights['mortality_index'] ?? 0.0}', 'Risk Adjusted', Colors.purple, Icons.analytics_rounded),
+                      _bentoCard('BED TURNOVER', '${_insights['bed_turnover_days'] ?? 0} Days', 'Per Patient', Colors.blue, Icons.bed_rounded),
+                      _bentoCard('AI EFFICIENCY', '${_insights['ai_efficiency_score'] ?? 0}%', 'System Health', primaryContainer, Icons.auto_awesome_rounded),
                     ],
                   ),
                   const SizedBox(height: 20),

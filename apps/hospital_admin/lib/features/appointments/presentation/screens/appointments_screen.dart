@@ -24,8 +24,15 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
   Future<void> _fetchAppointments() async {
     try {
       final res = await _apiClient.get('/hospital/appointments');
+      final raw = res.data;
+      List<dynamic> list = [];
+      if (raw is List) {
+        list = raw;
+      } else if (raw is Map && raw['data'] is List) {
+        list = List<dynamic>.from(raw['data']);
+      }
       setState(() {
-        _appointments = res.data is List ? res.data : [];
+        _appointments = list;
         _isLoading = false;
       });
     } catch (e) {
@@ -175,26 +182,54 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
   }
 
   void _showBookDialog(BuildContext context) {
+    final patientCtrl = TextEditingController();
+    final doctorCtrl = TextEditingController();
+    final timeCtrl = TextEditingController();
+
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Book New Consultation'),
-        content: const Column(
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(decoration: InputDecoration(labelText: 'Patient Name')),
-            SizedBox(height: 8),
-            TextField(decoration: InputDecoration(labelText: 'Doctor Specialty / Name')),
-            SizedBox(height: 8),
-            TextField(decoration: InputDecoration(labelText: 'Time Slot (e.g. 10:30 AM)')),
+            TextField(controller: patientCtrl, decoration: const InputDecoration(labelText: 'Patient Name')),
+            const SizedBox(height: 8),
+            TextField(controller: doctorCtrl, decoration: const InputDecoration(labelText: 'Doctor Specialty / Name')),
+            const SizedBox(height: 8),
+            TextField(controller: timeCtrl, decoration: const InputDecoration(labelText: 'Time Slot (e.g. 10:30 AM)')),
           ],
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('CANCEL')),
           ElevatedButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Appointment booked successfully!')));
+            onPressed: () async {
+              if (patientCtrl.text.isEmpty || doctorCtrl.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enter patient and doctor name')));
+                return;
+              }
+              try {
+                final res = await _apiClient.post('/hospital/appointments', data: {
+                  'patient_name': patientCtrl.text,
+                  'doctor_name': doctorCtrl.text,
+                  'specialty': 'General Medicine',
+                  'time_slot': timeCtrl.text.isNotEmpty ? timeCtrl.text : '10:30 AM'
+                });
+                if (mounted) {
+                  Navigator.pop(ctx);
+                  if (res.data != null && res.data['success'] == true) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Appointment booked successfully!')));
+                    _fetchAppointments();
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Failed to book appointment')));
+                  }
+                }
+              } catch (e) {
+                if (mounted) {
+                  Navigator.pop(ctx);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error booking appointment: ${e.toString()}'), backgroundColor: Colors.redAccent));
+                }
+              }
             },
             child: const Text('BOOK'),
           )

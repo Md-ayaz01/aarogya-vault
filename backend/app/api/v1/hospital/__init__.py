@@ -13,6 +13,7 @@ from app.api.v1.hospital.emergency import router as emergency_router
 from app.api.v1.hospital.analytics import router as analytics_router
 from app.api.v1.hospital.reports import router as reports_router
 from app.api.v1.hospital.settings import router as settings_router
+from app.api.v1.hospital.notifications import router as notifications_router
 
 hospital_master_router = APIRouter(prefix="/hospital", tags=["hospital"])
 
@@ -31,3 +32,5 @@ hospital_master_router.include_router(emergency_router)
 hospital_master_router.include_router(analytics_router)
 hospital_master_router.include_router(reports_router)
 hospital_master_router.include_router(settings_router)
+hospital_master_router.include_router(notifications_router)
+
