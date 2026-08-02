@@ -77,10 +77,15 @@ class EmergencyQRScreen extends ConsumerWidget {
 
     // Watch online QR url fetch state
     final qrFuture = ref.watch(qrFetchProvider);
-    final qrData = qrFuture.maybeWhen(
+    String qrData = qrFuture.maybeWhen(
       data: (url) => url,
       orElse: () => encryptedPayload,
     );
+    if (qrData.contains('127.0.0.1') || qrData.contains('localhost')) {
+      qrData = qrData
+          .replaceAll('http://127.0.0.1:8000', 'https://aarogya-vault.onrender.com')
+          .replaceAll('http://localhost:8000', 'https://aarogya-vault.onrender.com');
+    }
     final isOnlineQR = qrFuture.hasValue;
 
     return Scaffold(

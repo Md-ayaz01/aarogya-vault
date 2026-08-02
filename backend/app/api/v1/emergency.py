@@ -17,6 +17,8 @@ router = APIRouter(tags=["emergency"])
 def get_clean_domain() -> str:
     """Helper to extract backend root domain for public URL construction."""
     domain = settings.API_BASE_URL
+    if not domain or "127.0.0.1" in domain or "localhost" in domain:
+        return "https://aarogya-vault.onrender.com"
     if domain.endswith("/api/v1"):
         domain = domain[:-7]
     elif domain.endswith("/api/v1/"):
