@@ -33,7 +33,6 @@ def list_empanelled_hospitals(
     return {"success": True, "data": hospitals}
 
 @router.post("")
-@router.post("/register")
 def register_hospital(
     payload: HospitalCreateRequest,
     db: Session = Depends(get_db),
@@ -49,6 +48,14 @@ def register_hospital(
         email=payload.email
     )
     return {"success": True, "data": {"id": hosp.id, "name": hosp.name, "license_number": hosp.license_number}}
+
+@router.post("/register")
+def register_hospital_alias(
+    payload: HospitalCreateRequest,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
+):
+    return register_hospital(payload=payload, db=db, current_user=current_user)
 
 @router.delete("/{hospital_id}")
 def delete_hospital(
