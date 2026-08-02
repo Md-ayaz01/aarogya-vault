@@ -32,6 +32,7 @@ def list_empanelled_hospitals(
     hospitals = service.list_empanelled_hospitals(current_user)
     return {"success": True, "data": hospitals}
 
+@router.post("")
 @router.post("/register")
 def register_hospital(
     payload: HospitalCreateRequest,
