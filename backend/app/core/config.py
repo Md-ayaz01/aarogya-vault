@@ -47,7 +47,7 @@ class Settings:
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
     
     # Domain / API configuration
-    API_BASE_URL: str = os.getenv("API_BASE_URL", "http://127.0.0.1:8000/api/v1")
+    API_BASE_URL: str = os.getenv("API_BASE_URL", "https://aarogya-vault.onrender.com/api/v1")
     ENABLE_LOCAL_UPLOADS: bool = os.getenv("ENABLE_LOCAL_UPLOADS", "false").lower() == "true"
     
     # File upload limits
