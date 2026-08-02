@@ -81,10 +81,11 @@ def delete_patient(
     if not user:
         raise HTTPException(status_code=404, detail="Patient not found")
     
-    # Delete all associated records to prevent foreign key constraints
+    # Delete all associated records with correct column references
     from app.models.models import (
         Profile, ConsentSetting, Notification, MedicalHistory, LabReport,
-        Prescription, Appointment, Admission, DoctorPatientAccess, AuditLog
+        Prescription, Appointment, Admission, DoctorPatientAccess, AuditLog,
+        AIChatMessage, MedicineReminder, EmergencyContact
     )
     db.query(Profile).filter(Profile.user_id == patient_id).delete(synchronize_session=False)
     db.query(ConsentSetting).filter(ConsentSetting.user_id == patient_id).delete(synchronize_session=False)
@@ -92,10 +93,13 @@ def delete_patient(
     db.query(MedicalHistory).filter(MedicalHistory.user_id == patient_id).delete(synchronize_session=False)
     db.query(LabReport).filter(LabReport.user_id == patient_id).delete(synchronize_session=False)
     db.query(Prescription).filter(Prescription.user_id == patient_id).delete(synchronize_session=False)
-    db.query(Appointment).filter(or_(Appointment.patient_id == patient_id, Appointment.user_id == patient_id)).delete(synchronize_session=False)
+    db.query(Appointment).filter(Appointment.user_id == patient_id).delete(synchronize_session=False)
     db.query(Admission).filter(Admission.patient_id == patient_id).delete(synchronize_session=False)
     db.query(DoctorPatientAccess).filter(DoctorPatientAccess.patient_id == patient_id).delete(synchronize_session=False)
     db.query(AuditLog).filter(AuditLog.user_id == patient_id).delete(synchronize_session=False)
+    db.query(AIChatMessage).filter(AIChatMessage.user_id == patient_id).delete(synchronize_session=False)
+    db.query(MedicineReminder).filter(MedicineReminder.user_id == patient_id).delete(synchronize_session=False)
+    db.query(EmergencyContact).filter(EmergencyContact.user_id == patient_id).delete(synchronize_session=False)
 
     db.delete(user)
     db.commit()
