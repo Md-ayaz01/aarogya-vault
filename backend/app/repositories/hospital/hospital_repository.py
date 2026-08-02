@@ -191,11 +191,15 @@ class HospitalRepository:
             self.db.commit()
             self.db.refresh(user)
         else:
-            if user.profile:
+            if not user.profile:
+                prof = Profile(user_id=user.id, full_name=full_name, aadhaar_number=abha_id, blood_group="O+", health_score=92)
+                self.db.add(prof)
+            else:
                 user.profile.full_name = full_name
                 if abha_id:
                     user.profile.aadhaar_number = abha_id
-                self.db.commit()
+            self.db.commit()
+            self.db.refresh(user)
         return user
 
     def create_doctor_profile(self, full_name: str, specialty: str, registration_number: str, department_name: str = "General Medicine") -> DoctorProfile:
