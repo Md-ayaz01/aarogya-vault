@@ -181,7 +181,7 @@ class HospitalRepository:
     def create_patient_user(self, full_name: str, phone: str, abha_id: Optional[str] = None) -> User:
         user = self.db.query(User).filter(User.phone == phone).first()
         if not user:
-            user = User(phone=phone, role="patient", is_active=True)
+            user = User(phone=phone, role="patient")
             self.db.add(user)
             self.db.flush()
             prof = Profile(user_id=user.id, full_name=full_name, aadhaar_number=abha_id, blood_group="O+", health_score=92)
@@ -201,7 +201,7 @@ class HospitalRepository:
     def create_doctor_profile(self, full_name: str, specialty: str, registration_number: str, department_name: str = "General Medicine") -> DoctorProfile:
         reg_digits = ''.join(c for c in registration_number if c.isdigit())
         user_phone = f"+9199{reg_digits[-8:]}" if len(reg_digits) >= 8 else f"+9199{random.randint(10000000, 99999999)}"
-        user = User(phone=user_phone, role="doctor", is_active=True)
+        user = User(phone=user_phone, role="doctor")
         self.db.add(user)
         self.db.flush()
         doc = DoctorProfile(user_id=user.id, full_name=full_name, specialty=specialty, registration_number=registration_number, is_verified=True)
