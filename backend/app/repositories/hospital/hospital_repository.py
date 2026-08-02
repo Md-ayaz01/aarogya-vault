@@ -179,13 +179,23 @@ class HospitalRepository:
         return notif
 
     def create_patient_user(self, full_name: str, phone: str, abha_id: Optional[str] = None) -> User:
-        user = User(phone=phone, role="patient", is_active=True)
-        self.db.add(user)
-        self.db.flush()
-        prof = Profile(user_id=user.id, full_name=full_name, aadhaar_number=abha_id, blood_group="O+", health_score=92)
-        self.db.add(prof)
-        self.db.commit()
-        self.db.refresh(user)
+        user = self.db.query(User).filter(User.phone == phone).first()
+        if not user:
+            user = User(phone=phone, role="patient", is_active=True)
+            self.db.add(user)
+            self.db.flush()
+            prof = Profile(user_id=user.id, full_name=full_name, aadhaar_number=abha_id, blood_group="O+", health_score=92)
+            self.db.add(prof)
+            consent = ConsentSetting(user_id=user.id)
+            self.db.add(consent)
+            self.db.commit()
+            self.db.refresh(user)
+        else:
+            if user.profile:
+                user.profile.full_name = full_name
+                if abha_id:
+                    user.profile.aadhaar_number = abha_id
+                self.db.commit()
         return user
 
     def create_doctor_profile(self, full_name: str, specialty: str, registration_number: str, department_name: str = "General Medicine") -> DoctorProfile:
