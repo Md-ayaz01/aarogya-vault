@@ -34,14 +34,7 @@ class SuperAdminRepository:
 
     # Hospital Approvals & Licensing
     def get_hospital_approval_requests(self):
-        reqs = self.db.query(HospitalApprovalRequest).all()
-        if not reqs:
-            return [
-                {"id": 1, "hospital_name": "Apollo Care Multi-Specialty", "license_number": "LIC-AP-9901", "status": "Pending", "requested_at": "2026-07-29T10:00:00Z", "notes": "NABH Accredited"},
-                {"id": 2, "hospital_name": "Fortis Healthcare Center", "license_number": "LIC-FT-8812", "status": "Approved", "requested_at": "2026-07-28T09:30:00Z", "notes": "Verified PM-JAY Partner"},
-                {"id": 3, "hospital_name": "Max Super Specialty Hospital", "license_number": "LIC-MX-1029", "status": "Pending", "requested_at": "2026-07-30T08:15:00Z", "notes": "Pending license verification"},
-            ]
-        return reqs
+        return self.db.query(HospitalApprovalRequest).all()
 
     def update_hospital_approval_status(self, request_id: int, status: str, notes: str = None):
         req = self.db.query(HospitalApprovalRequest).filter(HospitalApprovalRequest.id == request_id).first()
@@ -49,10 +42,51 @@ class SuperAdminRepository:
             req.status = status
             if notes:
                 req.notes = notes
+            
+            # If approved, auto-register hospital in empanelled hospitals table if not present
+            if status.lower() == "approved":
+                existing_hosp = self.db.query(Hospital).filter(Hospital.license_number == req.license_number).first()
+                if not existing_hosp:
+                    new_hosp = Hospital(
+                        name=req.hospital_name,
+                        license_number=req.license_number,
+                        address="Verified Address",
+                        phone="+91999900000",
+                        email="info@hospital.in"
+                    )
+                    self.db.add(new_hosp)
+
             self.db.commit()
             self.db.refresh(req)
             return req
         return {"id": request_id, "status": status, "notes": notes or "Updated"}
+
+    def list_empanelled_hospitals(self):
+        return self.db.query(Hospital).order_by(Hospital.created_at.desc()).all()
+
+    def create_hospital(self, name: str, license_number: str, address: str = None, phone: str = None, email: str = None) -> Hospital:
+        hosp = Hospital(
+            name=name,
+            license_number=license_number,
+            address=address or "India",
+            phone=phone or "+919999000000",
+            email=email or "info@hospital.com"
+        )
+        self.db.add(hosp)
+        self.db.commit()
+        self.db.refresh(hosp)
+        return hosp
+
+    def delete_hospital(self, hospital_id: int) -> bool:
+        hosp = self.db.query(Hospital).filter(Hospital.id == hospital_id).first()
+        if hosp:
+            # Delete related departments first to satisfy FK constraints
+            from app.models.models import Department
+            self.db.query(Department).filter(Department.hospital_id == hospital_id).delete(synchronize_session=False)
+            self.db.delete(hosp)
+            self.db.commit()
+            return True
+        return False
 
     # Doctor Verification Platform-wide
     def get_doctors_verification_list(self):

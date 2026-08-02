@@ -23,24 +23,28 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   Future<void> _fetchUsers() async {
     try {
       final res = await _apiClient.get('/super_admin/users');
-      setState(() {
-        _users = res.data is List ? res.data : [];
-        _isLoading = false;
-      });
-    } catch (e) {
-    setState(() {
-      _users = [];
-      _isLoading = false;
-    });
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Failed to load data from server: ${e.toString()}"),
-          backgroundColor: Colors.redAccent,
-        ),
-      );
+      List<dynamic> list = [];
+      if (res.data != null) {
+        if (res.data is List) {
+          list = res.data;
+        } else if (res.data is Map && res.data['data'] is List) {
+          list = res.data['data'];
+        }
+      }
+      if (mounted) {
+        setState(() {
+          _users = list;
+          _isLoading = false;
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _users = [];
+          _isLoading = false;
+        });
+      }
     }
-  }
   }
 
   @override

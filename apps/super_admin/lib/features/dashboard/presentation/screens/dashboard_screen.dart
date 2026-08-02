@@ -23,25 +23,27 @@ class _SuperAdminDashboardScreenState extends State<SuperAdminDashboardScreen> {
   Future<void> _fetchKPIs() async {
     try {
       final res = await _apiClient.get('/super_admin/dashboard/overview');
-      setState(() {
-        _kpis = res.data is Map<String, dynamic> ? res.data : {};
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _kpis = {
-          "total_hospitals": 48,
-          "total_doctors": 342,
-          "total_patients": 14820,
-          "total_users": 18500,
-          "active_subscriptions": 42,
-          "pending_approvals": 6,
-          "system_health": "100% Fully Operational",
-          "ai_usage_tokens_today": 128450,
-          "emergency_alerts_today": 14
-        };
-        _isLoading = false;
-      });
+      Map<String, dynamic> map = {};
+      if (res.data != null) {
+        if (res.data is Map<String, dynamic>) {
+          map = res.data;
+        } else if (res.data is Map && res.data['data'] is Map) {
+          map = Map<String, dynamic>.from(res.data['data']);
+        }
+      }
+      if (mounted) {
+        setState(() {
+          _kpis = map;
+          _isLoading = false;
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _kpis = {};
+          _isLoading = false;
+        });
+      }
     }
   }
 

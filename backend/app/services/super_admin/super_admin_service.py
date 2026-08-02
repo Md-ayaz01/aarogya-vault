@@ -36,6 +36,35 @@ class SuperAdminService:
         )
         return res
 
+    def list_empanelled_hospitals(self, current_user):
+        self._verify_super_admin_permission(current_user, "super_admin.hospitals.manage")
+        return self.repo.list_empanelled_hospitals()
+
+    def create_hospital(self, current_user, name: str, license_number: str, address: str = None, phone: str = None, email: str = None):
+        self._verify_super_admin_permission(current_user, "super_admin.hospitals.manage")
+        hosp = self.repo.create_hospital(name, license_number, address, phone, email)
+        self.repo.log_action(
+            actor_email=self._get_user_email(current_user),
+            role=self._get_user_role(current_user),
+            action="HOSPITAL_ONBOARDED",
+            resource=f"Hospital #{hosp.id}",
+            details=f"Name: {name}, License: {license_number}"
+        )
+        return hosp
+
+    def delete_hospital(self, current_user, hospital_id: int):
+        self._verify_super_admin_permission(current_user, "super_admin.hospitals.manage")
+        success = self.repo.delete_hospital(hospital_id)
+        if success:
+            self.repo.log_action(
+                actor_email=self._get_user_email(current_user),
+                role=self._get_user_role(current_user),
+                action="HOSPITAL_OFFBOARDED",
+                resource=f"Hospital #{hospital_id}",
+                details=f"Hospital #{hospital_id} deleted from system"
+            )
+        return success
+
     def get_doctor_verifications(self, current_user):
         self._verify_super_admin_permission(current_user, "super_admin.doctors.verify")
         return self.repo.get_doctors_verification_list()

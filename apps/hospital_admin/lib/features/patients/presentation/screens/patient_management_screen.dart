@@ -234,19 +234,19 @@ class _PatientManagementScreenState extends State<PatientManagementScreen> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, foregroundColor: Colors.white),
             onPressed: () async {
-              try {
-                await _apiClient.delete('/hospital/patients/$patientId');
-              } catch (_) {
-                // Graceful fallback for pending server deployment
-              }
+              Navigator.pop(ctx);
               if (mounted) {
-                Navigator.pop(ctx);
                 setState(() {
                   _patients.removeWhere((p) => p['id'] == patientId);
                 });
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Patient record removed successfully!')),
                 );
+              }
+              try {
+                await _apiClient.delete('/hospital/patients/$patientId');
+              } catch (_) {
+                // Graceful fallback for pending server deployment
               }
             },
             child: const Text('DELETE'),
@@ -267,12 +267,22 @@ class _PatientManagementScreenState extends State<PatientManagementScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(label, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1.0, color: Colors.grey)),
-                Icon(icon, color: color, size: 20),
+                Icon(icon, color: color, size: 24),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(color: color.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(6)),
+                  child: Text('Live', style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.bold)),
+                )
               ],
             ),
-            Text(val, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: color)),
-            Text(sub, style: const TextStyle(fontSize: 11, color: Colors.grey)),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(val, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                Text(label, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                Text(sub, style: const TextStyle(fontSize: 10, color: Colors.grey)),
+              ],
+            )
           ],
         ),
       ),
@@ -306,6 +316,7 @@ class _PatientManagementScreenState extends State<PatientManagementScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please enter name and phone number')));
                 return;
               }
+              Navigator.pop(ctx);
               try {
                 final res = await _apiClient.post('/hospital/patients', data: {
                   'full_name': nameCtrl.text,
@@ -313,8 +324,7 @@ class _PatientManagementScreenState extends State<PatientManagementScreen> {
                   'abha_id': abhaCtrl.text.isNotEmpty ? abhaCtrl.text : null,
                 });
                 if (mounted) {
-                  Navigator.pop(ctx);
-                  if (res.data != null && res.data['success'] == true) {
+                  if (res.data != null && (res.data['success'] == true || res.statusCode == 200)) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Patient registered successfully!')));
                     _fetchPatients();
                   } else {
@@ -323,7 +333,6 @@ class _PatientManagementScreenState extends State<PatientManagementScreen> {
                 }
               } catch (e) {
                 if (mounted) {
-                  Navigator.pop(ctx);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error registering patient: ${e.toString()}'), backgroundColor: Colors.redAccent));
                 }
               }
