@@ -342,7 +342,7 @@ class _HospitalApprovalScreenState extends State<HospitalApprovalScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.check_circle_rounded, color: primaryColor),
+                        icon: Icon(Icons.check_circle_rounded, color: primaryColor),
                         tooltip: 'Approve License',
                         onPressed: () => _updateStatus(reqId, 'Approved', name),
                       ),
