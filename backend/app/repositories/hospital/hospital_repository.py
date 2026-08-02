@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func, desc, or_
 from typing import List, Optional, Dict, Any
 from datetime import datetime, timezone
+import random
 
 from app.models.models import (
     User, Profile, DoctorProfile, Department, Ward, Bed, Admission,
@@ -177,19 +178,20 @@ class HospitalRepository:
         self.db.refresh(notif)
         return notif
 
-    # --- CREATION HELPERS ---
     def create_patient_user(self, full_name: str, phone: str, abha_id: Optional[str] = None) -> User:
         user = User(phone=phone, role="patient", is_active=True)
         self.db.add(user)
         self.db.flush()
-        prof = Profile(user_id=user.id, full_name=full_name, abha_id=abha_id or f"91-{phone[:10]}", blood_group="O+", health_score=92)
+        prof = Profile(user_id=user.id, full_name=full_name, aadhaar_number=abha_id, blood_group="O+", health_score=92)
         self.db.add(prof)
         self.db.commit()
         self.db.refresh(user)
         return user
 
     def create_doctor_profile(self, full_name: str, specialty: str, registration_number: str, department_name: str = "General Medicine") -> DoctorProfile:
-        user = User(phone=f"999{registration_number[-6:] if len(registration_number)>=6 else '123456'}", role="doctor", is_active=True)
+        reg_digits = ''.join(c for c in registration_number if c.isdigit())
+        user_phone = f"+9199{reg_digits[-8:]}" if len(reg_digits) >= 8 else f"+9199{random.randint(10000000, 99999999)}"
+        user = User(phone=user_phone, role="doctor", is_active=True)
         self.db.add(user)
         self.db.flush()
         doc = DoctorProfile(user_id=user.id, full_name=full_name, specialty=specialty, registration_number=registration_number, is_verified=True)
@@ -199,7 +201,7 @@ class HospitalRepository:
         return doc
 
     def create_appointment(self, patient_name: str, doctor_name: str, specialty: str = "General", time_slot: str = "10:00 AM") -> Appointment:
-        appt = Appointment(user_id=1, doctor_id=1, doctor_name=doctor_name, specialty=specialty, date_time=get_utc_now(), status="Scheduled")
+        appt = Appointment(user_id=1, doctor_id=1, doctor_name=doctor_name, specialty=specialty, date_time=f"2026-08-02 {time_slot}", status="Scheduled")
         self.db.add(appt)
         self.db.commit()
         self.db.refresh(appt)
